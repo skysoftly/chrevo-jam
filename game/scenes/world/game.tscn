@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://dlgmtcau57j4d"]
+
+[ext_resource type="PackedScene" uid="uid://b3vxw03w7mrfi" path="res://scenes/world/spawner.tscn" id="1_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://casgcs7q8ujxx" path="res://scenes/player/player.tscn" id="1_uwrxv"]
+[ext_resource type="PackedScene" uid="uid://gbgmc8mxfeg5" path="res://scenes/enemies/enemy.tscn" id="2_yqjtg"]
+[ext_resource type="Resource" uid="uid://cjs8jmw5mryxy" path="res://resources/pumpkin.tres" id="3_h30v7"]
+[ext_resource type="Resource" uid="uid://4kjd8esc21r1" path="res://resources/bat.tres" id="4_sarsd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sa52v"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fxa6p"]
+bg_color = Color(0.50557107, 0, 0.05293162, 1)
+
+[node name="Game" type="Node2D" unique_id=2068740180]
+
+[node name="Spawner" parent="." unique_id=2065464322 node_paths=PackedStringArray("_player", "_objects") instance=ExtResource("1_lnu2h")]
+_player = NodePath("../Objects/Player")
+_enemy = ExtResource("2_yqjtg")
+_enemyTypes = Array[Object]([ExtResource("3_h30v7"), ExtResource("4_sarsd")])
+_objects = NodePath("../Objects")
+
+[node name="Objects" type="Node2D" parent="." unique_id=1406873489]
+y_sort_enabled = true
+
+[node name="Player" parent="Objects" unique_id=250972871 instance=ExtResource("1_uwrxv")]
+position = Vector2(-67, 61)
+MaxHealth = 15.0
+
+[node name="Camera2D" type="Camera2D" parent="Objects/Player" unique_id=1079895349]
+position_smoothing_enabled = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=120855969]
+
+[node name="Health" type="ProgressBar" parent="CanvasLayer" unique_id=1466755071]
+unique_name_in_owner = true
+offset_left = 34.0
+offset_top = 25.0
+offset_right = 209.0
+offset_bottom = 52.0
+theme_override_styles/background = SubResource("StyleBoxFlat_sa52v")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fxa6p")
+value = 10.0
+show_percentage = false
