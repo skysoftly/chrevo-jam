@@ -51,10 +51,9 @@ public partial class Spawner : Node2D
 	{
 		var enemyInstance = _enemy.Instantiate<Enemy>();
 
-		enemyInstance.Type = _enemyTypes[Math.Min(_minute, _enemyTypes.Length - 1)];
+		enemyInstance.Type = _enemyTypes[_random.Next( Math.Min(_minute, _enemyTypes.Length - 1) +  1)];
 		enemyInstance.Position = pos;
 		enemyInstance.PlayerReference = _player;
-		enemyInstance.AddToGroup("Enemies");
 		
 		_objects.AddChild(enemyInstance);
 	}
@@ -77,7 +76,7 @@ public partial class Spawner : Node2D
 		Second += 1;
 		int count = Second % 2;
 
-		int remaining = 200 - GetTree().GetNodesInGroup("Enemies").Count;
+		int remaining = 200 - GetTree().GetNodesInGroup("enemies").Count;
 		
 		Amount(Math.Min(count, remaining));
 	}

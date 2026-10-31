@@ -7,11 +7,13 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h30v7"]
 shader = ExtResource("2_fcftc")
 shader_parameter/line_color = Color(0.7153433, 0.46660912, 0.2977128, 1)
+shader_parameter/line_color_attack = Color(0.5507359, 0.114297844, 0.1088836, 1)
 shader_parameter/line_thickness = 1.0
 shader_parameter/enabled = false
+shader_parameter/attack = false
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7p1mj"]
-radius = 12.0
+radius = 14.0
 
 [sub_resource type="Animation" id="Animation_3vyb7"]
 length = 0.6
@@ -37,13 +39,20 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_sa52v"]
 radius = 11.045361
 
-[node name="Enemy" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_sprite")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38ino"]
+bg_color = Color(0.029506553, 0.029506562, 0.029506536, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fcftc"]
+bg_color = Color(0.53273195, 0.13513142, 0.11282284, 1)
+
+[node name="Enemy" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_sprite", "_healthBar")]
 collision_layer = 8
 collision_mask = 10
 motion_mode = 1
 safe_margin = 0.001
 script = ExtResource("1_8e3ao")
 _sprite = NodePath("Pumpkin")
+_healthBar = NodePath("ProgressBar")
 
 [node name="Pumpkin" type="Sprite2D" parent="." unique_id=917173418]
 material = SubResource("ShaderMaterial_h30v7")
@@ -67,6 +76,17 @@ collision_mask = 4
 position = Vector2(0, -6)
 shape = SubResource("CircleShape2D_sa52v")
 debug_color = Color(0.1764706, 0.023529412, 0.03137255, 0.1254902)
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1215665850]
+offset_left = -14.0
+offset_top = -43.0
+offset_right = 14.0
+offset_bottom = -36.0
+theme_override_styles/background = SubResource("StyleBoxFlat_38ino")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fcftc")
+max_value = 15.0
+value = 1.0
+show_percentage = false
 
 [connection signal="body_entered" from="AttackArea" to="." method="OnAttackAreaBodyEntered"]
 [connection signal="body_exited" from="AttackArea" to="." method="OnAttackAreaBodyExited"]
