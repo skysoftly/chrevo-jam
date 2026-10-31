@@ -6,6 +6,7 @@
 [ext_resource type="Theme" uid="uid://b6ku3hh08t2am" path="res://assets/themes/theme.tres" id="3_mhnvy"]
 [ext_resource type="Texture2D" uid="uid://ci28fn8omu51v" path="res://assets/bgPumpkin.png" id="4_4ytvr"]
 [ext_resource type="Texture2D" uid="uid://p8rjdhdgbav8" path="res://assets/vignette.png" id="6_g3eks"]
+[ext_resource type="Texture2D" uid="uid://dcqojvp73id4q" path="res://scenes/GameName.png" id="5_g3eks"]
 
 [sub_resource type="Gradient" id="Gradient_4ytvr"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -18,22 +19,6 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
-
-[sub_resource type="Gradient" id="Gradient_38ino"]
-offsets = PackedFloat32Array(0, 0.29714286, 0.72, 1)
-colors = PackedColorArray(0.6469792, 0.33000815, 0.04361047, 1, 0.64733636, 0.32663473, 0.12945074, 1, 0.5953264, 0.3130715, 0.13312902, 0.6666666, 0.49130648, 0.28594503, 0.14048555, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_4ytvr"]
-gradient = SubResource("Gradient_38ino")
-width = 4
-height = 4
-fill = 1
-fill_from = Vector2(0.47863248, 0.45726496)
-fill_to = Vector2(0, 0)
-
-[sub_resource type="Curve" id="Curve_g3eks"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
 
 [sub_resource type="Animation" id="Animation_g3eks"]
 resource_name = "Pumpkin"
@@ -519,7 +504,6 @@ texture = ExtResource("3_4ytvr")
 metadata/_edit_lock_ = true
 
 [node name="Pumpkin" type="Sprite2D" parent="Bg" unique_id=525041308]
-z_index = 1
 position = Vector2(-540.1433, -307.50916)
 rotation = -0.20943952
 texture = ExtResource("4_4ytvr")
@@ -531,23 +515,6 @@ color = Color(1, 1, 0.023529412, 1)
 energy = 2.0
 texture = SubResource("GradientTexture2D_gfg0v")
 texture_scale = 2.4
-
-[node name="Particle" type="CPUParticles2D" parent="Bg/Pumpkin" unique_id=236518083]
-z_index = -1
-position = Vector2(-0.96470666, 150.87463)
-amount = 12
-texture = SubResource("GradientTexture2D_4ytvr")
-lifetime = 2.0
-emission_shape = 1
-emission_sphere_radius = 37.92
-direction = Vector2(0, 1)
-spread = 68.57
-gravity = Vector2(0, 20)
-initial_velocity_min = 50.0
-initial_velocity_max = 100.0
-scale_amount_min = 2.0
-scale_amount_max = 3.0
-scale_amount_curve = SubResource("Curve_g3eks")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Bg" unique_id=1401433609]
 root_node = NodePath("../Pumpkin")
@@ -636,15 +603,6 @@ texture_filter = 1
 layout_mode = 2
 theme = ExtResource("3_mhnvy")
 text = "Выйти"
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=989286686]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("6_g3eks")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1465500105]
 position = Vector2(90, 355)
