@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" uid="uid://d0v83nfpy8jog" path="res://scenes/player/Player.cs" id="1_3vyb7"]
 [ext_resource type="Texture2D" uid="uid://dmgk5x87tu83j" path="res://assets/particles/particle.png" id="2_dovo2"]
+[ext_resource type="Shader" uid="uid://b460tc7jof254" path="res://gdshaders/selectEnemy.gdshader" id="2_gmlin"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_u8vuu"]
 radius = 13.0
 
 [sub_resource type="Animation" id="Animation_3vyb7"]
-length = 0.6
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -16,27 +16,63 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = false
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
+"times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [0, 1]
 }
 
+[sub_resource type="Animation" id="Animation_dovo2"]
+length = 0.30000000000000004
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [2, 3, 2]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_g2els"]
 _data = {
-&"Idle": SubResource("Animation_3vyb7")
+&"Idle": SubResource("Animation_3vyb7"),
+&"Run": SubResource("Animation_dovo2")
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sa52v"]
 radius = 80.024994
 
-[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_8afob"]
-_data = PackedByteArray("AAADAAUAAAABAAAAQAAAACAAAADqAAAAUklGRuIAAABXRUJQVlA4TNUAAAAvP8AHEDegqG0jNtXnuA31FLWRAgdXwckLA0hDTQAQbE6EvZ0qmP8AgKPz3u0yEaf8HzhqJMmRWs1g7XtUqyVwcwTWEXAAzvLHMLbOviP6b7Rtm5QNWTtD/uTg9koGhxuUdpr1mN2OXlnnuszB9p50Yk4MlNPMyWnWScQ4xqC6CO4d36UY/L0jnGYKGM+28Pez5pyJLkXh7q68M6pwFT7WORfF4O+cM/0H0plc3pntMw6bzhIOwZRkQghHGmqVcQjsFCkthHIITjZYByEdYhBMJe/4BxMA")
-size_override = Vector2(64, 32)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dovo2"]
+shader = ExtResource("2_gmlin")
+shader_parameter/line_color = Color(0.12769848, 0.13924831, 0.20539021, 1)
+shader_parameter/line_color_attack = Color(1, 0.2, 0.2, 1)
+shader_parameter/line_thickness = 0.250000011875
+shader_parameter/enabled = true
+shader_parameter/attack = false
+
+[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_gmlin"]
+_data = PackedByteArray("AAADAAUAAAABAAAAYAAAAEAAAAACAQAAUklGRvoAAABXRUJQVlA4TO0AAAAvX8APEB8gFkzx7mASCKQ4h70WC6Z4XyDNfwD+KnBj247ayNSHxt6OJtAbwlvAVaGhS6uTTSU1Soq7QBXRfwZu2zZSd3tD7jPgCypBbeL6w8h5vWpqcBk/8dHh39HcTmTikZX/0NxOq831FjE3HA2Hilu8WpzzObzoEJF0AxgutnnIHJyqqujpJoq2/eTlpiRsioxDvi0ZJPE7N4FFUIrF2MBfojiM2DBUhw7DR+eF6oCj4TAe2QDeOgARXW8Rd1YdoKoqyuc8o3CQbPPQ1HAY8iy6g5K8qb3W6GsONtHuzfcT6YCI6v02fPgABQAA")
+size_override = Vector2(96, 64)
 
 [sub_resource type="Curve" id="Curve_gmlin"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_4ytvr"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dovo2"]
+gradient = SubResource("Gradient_4ytvr")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+metadata/_snap_enabled = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dovo2"]
 bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.31764707)
@@ -46,7 +82,7 @@ corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gmlin"]
-bg_color = Color(0.59235656, 0, 0.0034541034, 0.5529412)
+bg_color = Color(0.72609425, 2.721794e-05, 0.0061748866, 1)
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
@@ -60,14 +96,14 @@ corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_75vfm"]
-bg_color = Color(0.62152386, 0.62152386, 0.6215238, 0.49411765)
+bg_color = Color(0.8047426, 0.80474263, 0.8047425, 0.7294118)
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p47bc"]
-bg_color = Color(0.41532683, 0.17753315, 0.5308036, 0.49411765)
+bg_color = Color(0.48761553, 0.28590983, 0.6291917, 1)
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
@@ -79,16 +115,16 @@ collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_3vyb7")
 _healthBar = NodePath("CanvasLayer/Health")
-_possessionCooldown = 8.0
+_possessionCooldown = 4.0
+_possessionDamage = 2.0
 _cooldownPossessionBar = NodePath("CanvasLayer/Cooldown")
 _sprite = NodePath("Sprite2D")
 _particlePossession = NodePath("ParticlePossession")
 _cooldownAttackBar = NodePath("CanvasLayer/CooldownAttack")
-MaxHealth = 3.0
+MaxHealth = 8.0
 _healthBar = NodePath("CanvasLayer/Health")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1119545135]
-visible = false
 position = Vector2(0, -7)
 shape = SubResource("CircleShape2D_u8vuu")
 debug_color = Color(0.5017985, 0.695035, 0.1450671, 0.0627451)
@@ -102,17 +138,18 @@ collision_layer = 0
 collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PossessionArea" unique_id=1172494490]
-visible = false
 position = Vector2(0, -7)
 shape = SubResource("CircleShape2D_sa52v")
+disabled = true
 debug_color = Color(0.827451, 0, 0.9529412, 0.047058824)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1563587527]
 texture_filter = 1
+material = SubResource("ShaderMaterial_dovo2")
 position = Vector2(0, -7)
-texture = SubResource("PortableCompressedTexture2D_8afob")
+texture = SubResource("PortableCompressedTexture2D_gmlin")
 hframes = 2
-frame = 1
+vframes = 2
 metadata/_aseprite_wizard_interface_config_ = {
 "animation_section": false,
 "layer_section": false,
@@ -137,7 +174,7 @@ metadata/_aseprite_wizard_config_ = {
 "source": "res://assets/player.aseprite",
 "source_uid": 3212217112115422117
 }
-metadata/_aseprite_wizard_source_file_hash_ = "f0eeda2fcedd1be70662296ee6029ab5"
+metadata/_aseprite_wizard_source_file_hash_ = "e774c97bb75f1f0695343949fd363359"
 
 [node name="ParticlePossession" type="CPUParticles2D" parent="." unique_id=1590670815]
 position = Vector2(0, -6)
@@ -155,6 +192,11 @@ initial_velocity_min = 50.0
 initial_velocity_max = 100.0
 scale_amount_max = 3.0
 scale_amount_curve = SubResource("Curve_gmlin")
+
+[node name="PointLight2D2" type="PointLight2D" parent="." unique_id=1541563586]
+position = Vector2(0, -5)
+color = Color(1, 0.6896666, 0.01999998, 1)
+texture = SubResource("GradientTexture2D_dovo2")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1780834866]
 

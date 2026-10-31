@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://kbxe8b7vppyr"
+path="res://.godot/imported/pumpkin.aseprite-e1d63c5b4924876be5b0c90f1a0af5ab.res"
+
+[deps]
+
+source_file="res://assets/pumpkin.aseprite"
+dest_files=["res://.godot/imported/pumpkin.aseprite-e1d63c5b4924876be5b0c90f1a0af5ab.res"]
+
+[params]
+

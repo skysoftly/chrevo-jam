@@ -98,10 +98,10 @@ public abstract partial class Enemy : Entity
 
 		foreach (Node node in GetTree().GetNodesInGroup("enemies"))
 		{
-			if (node == this || node is not Enemy other || other.IsPossessed)
+			if (node == this || node is not Enemy other)
 				continue;
 
-			if (other.IsQueuedForDeletion())
+			if (other.IsPossessed || other.IsQueuedForDeletion())
 				continue;
 
 			Vector2 offset = GlobalPosition - other.GlobalPosition;
@@ -110,7 +110,10 @@ public abstract partial class Enemy : Entity
 			if (distance <= 0 || distance >= SeparationRadius)
 				continue;
 
-			float strength = 1f - distance / SeparationRadius;
+			float strength = Mathf.Pow(
+				1f - distance / SeparationRadius,
+				2f
+			);
 
 			separation += offset.Normalized() * strength;
 		}
@@ -155,7 +158,17 @@ public abstract partial class Enemy : Entity
 		if (!IsPossessed || IsAttacking)
 			return;
 
+		if (direction.X > 0)
+		{
+			Sprite.FlipH = false;
+		}
+		else if (direction.X < 0)
+		{
+			Sprite.FlipH = true;
+		}
+		
 		Velocity = direction * Speed * speedMultiplier;
+
 
 		MoveAndSlide();
 	}

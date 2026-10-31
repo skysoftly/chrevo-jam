@@ -6,16 +6,13 @@ namespace game.scenes.player;
 
 public partial class Player : Entity
 {
-	[ExportGroup("Movement")]
-	[Export] private float _speed = 125f;
+	[ExportGroup("Movement")] [Export] private float _speed = 125f;
 	[Export] private float _speedModifier = 1.25f;
 
-	[ExportGroup("Health")]
-	[Export] private float _invulnerabilityTime = 0.2f;
+	[ExportGroup("Health")] [Export] private float _invulnerabilityTime = 0.2f;
 	[Export] private ProgressBar _healthBar;
 
-	[ExportGroup("Possession")]
-	[Export] private float _possessionRange = 100f;
+	[ExportGroup("Possession")] [Export] private float _possessionRange = 100f;
 	[Export] private float _possessionCooldown = 3f;
 	[Export] private float _possessionDamage = 1f;
 	[Export] private float _possessionDamageInterval = 3f;
@@ -23,7 +20,7 @@ public partial class Player : Entity
 	[Export] private ProgressBar _cooldownPossessionBar;
 	[Export] private Sprite2D _sprite;
 	[Export] private CpuParticles2D _particlePossession;
-	
+
 	[Export] private ProgressBar _cooldownAttackBar;
 
 	private Enemy _possessedEnemy;
@@ -40,6 +37,7 @@ public partial class Player : Entity
 		base.OnEntityReady();
 
 		_cooldownAttackBar.Visible = false;
+		_possessionDamageTimer = _possessionDamageInterval;
 		UpdateHealthBar();
 
 		if (GodotObject.IsInstanceValid(_cooldownPossessionBar))
@@ -81,7 +79,6 @@ public partial class Player : Entity
 
 			_cooldownAttackBar.Value = _possessedEnemy.AttackTimer;
 		}
-		
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -103,6 +100,13 @@ public partial class Player : Entity
 			GlobalPosition = _possessedEnemy.GlobalPosition;
 			return;
 		}
+
+
+		if (direction.X > 0)
+			_sprite.FlipH = false;
+		else if (direction.X < 0)
+			_sprite.FlipH = true;
+
 
 		_knockbackVelocity = _knockbackVelocity.MoveToward(
 			Vector2.Zero,
@@ -135,7 +139,6 @@ public partial class Player : Entity
 
 	protected override void Die()
 	{
-		
 	}
 
 	public void Heal(float amount)
@@ -190,7 +193,6 @@ public partial class Player : Entity
 		if (GodotObject.IsInstanceValid(_possessedEnemy) &&
 			!_possessedEnemy.IsQueuedForDeletion())
 		{
-
 			if (_possessionDamageTimer <= 0)
 			{
 				_possessionDamageTimer = _possessionDamageInterval;

@@ -6,11 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://bxtepmylamtkc" path="res://scenes/enemies/Pumpkin/pumpkin.tscn" id="4_h30v7"]
 [ext_resource type="Texture2D" uid="uid://p8rjdhdgbav8" path="res://assets/vignette.png" id="5_h30v7"]
 
-[sub_resource type="Environment" id="Environment_sa52v"]
-background_mode = 3
-
-[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_h30v7"]
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3gx7t"]
 size = Vector2(664, 23.333344)
 
@@ -27,11 +22,11 @@ _limits = [0.0, 50.0, 0.0, 1.0]
 _data = [Vector2(0, 1.6853943), 0.0, 0.0, 0, 0, Vector2(1, 50), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="Gradient_4ytvr"]
+[sub_resource type="Gradient" id="Gradient_h30v7"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_3gx7t"]
-gradient = SubResource("Gradient_4ytvr")
+gradient = SubResource("Gradient_h30v7")
 width = 128
 height = 128
 fill = 1
@@ -40,10 +35,6 @@ fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
 
 [node name="Game" type="Node2D" unique_id=2068740180]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=91695837]
-environment = SubResource("Environment_sa52v")
-camera_attributes = SubResource("CameraAttributesPractical_h30v7")
 
 [node name="SpookyArena" type="Sprite2D" parent="." unique_id=1107190591]
 scale = Vector2(1.5, 1.5)
@@ -178,6 +169,7 @@ texture = SubResource("GradientTexture2D_3gx7t")
 texture_scale = 2.4
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=60745922]
+layer = 0
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=1500956194]
 anchors_preset = 15
@@ -187,3 +179,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("5_h30v7")
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="." unique_id=116328711]
+position = Vector2(136, 75.999985)
+scale = Vector2(0.46014887, 0.46014878)
+energy = 0.1
+blend_mode = 1

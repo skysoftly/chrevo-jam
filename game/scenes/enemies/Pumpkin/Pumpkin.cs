@@ -55,6 +55,17 @@ public partial class Pumpkin : Enemy
         Vector2 direction = GlobalPosition.DirectionTo(
             PlayerReference.GlobalPosition
         );
+        
+        
+        if (direction.X > 0)
+        {
+            Sprite.FlipH = false;
+        }
+        else if (direction.X < 0)
+        {
+            Sprite.FlipH = true;
+        }
+
 
         float distance = GlobalPosition.DistanceTo(
             PlayerReference.GlobalPosition
@@ -65,9 +76,9 @@ public partial class Pumpkin : Enemy
         if (distance <= StopDistance)
             direction = Vector2.Zero;
 
-        direction = (direction + separation * 1.5f).Normalized();
+        Vector2 movement = direction + separation * SeparationForce / Speed;
 
-        Velocity = direction * Speed;
+        Velocity = movement.LimitLength(1f) * Speed;
 
         MoveAndSlide();
     }
@@ -211,6 +222,9 @@ public partial class Pumpkin : Enemy
     
     private void OnAttackAreaBodyEntered(Node2D body)
     {
+        
+        GD.Print($"Hit: {body.Name}");
+        
         if (body is IHealth health)
             health.TakeDamage(Damage);
     }

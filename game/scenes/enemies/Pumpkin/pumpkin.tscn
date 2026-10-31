@@ -1,8 +1,7 @@
-[gd_scene format=3 uid="uid://bxtepmylamtkc"]
+[gd_scene format=4 uid="uid://bxtepmylamtkc"]
 
 [ext_resource type="Script" uid="uid://b6udxlxr51j2e" path="res://scenes/enemies/Pumpkin/Pumpkin.cs" id="1_m8d4b"]
 [ext_resource type="Shader" uid="uid://b460tc7jof254" path="res://gdshaders/selectEnemy.gdshader" id="2_61lmv"]
-[ext_resource type="Texture2D" uid="uid://c05cdbc4ehpo4" path="res://assets/pumpkin.png" id="3_8ab2j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m8d4b"]
 shader = ExtResource("2_61lmv")
@@ -36,28 +35,47 @@ shader_parameter/line_thickness = 1.0
 shader_parameter/enabled = false
 shader_parameter/attack = false
 
+[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_t7bmf"]
+_data = PackedByteArray("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")
+size_override = Vector2(192, 144)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_7p1mj"]
 radius = 14.0
 
-[sub_resource type="Animation" id="Animation_3vyb7"]
-length = 0.6
+[sub_resource type="Animation" id="Animation_m8d4b"]
+length = 4.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pumpkin:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 3, 2, 5, 6, 6, 6, 5, 2, 3, 4, 3, 2, 6]
+}
+
+[sub_resource type="Animation" id="Animation_61lmv"]
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("Pumpkin:frame")
 tracks/0/interp = 1
-tracks/0/loop_wrap = true
+tracks/0/loop_wrap = false
 tracks/0/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": []
+"values": [7, 8, 9, 8]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_md0e3"]
 _data = {
-&"Idle": SubResource("Animation_3vyb7")
+&"Rotate and jump": SubResource("Animation_m8d4b"),
+&"Run": SubResource("Animation_61lmv")
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_38ino"]
@@ -87,10 +105,12 @@ _particles = NodePath("ParticlePumpkin")
 _attackArea = NodePath("AttackArea")
 _rangePumpkin = NodePath("AttackArea/RangePumpkin")
 Sprite = NodePath("Pumpkin")
-Damage = 2.0
+StopDistance = 30.0
+Damage = 5.0
 DamageCooldown = 0.3
+SeparationRadius = 40.0
 _outlineMaterial = SubResource("ShaderMaterial_m8d4b")
-MaxHealth = 10.0
+MaxHealth = 15.0
 _healthBar = NodePath("ProgressBar")
 
 [node name="ParticlePumpkin" type="CPUParticles2D" parent="." unique_id=29875832]
@@ -113,9 +133,35 @@ scale_amount_max = 3.0
 scale_amount_curve = SubResource("Curve_lu5c6")
 
 [node name="Pumpkin" type="Sprite2D" parent="." unique_id=917173418]
+texture_filter = 1
 material = SubResource("ShaderMaterial_61lmv")
 position = Vector2(0, -7)
-texture = ExtResource("3_8ab2j")
+texture = SubResource("PortableCompressedTexture2D_t7bmf")
+hframes = 4
+vframes = 3
+frame = 9
+metadata/_aseprite_wizard_interface_config_ = {
+"pending_changes": {}
+}
+metadata/_aseprite_wizard_config_ = {
+"convert_fps_field": 60.0,
+"convert_ms_field": 16.0,
+"convert_to_fps": false,
+"embed_tex": true,
+"i_mode": 0,
+"keep_anim_length": false,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "AnimationPlayer",
+"scale": "1.0",
+"slice": "",
+"source": "res://assets/pumpkin.aseprite",
+"source_uid": 705358184441595397
+}
+metadata/_aseprite_wizard_source_file_hash_ = "1bb6b6b385d4d24c07152b1dd7848107"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=387617582]
 position = Vector2(0, -6)
@@ -125,6 +171,7 @@ debug_color = Color(0.20258287, 0.34238014, 0.14652398, 0.12941177)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=255116535]
 libraries/ = SubResource("AnimationLibrary_md0e3")
+autoplay = &"Run"
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=728413881]
 collision_layer = 0

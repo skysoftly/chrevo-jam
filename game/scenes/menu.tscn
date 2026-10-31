@@ -6,19 +6,6 @@
 [ext_resource type="Theme" uid="uid://b6ku3hh08t2am" path="res://assets/themes/theme.tres" id="3_mhnvy"]
 [ext_resource type="Texture2D" uid="uid://ci28fn8omu51v" path="res://assets/bgPumpkin.png" id="4_4ytvr"]
 [ext_resource type="Texture2D" uid="uid://p8rjdhdgbav8" path="res://assets/vignette.png" id="6_g3eks"]
-[ext_resource type="Texture2D" uid="uid://dcqojvp73id4q" path="res://scenes/GameName.png" id="5_g3eks"]
-
-[sub_resource type="Gradient" id="Gradient_4ytvr"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_gfg0v"]
-gradient = SubResource("Gradient_4ytvr")
-width = 128
-height = 128
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.5, 0)
-metadata/_snap_enabled = true
 
 [sub_resource type="Animation" id="Animation_g3eks"]
 resource_name = "Pumpkin"
@@ -42,12 +29,40 @@ _data = {
 &"Pumpkin": SubResource("Animation_g3eks")
 }
 
-[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_con2f"]
-_data = PackedByteArray("AAADAAUAAAABAAAAAAEAAGAAAABIBAAAUklGRkAEAABXRUJQVlA4TDMEAAAv/8AXEIegoG0jx3f3i8fz57eIKGrbBuq5/6iMP7ZJYdu2jbKTjiP7/w0FBARF/o8WwLpCRY4DKjJd8N/XQEhbwfFl9u7ZC0hyG0mSJJuuZbbqCM///zbDzNwzIyvqNJiI/jty20aSVF2zneQkXdNv2P4VXdjXhyeiDj5iT15HwK7U8THmHnal7/2g0rrm/mRXANF1DTMLmYiSVyZVXLPvl557ICIqH4ZNt8vlh6q0ll6IiZzR9zPnfsYeH0xco9MLizEbGA6GF03kvLk/qe/XmvukvmHKLcQJALfd08IRrjL3QC33Jea+Hg+qARO7TioBuK4P5s+92LzJ3CMyIowA2/DSoAWAIIw0dmbP/bHcF5z7ESqroqLZ2E76THLWCdoo8QExe+6P5b7e3LtQIMJgJl3cbOyIpq4qKj672M7suT+aOwcIBSSNk3GhNIQCRkPJqW+SslfQNvTB9Lk/mluCGyUgIun7YwpUK1CgrNPFKaak1qvBji9+ISbOPVXxaO7i3E/tu0SUSoYgwQ/AReJPzRBUiZjA9kTnJDieuzz35/e9WEndRptoLYX1qEqshbuUg6y5EBP7Xspd7vvvet/nwMLRS6AKGdBRaMthzspL9R1v0ff02QaGUgaKzb2Wo9DEdkzrezX39fsOD2d1lGL3nWI1qAygYl059xX7bozNcQaXBNXYt5IOTwFf75d7at8hcDctUSPovVwNgCSogO+a+7b9nZA7BJ6aEF5cDiAPyH09YKOlwzJzAxp7tF0aaMvh8DKoxO76Dgm+zNwRGptQZS1HIWEhuMik9ern5SbNxn+gAOnfBpLl9NyYmnvT3Fs9d5gSe7ofHKjZeYgyOC2GvvVJ0YSF3G0sWLWF5gbHNhqmAthJD1CmpYBE0Jp+oTFaYG6fFHWhkmNB9DY8vgDcrd1te//cH3/9959/28G+PjwRdfBRegK7PK8jYFfq+ByfoutKfhi1zVqSKq15vmo31yD5AWBIw/gk772veEdE/gHAvguLUYvW0otcseBNSzCzFXbaoHVmzGYjw0smcrFbKiwAIfi7CpA6JwC33cgiEbDgTdVSjeze0nbIThAhwGToCyYyIrgB+bFq/2JgZxJGdBMHLBcAgpYUW3aVWtXYig9nhfZjsdgK41smx41RAfOu3QrytI3Cr2G1rfjC7+0FhC800Zohubu2v9yWZsRIGogVQ7X6Sb8WAO4VyO0boKP4zx8dR57E4bpcRq3sAQzPVtsNhedV7RrJLvd7/nAJN0io7ttWOo1WyZGKmeOUiQoQmUI3SKjxMyr7L/U3oQE6bK4dQO5YshEd/BgWT7DZet/pD8SdKtBm5AUuXEi68Q0s9kLo3yfuXO2Gm9JaSu+pjjMUGaO2TkBFAh+l39AzAySUHiBMSwGJQBjC5LHUJ2+gLlRyLIjehscXgLu1u23/I18bAA==")
+[sub_resource type="Gradient" id="Gradient_4ytvr"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gfg0v"]
+gradient = SubResource("Gradient_4ytvr")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+metadata/_snap_enabled = true
+
+[sub_resource type="Gradient" id="Gradient_m8d4b"]
+offsets = PackedFloat32Array(0, 0.29714286, 0.72, 1)
+colors = PackedColorArray(0.6469792, 0.33000815, 0.04361047, 1, 0.64733636, 0.32663473, 0.12945074, 1, 0.5953264, 0.3130715, 0.13312902, 0.6666666, 0.49130648, 0.28594503, 0.14048555, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_g3eks"]
+gradient = SubResource("Gradient_m8d4b")
+width = 4
+height = 4
+fill = 1
+fill_from = Vector2(0.47863248, 0.45726496)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="Curve" id="Curve_v86rl"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_4ytvr"]
+_data = PackedByteArray("AAADAAUAAAABAAAAAAEAAGAAAACgAwAAUklGRpgDAABXRUJQVlA4TIsDAAAv/8AXECegpm0Dpgg3/6+gBAKEUnFGjdP8BwDIecxAu7btuI0EZPAuUAngFhIwEAFqvfyDwnsAB0Ff1UNE/xm4bdtIt7djt70/hL+hkyB+O7oHiN+NjBq/Ije4yTOqExEXE1I8K7e7ijBIMiE6mApJeEU1venby7nJ0M08lG5y2u1M+83kTXjIDd9ezQ2qOhE4czxk8nQUriE8y+2Ob2/l5mv9M8EvM+caBDhEyee5Xfn2Xm5QWkkyJlDu8YIIZxv5Rm7QT+Q2FjSZOS6yQra8ggrfhhgf53al+73cgKU8wykNML+COBW+v8hIk8e5Xel+MTcpFskwig9MSstTsObCBKWhED7O7VL3RW7yJDezKZvJExjRskAwwSC1JqNCnud2qXuX21PfgksG1RtGbuRNwU5HdtYkqc9yk1EvdV/lVh+BOmU7Ai5AmHRjMI360Ldr3fvc7vu2KxBKh5B9wTkJthx9hEo89G2j+wO+DULrhrxHSsfSa8n0km/5A76VZaSKDoQFtXcC0fVaxzPftrpf900WiMm+2TDvSmgZTPFl3e/5JtU0oTA5gbvY2raEDimMn9P90DcYOTjGDmXbloAYQMQzdY9JgwwHiY3XaQG6aVNH6pZB66yumYuSaVcNVtuYEMSSjUfqVlrnlEoEqStipLgKW2riPSpbR4DFLKbwtm68rVsnzUP3G4cJuQfZEa2HO/pCIVuPq7A+sXgO1L35yQZgAualbU36wk/PP9kOej5SdwCwK2KjATbFRUzEWtnndf+/xiSI347uwZe4ADfdQkb9CjBIMnmLR4VNcTEhHcbdRIfSTQAmTMU0eHE1ndu8hiKu2+ohUwh2pv1m8iEcDFR1IrDi3P2FbNnTUehhisduK/9M8CuE4WOG1etBgEOUPBUorSQZk+LfLaXl6IkTuCvnMhY0ufe6eN2d4lKw/u7CwbkreHurey939ormwgSloUlOxRWbgvh+hS2oAKnVBcEk9VgC3JaGkN3ho7Z7evZPj4MZNUK5grAhBSkdTgOpxLkQWv3XZHuszCEA61vJdPBpksuIU7k7bpugUY/koqiEYnWNDdDNQCsYNQMlIR56PGmQ4b5DYqcGGwvcF3jk5WV461GU2UpjXo+5bGSxwJKJR1LZOoKwRfeuhUK27iF79570Myktw9LFBMxLtoXsCz89/0xQej7zAoCdCRsNsCkuYiLi4sy/x6cAAA==")
 size_override = Vector2(256, 96)
 
 [sub_resource type="Animation" id="Animation_mhnvy"]
-length = 1.2666667
+length = 1.2
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -496,36 +511,49 @@ PlayBtn = NodePath("CanvasLayer/VBoxContainer/Play")
 QuitBtn = NodePath("CanvasLayer/VBoxContainer/Quit")
 Scene = ExtResource("2_vjb58")
 
-[node name="Bg" type="Sprite2D" parent="." unique_id=1573572502]
-texture_filter = 1
-position = Vector2(383.54633, 216.49998)
-scale = Vector2(0.46014887, 0.4601488)
+[node name="Bg" type="Sprite2D" parent="." unique_id=1190014117]
+position = Vector2(384, 216)
 texture = ExtResource("3_4ytvr")
-metadata/_edit_lock_ = true
 
-[node name="Pumpkin" type="Sprite2D" parent="Bg" unique_id=525041308]
-position = Vector2(-540.1433, -307.50916)
-rotation = -0.20943952
-texture = ExtResource("4_4ytvr")
-offset = Vector2(-4.076172, 97.84952)
-
-[node name="PointLight2D" type="PointLight2D" parent="Bg/Pumpkin" unique_id=1977090122]
-position = Vector2(0, 145.6051)
-color = Color(1, 1, 0.023529412, 1)
-energy = 2.0
-texture = SubResource("GradientTexture2D_gfg0v")
-texture_scale = 2.4
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Bg" unique_id=1401433609]
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="." unique_id=1401433609]
 root_node = NodePath("../Pumpkin")
 libraries/ = SubResource("AnimationLibrary_13sgg")
 autoplay = &"Pumpkin"
+
+[node name="Pumpkin" type="Sprite2D" parent="." unique_id=525041308]
+z_index = 1
+position = Vector2(110, 151)
+rotation = -0.20943952
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("4_4ytvr")
+offset = Vector2(0.2131424, 32.90953)
+
+[node name="PointLight2D" type="PointLight2D" parent="Pumpkin" unique_id=1977090122]
+position = Vector2(0.41093826, 53.56362)
+color = Color(1, 0.4745098, 0.023529412, 1)
+texture = SubResource("GradientTexture2D_gfg0v")
+texture_scale = 2.4
+
+[node name="ParticlePumpkin" type="CPUParticles2D" parent="Pumpkin" unique_id=128448898]
+z_index = -1
+position = Vector2(0.41092944, 53.563637)
+amount = 20
+texture = SubResource("GradientTexture2D_g3eks")
+emission_shape = 1
+emission_sphere_radius = 19.39
+direction = Vector2(0, 1)
+spread = 80.0
+gravity = Vector2(0, 20)
+initial_velocity_min = 50.0
+initial_velocity_max = 50.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_v86rl")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=692747591]
 texture_filter = 1
 position = Vector2(313, 75.00001)
 scale = Vector2(2.7708333, 2.7708333)
-texture = SubResource("PortableCompressedTexture2D_con2f")
+texture = SubResource("PortableCompressedTexture2D_4ytvr")
 hframes = 2
 vframes = 2
 metadata/_aseprite_wizard_interface_config_ = {
@@ -543,13 +571,13 @@ metadata/_aseprite_wizard_config_ = {
 "o_folder": "",
 "o_name": "",
 "only_visible": false,
-"player": "CanvasLayer/AnimationPlayer",
+"player": "AnimationPlayer",
 "scale": "1.0",
 "slice": "",
 "source": "res://assets/GameName.aseprite",
 "source_uid": 7606953952552242511
 }
-metadata/_aseprite_wizard_source_file_hash_ = "0d8cf9077723418f215cbdb143f6c8ab"
+metadata/_aseprite_wizard_source_file_hash_ = "5c3fed92ca1f676d493d76671e2e9e8d"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=116505798]
 libraries/ = SubResource("AnimationLibrary_4ytvr")
@@ -561,6 +589,62 @@ scale = Vector2(0.46014887, 0.46014878)
 energy = 0.1
 blend_mode = 1
 
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=392259438]
+position = Vector2(39, 406)
+color = Color(1, 0.4745098, 0.023529412, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_gfg0v")
+texture_scale = 3.0
+
+[node name="PointLight2D3" type="PointLight2D" parent="." unique_id=1464121685]
+position = Vector2(565, 396)
+color = Color(1, 0.4745098, 0.023529412, 1)
+energy = 1.5
+texture = SubResource("GradientTexture2D_gfg0v")
+texture_scale = 2.4
+
+[node name="PointLight2D4" type="PointLight2D" parent="." unique_id=1871122401]
+position = Vector2(403, 399)
+color = Color(1, 0.4745098, 0.023529412, 1)
+energy = 1.8
+texture = SubResource("GradientTexture2D_gfg0v")
+
+[node name="PointLight2D2" type="PointLight2D" parent="." unique_id=308784002]
+position = Vector2(236, 420)
+color = Color(1, 0.4745098, 0.023529412, 1)
+energy = 1.5
+texture = SubResource("GradientTexture2D_gfg0v")
+
+[node name="PointLight2D5" type="PointLight2D" parent="." unique_id=1940480589]
+position = Vector2(482, 144)
+color = Color(1, 0.4745098, 0.023529412, 1)
+energy = 0.8
+texture = SubResource("GradientTexture2D_gfg0v")
+
+[node name="PointLight2D6" type="PointLight2D" parent="." unique_id=1779003713]
+position = Vector2(529, 89)
+color = Color(1, 0.4745098, 0.023529412, 1)
+energy = 0.8
+texture = SubResource("GradientTexture2D_gfg0v")
+
+[node name="PointLight2D7" type="PointLight2D" parent="." unique_id=1481926248]
+position = Vector2(556, 150)
+color = Color(1, 0.4745098, 0.023529412, 1)
+energy = 0.8
+texture = SubResource("GradientTexture2D_gfg0v")
+
+[node name="PointLight2D8" type="PointLight2D" parent="." unique_id=1650120665]
+position = Vector2(602, 120)
+color = Color(1, 0.4745098, 0.023529412, 1)
+energy = 0.4
+texture = SubResource("GradientTexture2D_gfg0v")
+
+[node name="PointLight2D9" type="PointLight2D" parent="." unique_id=960811836]
+position = Vector2(463, 37)
+color = Color(0.82266104, 0.6635192, 0.78975856, 1)
+texture = SubResource("GradientTexture2D_gfg0v")
+texture_scale = 3.53
+
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=44820775]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1285189682]
@@ -569,13 +653,12 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -241.0
-offset_top = -68.0
-offset_right = -72.0
-offset_bottom = 148.0
+offset_left = -327.0
+offset_top = -42.0
+offset_right = -158.0
+offset_bottom = 174.0
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_constants/separation = 10
 
 [node name="Play" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=564096435]
 texture_filter = 1
@@ -604,28 +687,11 @@ layout_mode = 2
 theme = ExtResource("3_mhnvy")
 text = "Выйти"
 
-[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1465500105]
-position = Vector2(90, 355)
-color = Color(1, 1, 0.023529412, 1)
-energy = 2.0
-texture = SubResource("GradientTexture2D_gfg0v")
-texture_scale = 2.4
-
-[node name="PointLight2D2" type="PointLight2D" parent="." unique_id=327682366]
-position = Vector2(709, 377)
-color = Color(1, 1, 0.023529412, 1)
-energy = 2.0
-texture = SubResource("GradientTexture2D_gfg0v")
-texture_scale = 2.4
-
-[node name="PointLight2D3" type="PointLight2D" parent="." unique_id=1378303526]
-position = Vector2(186, 381)
-color = Color(1, 1, 0.023529412, 1)
-energy = 2.0
-texture = SubResource("GradientTexture2D_gfg0v")
-texture_scale = 2.4
-
-[node name="PointLight2D4" type="PointLight2D" parent="." unique_id=364225323]
-position = Vector2(504, 68)
-texture = SubResource("GradientTexture2D_gfg0v")
-texture_scale = 2.4
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=502991497]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_g3eks")
