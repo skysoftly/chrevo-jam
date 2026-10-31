@@ -7,8 +7,9 @@
 script = ExtResource("2_b4r0v")
 Title = "Летучая мышь"
 Texture = ExtResource("1_v2ro1")
-MaxHealth = 4.0
+MaxHealth = 6.0
 Damage = 1.0
 Speed = 100.0
 KnockbackForce = 100.0
+AttackRange = 10.0
 metadata/_custom_type_script = "uid://cxjyyvxq3mbop"

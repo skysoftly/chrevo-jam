@@ -11,4 +11,6 @@ MaxHealth = 10.0
 Damage = 2.0
 Speed = 70.0
 KnockbackForce = 200.0
+AttackType = 2
+AttackRange = 67.0
 metadata/_custom_type_script = "uid://cxjyyvxq3mbop"

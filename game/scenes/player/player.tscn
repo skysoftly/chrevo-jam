@@ -1,10 +1,7 @@
 [gd_scene format=4 uid="uid://casgcs7q8ujxx"]
 
 [ext_resource type="Script" uid="uid://d0v83nfpy8jog" path="res://scenes/player/Player.cs" id="1_3vyb7"]
-
-[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_8afob"]
-_data = PackedByteArray("AAADAAUAAAABAAAAQAAAACAAAADqAAAAUklGRuIAAABXRUJQVlA4TNUAAAAvP8AHEDegqG0jNtXnuA31FLWRAgdXwckLA0hDTQAQbE6EvZ0qmP8AgKPz3u0yEaf8HzhqJMmRWs1g7XtUqyVwcwTWEXAAzvLHMLbOviP6b7Rtm5QNWTtD/uTg9koGhxuUdpr1mN2OXlnnuszB9p50Yk4MlNPMyWnWScQ4xqC6CO4d36UY/L0jnGYKGM+28Pez5pyJLkXh7q68M6pwFT7WORfF4O+cM/0H0plc3pntMw6bzhIOwZRkQghHGmqVcQjsFCkthHIITjZYByEdYhBMJe/4BxMA")
-size_override = Vector2(64, 32)
+[ext_resource type="Texture2D" uid="uid://dmgk5x87tu83j" path="res://assets/particles/particle.png" id="2_dovo2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_u8vuu"]
 radius = 13.0
@@ -33,12 +30,41 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_sa52v"]
 radius = 80.024994
 
-[node name="Player" type="CharacterBody2D" unique_id=250972871 node_paths=PackedStringArray("_sprite")]
+[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_8afob"]
+_data = PackedByteArray("AAADAAUAAAABAAAAQAAAACAAAADqAAAAUklGRuIAAABXRUJQVlA4TNUAAAAvP8AHEDegqG0jNtXnuA31FLWRAgdXwckLA0hDTQAQbE6EvZ0qmP8AgKPz3u0yEaf8HzhqJMmRWs1g7XtUqyVwcwTWEXAAzvLHMLbOviP6b7Rtm5QNWTtD/uTg9koGhxuUdpr1mN2OXlnnuszB9p50Yk4MlNPMyWnWScQ4xqC6CO4d36UY/L0jnGYKGM+28Pez5pyJLkXh7q68M6pwFT7WORfF4O+cM/0H0plc3pntMw6bzhIOwZRkQghHGmqVcQjsFCkthHIITjZYByEdYhBMJe/4BxMA")
+size_override = Vector2(64, 32)
+
+[sub_resource type="Curve" id="Curve_gmlin"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Player" type="CharacterBody2D" unique_id=250972871 node_paths=PackedStringArray("_sprite", "_particlePossession")]
 collision_layer = 4
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_3vyb7")
 _sprite = NodePath("Sprite2D")
+_particlePossession = NodePath("ParticlePossession")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1119545135]
+visible = false
+position = Vector2(0, -7)
+shape = SubResource("CircleShape2D_u8vuu")
+debug_color = Color(0.5017985, 0.695035, 0.1450671, 0.0627451)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1282550276]
+libraries/ = SubResource("AnimationLibrary_g2els")
+autoplay = &"Idle"
+
+[node name="PossessionArea" type="Area2D" parent="." unique_id=383010202]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PossessionArea" unique_id=1172494490]
+visible = false
+position = Vector2(0, -7)
+shape = SubResource("CircleShape2D_sa52v")
+debug_color = Color(0.827451, 0, 0.9529412, 0.047058824)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1563587527]
 texture_filter = 1
@@ -72,28 +98,22 @@ metadata/_aseprite_wizard_config_ = {
 }
 metadata/_aseprite_wizard_source_file_hash_ = "f0eeda2fcedd1be70662296ee6029ab5"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1119545135]
-position = Vector2(0, -7)
-shape = SubResource("CircleShape2D_u8vuu")
-debug_color = Color(0.5017985, 0.695035, 0.1450671, 0.0627451)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1282550276]
-libraries/ = SubResource("AnimationLibrary_g2els")
-autoplay = &"Idle"
-
-[node name="PossessionArea" type="Area2D" parent="." unique_id=383010202]
-collision_layer = 0
-collision_mask = 8
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PossessionArea" unique_id=1172494490]
-position = Vector2(0, -7)
-shape = SubResource("CircleShape2D_sa52v")
-debug_color = Color(0.827451, 0, 0.9529412, 0.047058824)
-
-[node name="Timer" type="Timer" parent="." unique_id=684851861]
-wait_time = 3.0
-autostart = true
+[node name="ParticlePossession" type="CPUParticles2D" parent="." unique_id=1590670815]
+position = Vector2(0, -6)
+emitting = false
+amount = 20
+texture = ExtResource("2_dovo2")
+one_shot = true
+explosiveness = 1.0
+emission_shape = 1
+emission_sphere_radius = 5.0
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+scale_amount_max = 3.0
+scale_amount_curve = SubResource("Curve_gmlin")
 
 [connection signal="body_entered" from="PossessionArea" to="." method="OnPossessionAreaBodyEntered"]
 [connection signal="body_exited" from="PossessionArea" to="." method="OnPossessionAreaBodyExited"]
-[connection signal="timeout" from="Timer" to="." method="PossessionDamage"]

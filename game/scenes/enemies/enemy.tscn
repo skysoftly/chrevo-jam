@@ -4,6 +4,22 @@
 [ext_resource type="Texture2D" uid="uid://c05cdbc4ehpo4" path="res://assets/pumpkin.png" id="2_38ino"]
 [ext_resource type="Shader" uid="uid://b460tc7jof254" path="res://gdshaders/selectEnemy.gdshader" id="2_fcftc"]
 
+[sub_resource type="Gradient" id="Gradient_38ino"]
+offsets = PackedFloat32Array(0, 0.29714286, 0.72, 1)
+colors = PackedColorArray(0.6469792, 0.33000815, 0.04361047, 1, 0.64733636, 0.32663473, 0.12945074, 1, 0.5953264, 0.3130715, 0.13312902, 0.6666666, 0.49130648, 0.28594503, 0.14048555, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_38ino"]
+gradient = SubResource("Gradient_38ino")
+width = 4
+height = 4
+fill = 1
+fill_from = Vector2(0.47863248, 0.45726496)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="Curve" id="Curve_lu5c6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h30v7"]
 shader = ExtResource("2_fcftc")
 shader_parameter/line_color = Color(0.7153433, 0.46660912, 0.2977128, 1)
@@ -36,8 +52,8 @@ _data = {
 &"Idle": SubResource("Animation_3vyb7")
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_sa52v"]
-radius = 11.045361
+[sub_resource type="CircleShape2D" id="CircleShape2D_38ino"]
+radius = 30.016663
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38ino"]
 bg_color = Color(0.029506553, 0.029506562, 0.029506536, 1)
@@ -45,14 +61,38 @@ bg_color = Color(0.029506553, 0.029506562, 0.029506536, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fcftc"]
 bg_color = Color(0.53273195, 0.13513142, 0.11282284, 1)
 
-[node name="Enemy" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_sprite", "_healthBar")]
+[node name="Enemy" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_sprite", "_healthBar", "_pumpkinCollider", "_attackArea", "_particlePumpkin")]
 collision_layer = 8
-collision_mask = 10
+collision_mask = 2
 motion_mode = 1
 safe_margin = 0.001
 script = ExtResource("1_8e3ao")
 _sprite = NodePath("Pumpkin")
 _healthBar = NodePath("ProgressBar")
+_separationRadius = 40.0
+_separationStrength = 0.8
+_pumpkinCollider = NodePath("AttackArea/RangePumpkin")
+_attackArea = NodePath("AttackArea")
+_particlePumpkin = NodePath("ParticlePumpkin")
+
+[node name="ParticlePumpkin" type="CPUParticles2D" parent="." unique_id=29875832]
+position = Vector2(0, -6)
+emitting = false
+amount = 20
+texture = SubResource("GradientTexture2D_38ino")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+emission_shape = 1
+emission_sphere_radius = 5.0
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+scale_amount_min = 2.0
+scale_amount_max = 3.0
+scale_amount_curve = SubResource("Curve_lu5c6")
 
 [node name="Pumpkin" type="Sprite2D" parent="." unique_id=917173418]
 material = SubResource("ShaderMaterial_h30v7")
@@ -72,9 +112,10 @@ libraries/ = SubResource("AnimationLibrary_md0e3")
 collision_layer = 0
 collision_mask = 4
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="AttackArea" unique_id=166646319]
+[node name="RangePumpkin" type="CollisionShape2D" parent="AttackArea" unique_id=1139850579]
 position = Vector2(0, -6)
-shape = SubResource("CircleShape2D_sa52v")
+shape = SubResource("CircleShape2D_38ino")
+disabled = true
 debug_color = Color(0.1764706, 0.023529412, 0.03137255, 0.1254902)
 
 [node name="ProgressBar" type="ProgressBar" parent="." unique_id=1215665850]
@@ -85,8 +126,7 @@ offset_bottom = -30.0
 theme_override_styles/background = SubResource("StyleBoxFlat_38ino")
 theme_override_styles/fill = SubResource("StyleBoxFlat_fcftc")
 max_value = 15.0
-value = 1.0
+value = 7.5
 show_percentage = false
 
-[connection signal="body_entered" from="AttackArea" to="." method="OnAttackAreaBodyEntered"]
-[connection signal="body_exited" from="AttackArea" to="." method="OnAttackAreaBodyExited"]
+[connection signal="body_entered" from="AttackArea" to="." method="DealDamage"]

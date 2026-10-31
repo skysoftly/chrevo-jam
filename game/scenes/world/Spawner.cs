@@ -60,7 +60,18 @@ public partial class Spawner : Node2D
 
 	private Vector2 GetRandomPosition()
 	{
-		return _player.Position + _distance * Vector2.Right.Rotated((float)(_random.NextDouble() * 2 * Math.PI));
+		Vector2 pos;
+
+		do
+		{
+			pos = new Vector2(
+				_random.Next(-450, 451),
+				_random.Next(-300, 301)
+			);
+		}
+		while (pos.DistanceSquaredTo(_player.Position) < _distance * _distance);
+
+		return pos;
 	}
 
 	private void Amount(int number = 1)
@@ -76,7 +87,7 @@ public partial class Spawner : Node2D
 		Second += 1;
 		int count = Second % 2;
 
-		int remaining = 200 - GetTree().GetNodesInGroup("enemies").Count;
+		int remaining = 50 - GetTree().GetNodesInGroup("enemies").Count;
 		
 		Amount(Math.Min(count, remaining));
 	}
