@@ -23,6 +23,8 @@ public partial class Player : Entity
 	[Export] private ProgressBar _cooldownPossessionBar;
 	[Export] private Sprite2D _sprite;
 	[Export] private CpuParticles2D _particlePossession;
+	
+	[Export] private ProgressBar _cooldownAttackBar;
 
 	private Enemy _possessedEnemy;
 	private Enemy _nearestEnemy;
@@ -37,6 +39,7 @@ public partial class Player : Entity
 	{
 		base.OnEntityReady();
 
+		_cooldownAttackBar.Visible = false;
 		UpdateHealthBar();
 
 		if (GodotObject.IsInstanceValid(_cooldownPossessionBar))
@@ -66,12 +69,19 @@ public partial class Player : Entity
 
 		UpdatePossession(delta);
 
-		if (Input.IsActionJustPressed("attack") &&
-			GodotObject.IsInstanceValid(_possessedEnemy) &&
-			GodotObject.IsInstanceValid(_nearestEnemy))
+		if (IsInstanceValid(_possessedEnemy))
 		{
-			_possessedEnemy.TryAttack(_nearestEnemy);
+			if (IsInstanceValid(_nearestEnemy))
+			{
+				if (Input.IsActionJustPressed("attack"))
+				{
+					_possessedEnemy.TryAttack(_nearestEnemy);
+				}
+			}
+
+			_cooldownAttackBar.Value = _possessedEnemy.AttackTimer;
 		}
+		
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -176,10 +186,10 @@ public partial class Player : Entity
 
 	private void UpdatePossession(double delta)
 	{
+		_possessionDamageTimer -= (float)delta;
 		if (GodotObject.IsInstanceValid(_possessedEnemy) &&
 			!_possessedEnemy.IsQueuedForDeletion())
 		{
-			_possessionDamageTimer -= (float)delta;
 
 			if (_possessionDamageTimer <= 0)
 			{
@@ -191,8 +201,16 @@ public partial class Player : Entity
 		}
 		else if (_possessedEnemy != null)
 		{
-			// Захваченный враг был уничтожен.
 			ExitPossession();
+		}
+
+		if (_possessedEnemy == null)
+		{
+			if (_possessionDamageTimer <= 0)
+			{
+				_possessionDamageTimer = _possessionDamageInterval;
+				TakeDamage(_possessionDamage);
+			}
 		}
 
 		UpdateNearestEnemy();
@@ -279,6 +297,8 @@ public partial class Player : Entity
 
 		_possessedEnemy = _nearestEnemy;
 
+		_cooldownAttackBar.MaxValue = _possessedEnemy.AttackCooldown;
+		_cooldownAttackBar.Visible = true;
 		_possessedEnemy.SetOutline(true);
 
 		_possessedEnemy.SetPossessed(
@@ -316,6 +336,7 @@ public partial class Player : Entity
 		_nearestEnemy?.SetOutline(false);
 		_possessedEnemy = null;
 
+		_cooldownAttackBar.Visible = false;
 		Velocity = Vector2.Zero;
 
 		SetCollisionDisabled(false);

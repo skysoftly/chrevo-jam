@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://46phkp80ufgi" path="res://assets/bg.png" id="3_4ytvr"]
 [ext_resource type="Theme" uid="uid://b6ku3hh08t2am" path="res://assets/themes/theme.tres" id="3_mhnvy"]
 [ext_resource type="Texture2D" uid="uid://ci28fn8omu51v" path="res://assets/bgPumpkin.png" id="4_4ytvr"]
+[ext_resource type="Texture2D" uid="uid://p8rjdhdgbav8" path="res://assets/vignette.png" id="6_g3eks"]
 
 [sub_resource type="Gradient" id="Gradient_4ytvr"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -635,6 +636,15 @@ texture_filter = 1
 layout_mode = 2
 theme = ExtResource("3_mhnvy")
 text = "Выйти"
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=989286686]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_g3eks")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1465500105]
 position = Vector2(90, 355)

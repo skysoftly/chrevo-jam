@@ -39,26 +39,52 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dovo2"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.31764707)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gmlin"]
-bg_color = Color(0.50557107, 0, 0.05293162, 1)
+bg_color = Color(0.59235656, 0, 0.0034541034, 0.5529412)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lvxji"]
-bg_color = Color(0.47185636, 0.18253708, 0.5886322, 1)
+bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.31764707)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_75vfm"]
+bg_color = Color(0.62152386, 0.62152386, 0.6215238, 0.49411765)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p47bc"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0.41532683, 0.17753315, 0.5308036, 0.49411765)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
 
-[node name="Player" type="CharacterBody2D" unique_id=250972871 node_paths=PackedStringArray("_healthBar", "_cooldownPossessionBar", "_sprite", "_particlePossession", "_healthBar")]
+[node name="Player" type="CharacterBody2D" unique_id=250972871 node_paths=PackedStringArray("_healthBar", "_cooldownPossessionBar", "_sprite", "_particlePossession", "_cooldownAttackBar", "_healthBar")]
 collision_layer = 4
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_3vyb7")
 _healthBar = NodePath("CanvasLayer/Health")
+_possessionCooldown = 8.0
 _cooldownPossessionBar = NodePath("CanvasLayer/Cooldown")
 _sprite = NodePath("Sprite2D")
 _particlePossession = NodePath("ParticlePossession")
+_cooldownAttackBar = NodePath("CanvasLayer/CooldownAttack")
+MaxHealth = 3.0
 _healthBar = NodePath("CanvasLayer/Health")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1119545135]
@@ -133,12 +159,29 @@ scale_amount_curve = SubResource("Curve_gmlin")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1780834866]
 
 [node name="Health" type="ProgressBar" parent="CanvasLayer" unique_id=1497875978]
-offset_left = 68.0
-offset_top = 50.0
-offset_right = 243.0
-offset_bottom = 77.0
+offset_left = 13.0
+offset_top = 9.0
+offset_right = 188.0
+offset_bottom = 19.0
 theme_override_styles/background = SubResource("StyleBoxFlat_dovo2")
 theme_override_styles/fill = SubResource("StyleBoxFlat_gmlin")
+value = 10.0
+show_percentage = false
+
+[node name="CooldownAttack" type="ProgressBar" parent="CanvasLayer" unique_id=612948783]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -193.0
+offset_top = -19.0
+offset_right = 193.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_lvxji")
+theme_override_styles/fill = SubResource("StyleBoxFlat_75vfm")
 value = 10.0
 show_percentage = false
 
@@ -146,15 +189,14 @@ show_percentage = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -88.0
-offset_top = 19.0
-offset_right = 87.0
-offset_bottom = 46.0
+offset_left = -87.0
+offset_top = 8.0
+offset_right = 88.0
+offset_bottom = 20.0
 grow_horizontal = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_lvxji")
 theme_override_styles/fill = SubResource("StyleBoxFlat_p47bc")
 value = 10.0
-fill_mode = 1
 show_percentage = false
 
 [connection signal="body_entered" from="PossessionArea" to="." method="OnPossessionAreaBodyEntered"]

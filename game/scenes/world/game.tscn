@@ -4,12 +4,28 @@
 [ext_resource type="PackedScene" uid="uid://casgcs7q8ujxx" path="res://scenes/player/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://b7p8rcnxaw0ev" path="res://assets/Spooky_Arena.png" id="2_3gx7t"]
 [ext_resource type="PackedScene" uid="uid://bxtepmylamtkc" path="res://scenes/enemies/Pumpkin/pumpkin.tscn" id="4_h30v7"]
+[ext_resource type="Texture2D" uid="uid://p8rjdhdgbav8" path="res://assets/vignette.png" id="5_h30v7"]
+
+[sub_resource type="Environment" id="Environment_sa52v"]
+background_mode = 3
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_h30v7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3gx7t"]
 size = Vector2(664, 23.333344)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sa52v"]
 size = Vector2(21.333344, 471.33334)
+
+[sub_resource type="Curve" id="Curve_r5nxa"]
+_limits = [0.0, 10.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 10), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_h30v7"]
+_limits = [0.0, 50.0, 0.0, 1.0]
+_data = [Vector2(0, 1.6853943), 0.0, 0.0, 0, 0, Vector2(1, 50), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Gradient" id="Gradient_4ytvr"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -24,6 +40,10 @@ fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
 
 [node name="Game" type="Node2D" unique_id=2068740180]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=91695837]
+environment = SubResource("Environment_sa52v")
+camera_attributes = SubResource("CameraAttributesPractical_h30v7")
 
 [node name="SpookyArena" type="Sprite2D" parent="." unique_id=1107190591]
 scale = Vector2(1.5, 1.5)
@@ -57,6 +77,8 @@ debug_color = Color(0, 0.33580458, 0.38414806, 0)
 _player = NodePath("../Player")
 _objects = NodePath("../Objects")
 _enemyScenes = Array[PackedScene]([ExtResource("4_h30v7")])
+_spawnCurve = SubResource("Curve_r5nxa")
+_maxEnemiesCurve = SubResource("Curve_h30v7")
 
 [node name="Player" parent="." unique_id=250972871 instance=ExtResource("1_uwrxv")]
 position = Vector2(-67, 61)
@@ -154,3 +176,14 @@ color = Color(1, 1, 0.023529412, 1)
 energy = 1.5
 texture = SubResource("GradientTexture2D_3gx7t")
 texture_scale = 2.4
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=60745922]
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=1500956194]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_h30v7")

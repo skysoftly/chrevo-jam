@@ -1,3 +1,4 @@
+
 using System;
 using Godot;
 using game.scenes.enemies;
@@ -15,12 +16,20 @@ public partial class Spawner : Node2D
 
 	[ExportGroup("Spawn Settings")]
 	[Export] private int _maxEnemies = 50;
-	[Export] private int _spawnCount = 1;
+	[Export] private float _spawnInterval = 5f;
+	[Export] private float _difficultyDuration = 600f;
 
+	[Export] private Curve _spawnCurve;
+	[Export] private Curve _maxEnemiesCurve;
+
+	[ExportGroup("Spawn Area")]
 	[Export] private Vector2 _worldMin = new(-450, -300);
 	[Export] private Vector2 _worldMax = new(450, 300);
 
 	private readonly Random _random = new();
+
+	private float _gameTime;
+	private float _spawnTimer;
 
 	private int _minute;
 	private int _second;
@@ -43,7 +52,24 @@ public partial class Spawner : Node2D
 
 	public override void _Process(double delta)
 	{
+		float dt = (float)delta;
+
+		_gameTime += dt;
+		_spawnTimer += dt;
+
+		if (_spawnTimer < _spawnInterval)
+			return;
+
+		_spawnTimer -= _spawnInterval;
+
+		UpdateGameTime();
+
+		int spawnCount = GetSpawnCount();
+
+		SpawnAmount(spawnCount);
 	}
+
+	#region Game Time
 
 	private void UpdateTimerLabels()
 	{
@@ -58,7 +84,7 @@ public partial class Spawner : Node2D
 	{
 		_second++;
 
-		if (_second >= 10)
+		if (_second >= 60)
 		{
 			_second = 0;
 			_minute++;
@@ -66,6 +92,66 @@ public partial class Spawner : Node2D
 
 		UpdateTimerLabels();
 	}
+
+	#endregion
+
+	#region Difficulty
+
+	private float GetDifficultyProgress()
+	{
+		return Mathf.Clamp(
+			_gameTime / _difficultyDuration,
+			0f,
+			1f
+		);
+	}
+
+	private int GetSpawnCount()
+	{
+		if (_spawnCurve == null)
+			return 1;
+
+		float progress = GetDifficultyProgress();
+
+		return Mathf.Max(
+			1,
+			Mathf.RoundToInt(_spawnCurve.Sample(progress))
+		);
+	}
+
+	private int GetMaxEnemies()
+	{
+		if (_maxEnemiesCurve == null)
+			return _maxEnemies;
+
+		float progress = GetDifficultyProgress();
+
+		float multiplier = _maxEnemiesCurve.Sample(progress);
+
+		return Mathf.Clamp(
+			Mathf.RoundToInt(multiplier * _maxEnemies),
+			1,
+			_maxEnemies
+		);
+	}
+
+	private int GetUnlockedEnemyCount()
+	{
+		if (_enemyScenes == null || _enemyScenes.Length == 0)
+			return 0;
+
+		float progress = GetDifficultyProgress();
+
+		return Mathf.Clamp(
+			Mathf.FloorToInt(progress * _enemyScenes.Length) + 1,
+			1,
+			_enemyScenes.Length
+		);
+	}
+
+	#endregion
+
+	#region Spawning
 
 	private int GetEnemyCount()
 	{
@@ -88,10 +174,10 @@ public partial class Spawner : Node2D
 			return;
 		}
 
-		int unlockedCount = Math.Min(
-			_minute + 1,
-			_enemyScenes.Length
-		);
+		int unlockedCount = GetUnlockedEnemyCount();
+
+		if (unlockedCount <= 0)
+			return;
 
 		int index = _random.Next(unlockedCount);
 
@@ -114,7 +200,7 @@ public partial class Spawner : Node2D
 	{
 		int remaining = Math.Max(
 			0,
-			_maxEnemies - GetEnemyCount()
+			GetMaxEnemies() - GetEnemyCount()
 		);
 
 		int count = Math.Min(amount, remaining);
@@ -123,10 +209,5 @@ public partial class Spawner : Node2D
 			Spawn();
 	}
 
-	private void OnTimerTimeout()
-	{
-		UpdateGameTime();
-
-		SpawnAmount(_spawnCount);
-	}
+	#endregion
 }

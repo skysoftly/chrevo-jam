@@ -64,22 +64,33 @@ _data = {
 radius = 30.016663
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38ino"]
-bg_color = Color(0.029506553, 0.029506562, 0.029506536, 1)
+bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.31764707)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fcftc"]
-bg_color = Color(0.53273195, 0.13513142, 0.11282284, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m8d4b"]
+bg_color = Color(0.53333336, 0, 0.003921569, 0.5176471)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
 
-[node name="Pumpkin" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_particles", "Sprite", "_healthBar")]
+[node name="Pumpkin" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_particles", "_attackArea", "_rangePumpkin", "Sprite", "_healthBar")]
 collision_layer = 8
 collision_mask = 2
 motion_mode = 1
 safe_margin = 0.001
 script = ExtResource("1_m8d4b")
 _particles = NodePath("ParticlePumpkin")
+_attackArea = NodePath("AttackArea")
+_rangePumpkin = NodePath("AttackArea/RangePumpkin")
 Sprite = NodePath("Pumpkin")
 Damage = 2.0
 DamageCooldown = 0.3
 _outlineMaterial = SubResource("ShaderMaterial_m8d4b")
+MaxHealth = 10.0
 _healthBar = NodePath("ProgressBar")
 
 [node name="ParticlePumpkin" type="CPUParticles2D" parent="." unique_id=29875832]
@@ -127,13 +138,13 @@ debug_color = Color(0.1764706, 0.023529412, 0.03137255, 0.1254902)
 
 [node name="ProgressBar" type="ProgressBar" parent="." unique_id=1215665850]
 offset_left = -14.0
-offset_top = -37.0
+offset_top = -28.0
 offset_right = 14.0
-offset_bottom = -30.0
+offset_bottom = -25.0
 theme_override_styles/background = SubResource("StyleBoxFlat_38ino")
-theme_override_styles/fill = SubResource("StyleBoxFlat_fcftc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_m8d4b")
 max_value = 15.0
 value = 7.5
 show_percentage = false
 
-[connection signal="body_entered" from="AttackArea" to="." method="DealDamage"]
+[connection signal="body_entered" from="AttackArea" to="." method="OnAttackAreaBodyEntered"]

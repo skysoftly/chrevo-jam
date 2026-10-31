@@ -9,6 +9,7 @@ public abstract partial class Enemy : Entity
 	[Export] public Node2D PlayerReference { get; set; }
 
 	[Export] public float Speed { get; set; } = 100f;
+	[Export] public float StopDistance { get; set; } = 5f;
 	[ExportGroup("Damage")]
 	[Export] public float AttackRange { get; set; } = 50f;
 	[Export] public float AttackCooldown { get; set; } = 2f;
@@ -26,20 +27,19 @@ public abstract partial class Enemy : Entity
 
 	private ShaderMaterial _materialInstance;
 	
+	public bool IsInvulnerable { get; protected set; }
+	
 	public bool IsPossessed { get; private set; }
 	public bool IsAttacking { get; protected set; }
 
-	private float _attackTimer;
+	
+	public float AttackTimer { get; protected set; }
 
 	protected override void OnEntityReady()
 	{
 		base.OnEntityReady();
 
 		AddToGroup("enemies");
-
-		GD.Print($"Enemy: {Name}");
-		GD.Print($"Sprite: {Sprite?.GetPath() ?? "NULL"}");
-		GD.Print($"Material: {_outlineMaterial?.ResourcePath ?? "NULL"}");
 		
 		if (_outlineMaterial != null && Sprite != null)
 		{
@@ -58,9 +58,9 @@ public abstract partial class Enemy : Entity
 	{
 		_damageTimer = Mathf.Max(0, _damageTimer - (float)delta);
 		
-		_attackTimer = Mathf.Max(
+		AttackTimer = Mathf.Max(
 			0,
-			_attackTimer - (float)delta
+			AttackTimer - (float)delta
 		);
 
 		if (IsPossessed || IsAttacking)
@@ -73,7 +73,7 @@ public abstract partial class Enemy : Entity
 			PlayerReference.GlobalPosition
 		);
 
-		if (distance <= AttackRange && _attackTimer <= 0)
+		if (distance <= AttackRange && AttackTimer <= 0)
 		{
 			TryAttack(PlayerReference);
 		}
@@ -98,7 +98,7 @@ public abstract partial class Enemy : Entity
 
 		foreach (Node node in GetTree().GetNodesInGroup("enemies"))
 		{
-			if (node == this || node is not Enemy other)
+			if (node == this || node is not Enemy other || other.IsPossessed)
 				continue;
 
 			if (other.IsQueuedForDeletion())
@@ -120,16 +120,10 @@ public abstract partial class Enemy : Entity
 
 	public override void TakeDamage(float amount)
 	{
-		// Во время атаки враг неуязвим.
-		if (IsAttacking)
-			return;
-
-		// Ограничиваем частоту получения урона.
-		if (_damageTimer > 0)
+		if (IsInvulnerable || _damageTimer > 0)
 			return;
 
 		_damageTimer = DamageCooldown;
-
 		base.TakeDamage(amount);
 	}
 	
@@ -143,13 +137,13 @@ public abstract partial class Enemy : Entity
 
 	public bool TryAttack(Node2D target)
 	{
-		if (IsAttacking || _attackTimer > 0)
+		if (IsAttacking || AttackTimer > 0)
 			return false;
 
 		if (!IsValidTarget(target))
 			return false;
 
-		_attackTimer = AttackCooldown;
+		AttackTimer = AttackCooldown;
 
 		StartAttack(target);
 

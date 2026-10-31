@@ -12,6 +12,8 @@ public abstract partial class Entity : CharacterBody2D, IHealth
 
     public float Health { get; protected set; }
 
+    public bool IsDead { get; protected set; }
+    
     public uint OriginalCollisionLayer { get; private set; }
     public uint OriginalCollisionMask { get; private set; }
 
@@ -86,6 +88,7 @@ public abstract partial class Entity : CharacterBody2D, IHealth
 
     protected virtual void Die()
     {
+        IsDead = true;
         QueueFree();
     }
 
