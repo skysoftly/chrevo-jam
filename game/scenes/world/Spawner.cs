@@ -1,94 +1,132 @@
 using System;
-using game.scenes.enemies;
 using Godot;
-using Enemy = game.scenes.enemies.Enemy;
+using game.scenes.enemies;
 
 namespace game.scenes.world;
 
-
 public partial class Spawner : Node2D
 {
-	[Export] private CharacterBody2D _player;
-	[Export] private PackedScene _enemy;
-
-	[Export] private EnemyType[] _enemyTypes;
-	
+	[ExportGroup("References")]
+	[Export] private Node2D _player;
 	[Export] private Node2D _objects;
-	
-	private float _distance = 400;
 
-	private readonly Random _random = new Random();
-	
-	
+	[ExportGroup("Enemies")]
+	[Export] private PackedScene[] _enemyScenes;
+
+	[ExportGroup("Spawn Settings")]
+	[Export] private int _maxEnemies = 50;
+	[Export] private int _spawnCount = 1;
+
+	[Export] private Vector2 _worldMin = new(-450, -300);
+	[Export] private Vector2 _worldMax = new(450, 300);
+
+	private readonly Random _random = new();
+
 	private int _minute;
-	private int Minute
-	{
-		get => _minute;
-		set
-		{
-			_minute = value;
-			GetNode<Label>("%Minute").Text = _minute.ToString();
-		}
-	}
-	
 	private int _second;
-	private int Second
+
+	private Label _minuteLabel;
+	private Label _secondLabel;
+
+	public override void _Ready()
 	{
-		get => _second;
-		set
-		{
-			_second = value;
-			if (_second >= 10)
-			{
-				_second -= 10;
-				Minute += 1;
-			}
-			GetNode<Label>("%Second").Text = _second.ToString().PadLeft(2, '0');;
-		}
+		_minuteLabel = GetNode<Label>("%Minute");
+		_secondLabel = GetNode<Label>("%Second");
+
+		UpdateTimerLabels();
+
+		// Сразу создаём первого врага.
+		SpawnAmount(1);
+
+		GD.Print("Spawner initialized.");
 	}
 
-	private void Spawn(Vector2 pos)
+	public override void _Process(double delta)
 	{
-		var enemyInstance = _enemy.Instantiate<Enemy>();
+	}
 
-		enemyInstance.Type = _enemyTypes[_random.Next( Math.Min(_minute, _enemyTypes.Length - 1) +  1)];
-		enemyInstance.Position = pos;
-		enemyInstance.PlayerReference = _player;
-		
-		_objects.AddChild(enemyInstance);
+	private void UpdateTimerLabels()
+	{
+		if (GodotObject.IsInstanceValid(_minuteLabel))
+			_minuteLabel.Text = _minute.ToString();
+
+		if (GodotObject.IsInstanceValid(_secondLabel))
+			_secondLabel.Text = _second.ToString("00");
+	}
+
+	private void UpdateGameTime()
+	{
+		_second++;
+
+		if (_second >= 10)
+		{
+			_second = 0;
+			_minute++;
+		}
+
+		UpdateTimerLabels();
+	}
+
+	private int GetEnemyCount()
+	{
+		return GetTree().GetNodesInGroup("enemies").Count;
 	}
 
 	private Vector2 GetRandomPosition()
 	{
-		Vector2 pos;
-
-		do
-		{
-			pos = new Vector2(
-				_random.Next(-450, 451),
-				_random.Next(-300, 301)
-			);
-		}
-		while (pos.DistanceSquaredTo(_player.Position) < _distance * _distance);
-
-		return pos;
+		return new Vector2(
+			(float)(_random.NextDouble() * (_worldMax.X - _worldMin.X) + _worldMin.X),
+			(float)(_random.NextDouble() * (_worldMax.Y - _worldMin.Y) + _worldMin.Y)
+		);
 	}
 
-	private void Amount(int number = 1)
+	private void Spawn()
 	{
-		for (int i = 0; i < number; i++)
+		if (_enemyScenes == null || _enemyScenes.Length == 0)
 		{
-			Spawn(GetRandomPosition());
+			GD.PushWarning("Spawner: No enemy scenes assigned!");
+			return;
 		}
+
+		int unlockedCount = Math.Min(
+			_minute + 1,
+			_enemyScenes.Length
+		);
+
+		int index = _random.Next(unlockedCount);
+
+		PackedScene scene = _enemyScenes[index];
+
+		if (scene == null)
+			return;
+
+		Enemy enemy = scene.Instantiate<Enemy>();
+
+		_objects.AddChild(enemy);
+
+		enemy.GlobalPosition = ToGlobal(GetRandomPosition());
+		enemy.PlayerReference = _player;
+
+		GD.Print($"Spawned: {enemy.Name} at {enemy.GlobalPosition}");
 	}
 
-	private void On_timer_timeout()
+	private void SpawnAmount(int amount)
 	{
-		Second += 1;
-		int count = Second % 2;
+		int remaining = Math.Max(
+			0,
+			_maxEnemies - GetEnemyCount()
+		);
 
-		int remaining = 50 - GetTree().GetNodesInGroup("enemies").Count;
-		
-		Amount(Math.Min(count, remaining));
+		int count = Math.Min(amount, remaining);
+
+		for (int i = 0; i < count; i++)
+			Spawn();
+	}
+
+	private void OnTimerTimeout()
+	{
+		UpdateGameTime();
+
+		SpawnAmount(_spawnCount);
 	}
 }

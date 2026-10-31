@@ -1,5 +1,3 @@
-using Godot;
-
 namespace game.scenes;
 
 public interface IHealth

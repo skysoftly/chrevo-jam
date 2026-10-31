@@ -1,329 +1,208 @@
-using System;
-using game.scenes.player;
 using Godot;
+using game.scenes.entities;
 
 namespace game.scenes.enemies;
 
-public partial class Enemy : CharacterBody2D, IHealth
+public abstract partial class Enemy : Entity
 {
-    [Export] public CharacterBody2D PlayerReference;
-    [Export] private Sprite2D _sprite;
-    [Export] private ProgressBar _healthBar;
-    
-    [Export] private float _separationRadius = 32f;
-    [Export] private float _separationStrength = 0.2f;
+	[Export] protected Sprite2D Sprite { get; set; }
+	[Export] public Node2D PlayerReference { get; set; }
 
-    public float Speed;
-    private float _damage;
-    private float _knockbackForce;
+	[Export] public float Speed { get; set; } = 100f;
+	[ExportGroup("Damage")]
+	[Export] public float AttackRange { get; set; } = 50f;
+	[Export] public float AttackCooldown { get; set; } = 2f;
+	[Export] public float Damage { get; set; } = 1f;
+	[Export] public float DamageCooldown { get; set; } = 0.2f;
 
-    public bool IsPossessed { get; set; }
-    public bool IsAttacking { get; private set; }
+	private float _damageTimer;
+	
+	[ExportGroup("Separation")]
+	[Export] public float SeparationRadius { get; set; } = 35f;
+	[Export] public float SeparationForce { get; set; } = 180f;
+	
+	[ExportGroup("Outline")]
+	[Export] private ShaderMaterial _outlineMaterial;
 
-    private EnemyType _type;
+	private ShaderMaterial _materialInstance;
+	
+	public bool IsPossessed { get; private set; }
+	public bool IsAttacking { get; protected set; }
 
-    public EnemyType Type
-    {
-        get => _type;
-        set
-        {
-            _type = value;
-            _sprite.Texture = _type.Texture;
-            _damage = _type.Damage;
-            Speed = _type.Speed;
-            _knockbackForce = _type.KnockbackForce;
-            MaxHealth = _type.MaxHealth;
-        }
-    }
+	private float _attackTimer;
 
-    public uint OriginalCollisionLayer { get; private set; }
-    public uint OriginalCollisionMask { get; private set; }
-    private Vector2 GetSeparation()
-    {
-        Vector2 separation = Vector2.Zero;
-    
-        foreach (Node node in GetTree().GetNodesInGroup("enemies"))
-        {
-            if (node == this || node is not Enemy enemy)
-                continue;
-    
-            Vector2 offset = GlobalPosition - enemy.GlobalPosition;
-            float distance = offset.Length();
-    
-            if (distance < 0.001f || distance >= _separationRadius)
-                continue;
-    
-            float weight = 1f - distance / _separationRadius;
-    
-            separation += offset.Normalized() * weight;
-        }
-    
-        return separation;
-    }
-    
-    #region Health
+	protected override void OnEntityReady()
+	{
+		base.OnEntityReady();
 
-    [Export] public float MaxHealth { get; private set; }
-    public float Health { get; private set; }
+		AddToGroup("enemies");
 
-    private float _invulnerability = 0.1f;
-    private float _invulnerabilityTimer;
+		GD.Print($"Enemy: {Name}");
+		GD.Print($"Sprite: {Sprite?.GetPath() ?? "NULL"}");
+		GD.Print($"Material: {_outlineMaterial?.ResourcePath ?? "NULL"}");
+		
+		if (_outlineMaterial != null && Sprite != null)
+		{
+			_materialInstance = (ShaderMaterial)_outlineMaterial.Duplicate();
+			Sprite.Material = _materialInstance;
 
-    private void UpdateHealthBar()
-    {
-        _healthBar.MaxValue = MaxHealth;
-        _healthBar.Value = Health;
-    }
+			SetOutline(false);
+		}
+		else
+		{
+			GD.PushWarning($"{Name}: Outline Sprite or Material is missing!");
+		}
+	}
 
-    public void TakeDamage(float amount)
-    {
-        if (_invulnerabilityTimer > 0)
-            return;
+	public override void _Process(double delta)
+	{
+		_damageTimer = Mathf.Max(0, _damageTimer - (float)delta);
+		
+		_attackTimer = Mathf.Max(
+			0,
+			_attackTimer - (float)delta
+		);
 
-        _invulnerabilityTimer = _invulnerability;
+		if (IsPossessed || IsAttacking)
+			return;
 
-        Health = Math.Max(0, Health - amount);
-        UpdateHealthBar();
+		if (!IsValidTarget(PlayerReference))
+			return;
 
-        if (Health == 0)
-            Die();
-    }
+		float distance = GlobalPosition.DistanceTo(
+			PlayerReference.GlobalPosition
+		);
 
-    private void Die()
-    {
-        QueueFree();
-    }
+		if (distance <= AttackRange && _attackTimer <= 0)
+		{
+			TryAttack(PlayerReference);
+		}
+	}
 
-    #endregion
+	public override void _PhysicsProcess(double delta)
+	{
+		if (IsAttacking)
+		{
+			UpdateAttack(delta);
+			return;
+		}
 
-    #region Movement
+		if (IsPossessed)
+			return;
 
-    private void MoveHandler()
-    {
-        if (IsPossessed || IsAttacking)
-        {
-            Velocity = Vector2.Zero;
-            MoveAndSlide();
-            return;
-        }
+		MoveEnemy(delta);
+	}
+	protected Vector2 GetSeparationDirection()
+	{
+		Vector2 separation = Vector2.Zero;
 
-        Vector2 direction = PlayerReference.GlobalPosition - GlobalPosition;
+		foreach (Node node in GetTree().GetNodesInGroup("enemies"))
+		{
+			if (node == this || node is not Enemy other)
+				continue;
 
-        if (direction.Length() > 5)
-            direction = direction.Normalized();
-        else
-            direction = Vector2.Zero;
-        
-        Vector2 separation = GetSeparation() * _separationStrength;
+			if (other.IsQueuedForDeletion())
+				continue;
 
-        direction = (direction + separation).Normalized();
-        Vector2 targetVelocity = direction * Speed;
+			Vector2 offset = GlobalPosition - other.GlobalPosition;
+			float distance = offset.Length();
 
-        Velocity = Velocity.MoveToward(
-            targetVelocity,
-            300f * (float)GetPhysicsProcessDeltaTime()
-        );
-        MoveAndSlide();
-    }
+			if (distance <= 0 || distance >= SeparationRadius)
+				continue;
 
-    #endregion
+			float strength = 1f - distance / SeparationRadius;
 
-    #region Attacks
+			separation += offset.Normalized() * strength;
+		}
 
-    [Export] private CollisionShape2D _pumpkinCollider;
-    private float _attackTimer;
-    [Export] private Area2D _attackArea;
+		return separation;
+	}
 
-    private void UpdateAttack(double delta)
-    {
-        _attackTimer -= (float)delta;
-        if (IsPossessed || IsAttacking)
-            return;
+	public override void TakeDamage(float amount)
+	{
+		// Во время атаки враг неуязвим.
+		if (IsAttacking)
+			return;
 
-        if (_type == null || PlayerReference == null)
-            return;
+		// Ограничиваем частоту получения урона.
+		if (_damageTimer > 0)
+			return;
 
-        
-        TryAttack(PlayerReference);
-    }
+		_damageTimer = DamageCooldown;
 
-    public void TryAttack(Node2D target)
-    {
-        if (!IsInstanceValid(target))
-            return;
-        if (_attackTimer > 0)
-        {
-            return;
-        }
-        
-        float distance = GlobalPosition.DistanceTo(target.GlobalPosition);
-        
-        if (distance > _type.AttackRange)
-            return;
-        
-        if (IsAttacking || !IsInstanceValid(target))
-            return;
+		base.TakeDamage(amount);
+	}
+	
+	protected abstract void MoveEnemy(double delta);
 
-        Vector2 direction = (target.GlobalPosition - GlobalPosition).Normalized();
-        AttackHandler(target, direction);
-    }
+	protected abstract void StartAttack(Node2D target);
 
-    private void AttackHandler(Node2D target, Vector2 direction)
-    {
-        _attackTimer = _type.AttackCooldown;
-        switch (_type.AttackType)
-        {
-            case AttackType.Melee:
-                MeleeAttack(target, direction);
-                break;
+	protected virtual void UpdateAttack(double delta)
+	{
+	}
 
-            case AttackType.Projectile:
-                ProjectileAttack(direction);
-                break;
+	public bool TryAttack(Node2D target)
+	{
+		if (IsAttacking || _attackTimer > 0)
+			return false;
 
-            case AttackType.Jump:
-                if (target != null)
-                    PumpkinJumpAttack(target);
-                break;
+		if (!IsValidTarget(target))
+			return false;
 
-            case AttackType.Wave:
-                WaveAttack(direction);
-                break;
-        }
-    }
+		_attackTimer = AttackCooldown;
 
-    private void MeleeAttack(Node2D target, Vector2 direction)
-    {
-        // if (target is IHealth health)
-        //     health.TakeDamage(_damage);
-    }
+		StartAttack(target);
 
-    private void ProjectileAttack(Vector2 direction)
-    {
-        // TODO: Создание снаряда.
-    }
+		return true;
+	}
 
-    [Export] private CpuParticles2D _particlePumpkin;
-    private async void PumpkinJumpAttack(Node2D target)
-    {
-        IsAttacking = true;
+	public void MovePossessed(Vector2 direction, float speedMultiplier = 1f)
+	{
+		if (!IsPossessed || IsAttacking)
+			return;
 
-        Vector2 startPosition = GlobalPosition;
-        Vector2 targetPosition = target.GlobalPosition;
+		Velocity = direction * Speed * speedMultiplier;
 
-        CollisionMask = 0;
-        CollisionLayer = 0;
-        
-        float duration = 0.5f;
-        float elapsed = 0f;
+		MoveAndSlide();
+	}
 
-        await ToSignal(GetTree().CreateTimer(0.2f), SceneTreeTimer.SignalName.Timeout);
-        _particlePumpkin.Restart();
-        while (elapsed < duration)
-        {
-            if (!IsInsideTree() || !IsInstanceValid(target))
-                break;
+	public override void SetPossessed(
+		bool possessed,
+		uint playerLayer = 0,
+		uint playerMask = 0)
+	{
+		IsPossessed = possessed;
 
-            elapsed += (float)GetPhysicsProcessDeltaTime();
+		Velocity = Vector2.Zero;
 
-            float t = Mathf.Clamp(elapsed / duration, 0f, 1f);
+		base.SetPossessed(
+			possessed,
+			playerLayer,
+			playerMask
+		);
+	}
 
-            GlobalPosition = startPosition.Lerp(targetPosition, t);
+	protected bool IsValidTarget(Node2D target)
+	{
+		return GodotObject.IsInstanceValid(target)
+			   && !target.IsQueuedForDeletion();
+	}
 
-            float height = Mathf.Sin(t * Mathf.Pi) * 35f;
-            _sprite.Position = new Vector2(0, -height);
+	protected void DamageTarget(Node2D target)
+	{
+		if (!IsValidTarget(target))
+			return;
 
-            await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
-        }
+		if (target is IHealth health)
+			health.TakeDamage(Damage);
+	}
+	
+	public void SetOutline(bool enabled, bool attack = false)
+	{
+		if (_materialInstance == null)
+			return;
 
-        if (!IsInsideTree())
-            return;
-
-        _sprite.Position = Vector2.Zero;
-        
-        // TODO: Урон по области при приземлении.
-        
-        
-        _pumpkinCollider.Disabled = false;
-        _particlePumpkin.Restart();
-        await ToSignal(GetTree().CreateTimer(0.05f), SceneTreeTimer.SignalName.Timeout);
-        _pumpkinCollider.Disabled = true;
-        
-        CollisionMask = OriginalCollisionMask;
-        CollisionLayer = OriginalCollisionLayer;
-
-        IsAttacking = false;
-    }
-
-    private void WaveAttack(Vector2 direction)
-    {
-        // TODO: Создание волны.
-    }
-    
-    private void DealDamage(Node2D body)
-    {
-        if (body is IHealth health)
-            health.TakeDamage(_damage);
-    }
-
-    #endregion
-
-    #region Visuals
-
-    public void SetOutline(bool enabled)
-    {
-        if (_sprite.Material is ShaderMaterial material)
-            material.SetShaderParameter("enabled", enabled);
-    }
-
-    public void SetOutlineAttack(bool enabled)
-    {
-        if (_sprite.Material is ShaderMaterial material)
-            material.SetShaderParameter("attack", enabled);
-    }
-
-    #endregion
-
-    public void SetPossessed(bool possessed)
-    {
-        IsPossessed = possessed;
-        
-        if (possessed)
-            _attackArea.CollisionMask |= 1u << 3;
-        else
-            _attackArea.CollisionMask &= ~(1u << 3);
-    }
-
-    #region Godot Lifecycle
-
-    public override void _Ready()
-    {
-        _sprite.Material = _sprite.Material.Duplicate() as ShaderMaterial;
-
-        AddToGroup("enemies");
-
-        Health = MaxHealth;
-
-        OriginalCollisionLayer = CollisionLayer;
-        OriginalCollisionMask = CollisionMask;
-
-        UpdateHealthBar();
-    }
-
-    public override void _Process(double delta)
-    {
-        _invulnerabilityTimer = Math.Max(
-            0,
-            _invulnerabilityTimer - (float)delta
-        );
-
-        UpdateAttack(delta);
-    }
-
-    public override void _PhysicsProcess(double delta)
-    {
-        MoveHandler();
-    }
-
-    #endregion
+		_materialInstance.SetShaderParameter("enabled", enabled);
+		_materialInstance.SetShaderParameter("attack", attack);
+	}
 }

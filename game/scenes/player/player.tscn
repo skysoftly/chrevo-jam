@@ -38,13 +38,28 @@ size_override = Vector2(64, 32)
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[node name="Player" type="CharacterBody2D" unique_id=250972871 node_paths=PackedStringArray("_sprite", "_particlePossession")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dovo2"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gmlin"]
+bg_color = Color(0.50557107, 0, 0.05293162, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lvxji"]
+bg_color = Color(0.47185636, 0.18253708, 0.5886322, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p47bc"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="Player" type="CharacterBody2D" unique_id=250972871 node_paths=PackedStringArray("_healthBar", "_cooldownPossessionBar", "_sprite", "_particlePossession", "_healthBar")]
 collision_layer = 4
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_3vyb7")
+_healthBar = NodePath("CanvasLayer/Health")
+_cooldownPossessionBar = NodePath("CanvasLayer/Cooldown")
 _sprite = NodePath("Sprite2D")
 _particlePossession = NodePath("ParticlePossession")
+_healthBar = NodePath("CanvasLayer/Health")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1119545135]
 visible = false
@@ -114,6 +129,33 @@ initial_velocity_min = 50.0
 initial_velocity_max = 100.0
 scale_amount_max = 3.0
 scale_amount_curve = SubResource("Curve_gmlin")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1780834866]
+
+[node name="Health" type="ProgressBar" parent="CanvasLayer" unique_id=1497875978]
+offset_left = 68.0
+offset_top = 50.0
+offset_right = 243.0
+offset_bottom = 77.0
+theme_override_styles/background = SubResource("StyleBoxFlat_dovo2")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gmlin")
+value = 10.0
+show_percentage = false
+
+[node name="Cooldown" type="ProgressBar" parent="CanvasLayer" unique_id=1777811515]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -88.0
+offset_top = 19.0
+offset_right = 87.0
+offset_bottom = 46.0
+grow_horizontal = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_lvxji")
+theme_override_styles/fill = SubResource("StyleBoxFlat_p47bc")
+value = 10.0
+fill_mode = 1
+show_percentage = false
 
 [connection signal="body_entered" from="PossessionArea" to="." method="OnPossessionAreaBodyEntered"]
 [connection signal="body_exited" from="PossessionArea" to="." method="OnPossessionAreaBodyExited"]
