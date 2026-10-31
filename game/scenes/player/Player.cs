@@ -83,18 +83,39 @@ public partial class Player : CharacterBody2D, IHealth
 
 		_invulnerabilityTimer = _invulnerability;
 
-		GD.Print("Damage " + amount);
-
 		Health = Math.Max(0, Health - amount);
 		UpdateHealthBar();
 
 		if (Health == 0)
 			Die();
 	}
+	
+	
+
+	public void Heal(float amount)
+	{
+		Health = Math.Min(MaxHealth, Health + amount);
+		UpdateHealthBar();
+	}
 
 	private void Die()
 	{
 		GD.Print("Die ");
+	}
+
+	private float _possessionDamage = 1;
+	
+	private void PossessionDamage()
+	{
+		if (IsInstanceValid(_possessionEnemy))
+		{
+			_possessionEnemy.TakeDamage(_possessionDamage);
+			Heal(_possessionDamage);
+		}
+		else
+		{
+			TakeDamage(_possessionDamage);
+		}
 	}
 
 	#endregion
@@ -190,13 +211,15 @@ public partial class Player : CharacterBody2D, IHealth
 			_possessionEnemy.CollisionMask = _possessionEnemy.OriginalCollisionMask;
 			_possessionEnemy.SetPossessed(false);
 			_possessionEnemy.SetOutline(false);
-			_possessionEnemy = null;
 		}
-
-				
-				
+		_possessionEnemy = null;
+		
 		_sprite.Visible = true;
-		_invulnerabilityTimer = _invulnerability * 2;
+		_invulnerabilityTimer = _invulnerability;
+		
+		_nearestEnemy?.SetOutlineAttack(false);
+		_nearestEnemy?.SetOutline(false);
+		_nearestEnemy = null;
 	}
 	
 

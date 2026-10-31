@@ -66,7 +66,7 @@ public partial class Enemy : CharacterBody2D, IHealth
         {
             Vector2 direction = PlayerReference.GlobalPosition - GlobalPosition;
 
-            if (direction.Length() > 10)
+            if (direction.Length() > 5)
                 direction = direction.Normalized();
             else
                 direction = Vector2.Zero;
@@ -88,8 +88,7 @@ public partial class Enemy : CharacterBody2D, IHealth
     {
         if (body == this)
             return;
-        GD.Print("Entered: ", body.Name);
-
+        
         if (body is Player player)
             _target = player;
         if (body is Enemy { IsPossessed: true } enemy)
@@ -161,7 +160,7 @@ public partial class Enemy : CharacterBody2D, IHealth
 
     private void Die()
     {
-        GD.Print("Die ");
+        QueueFree();
     }
 
     #endregion

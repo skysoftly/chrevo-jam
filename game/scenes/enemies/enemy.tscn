@@ -79,9 +79,9 @@ debug_color = Color(0.1764706, 0.023529412, 0.03137255, 0.1254902)
 
 [node name="ProgressBar" type="ProgressBar" parent="." unique_id=1215665850]
 offset_left = -14.0
-offset_top = -43.0
+offset_top = -37.0
 offset_right = 14.0
-offset_bottom = -36.0
+offset_bottom = -30.0
 theme_override_styles/background = SubResource("StyleBoxFlat_38ino")
 theme_override_styles/fill = SubResource("StyleBoxFlat_fcftc")
 max_value = 15.0
