@@ -6,7 +6,7 @@ using Godot;
 
 namespace game.scenes.player;
 
-public partial class Player : CharacterBody2D
+public partial class Player : CharacterBody2D, IHealth
 {
 	#region Movement
 
@@ -20,6 +20,9 @@ public partial class Player : CharacterBody2D
 		return Input.GetVector("left", "right", "up", "down");
 	}
 
+	public uint OriginalCollisionLayer { get; set; }
+	public uint OriginalCollisionMask { get; set; }
+	
 	private void MoveHandler(double delta)
 	{
 		_knockbackVelocity = _knockbackVelocity.MoveToward(
@@ -28,7 +31,7 @@ public partial class Player : CharacterBody2D
 		
 		if (_possessionEnemy == null)
 		{
-			Velocity = GetDirection() * _speed * _speedModifier + _knockbackVelocity;
+			Velocity = GetDirection() * _speed * _speedModifier ;
 			MoveAndSlide();
 		}
 		else
@@ -37,7 +40,7 @@ public partial class Player : CharacterBody2D
 
 			if (IsInstanceValid(_possessionEnemy))
 			{
-				_possessionEnemy.Velocity = GetDirection() * _possessionEnemy.Speed * _speedModifier + _knockbackVelocity;
+				_possessionEnemy.Velocity = GetDirection() * _possessionEnemy.Speed * _speedModifier ;
 				
 				_possessionEnemy.MoveAndSlide();
 				
@@ -61,7 +64,7 @@ public partial class Player : CharacterBody2D
 
 	[Export] public float MaxHealth { get; set; } = 5f;
 
-	private float Health { get; set; }
+	public float Health { get; private set; }
 
 	private float _invulnerability = 0.4f;
 	private float _invulnerabilityTimer;
@@ -73,12 +76,8 @@ public partial class Player : CharacterBody2D
 		healthBar.Value = Health;
 	}
 
-	public void TakeDamage(float amount, Node2D attacker)
+	public void TakeDamage(float amount)
 	{
-		if (attacker == _possessionEnemy)
-		{
-			return;
-		}
 		if (_invulnerabilityTimer > 0)
 			return;
 
@@ -107,12 +106,11 @@ public partial class Player : CharacterBody2D
 	private Enemy _possessionEnemy;
 	private Enemy _nearestEnemy;
 	
-	private bool _isPossessingAnimation;
-	
 	private Enemy GetNearestEnemy()
 	{
 		return _nearbyEnemies
 			.Where(IsInstanceValid)
+			.Where(enemy => !enemy.IsPossessed)
 			.OrderBy(enemy => GlobalPosition.DistanceSquaredTo(enemy.GlobalPosition))
 			.FirstOrDefault();
 	}
@@ -124,40 +122,83 @@ public partial class Player : CharacterBody2D
 			if (_nearestEnemy == nearest)
 				return;
 
+			_nearestEnemy?.SetOutlineAttack(false);
 			_nearestEnemy?.SetOutline(false);
-
+			
 			_nearestEnemy = nearest;
-
-			_nearestEnemy?.SetOutline(true);
+			
+			if (!IsInstanceValid(_possessionEnemy))
+			{
+				_nearestEnemy?.SetOutline(true);
+			}
+			else
+			{
+				_nearestEnemy?.SetOutlineAttack(true);
+			}
 		
 	}
 
 	private void PossessionHandler()
 	{
+		if (_possessionEnemy != null && !IsInstanceValid(_possessionEnemy))
+		{
+			ExitPossession();
+		}
+		
 		if (Input.IsActionJustPressed("possession"))
 		{
 			if (_possessionEnemy == null)
 			{
 				if (IsInstanceValid(_nearestEnemy))
 				{
-					_possessionEnemy = _nearestEnemy;
-					_possessionEnemy.IsPossessed = true;
-					_sprite.Visible = false;
+					EnterPossession();
 				}
 			}
 			else
 			{
-				_possessionEnemy.IsPossessed = false;
-				_possessionEnemy = null;
-				_sprite.Visible = true;
-				_invulnerabilityTimer = _invulnerability * 2;
+				ExitPossession();
 			}
 		}
 		
-		if (_possessionEnemy == null)
-			UpdateNearestEnemy();
+		
+		UpdateNearestEnemy();
 	}
 
+	private void EnterPossession()
+	{
+		
+		_possessionEnemy = _nearestEnemy;
+		_possessionEnemy.SetPossessed(true);
+		_sprite.Visible = false;
+		_nearestEnemy = null;
+					
+		_possessionEnemy.CollisionLayer = CollisionLayer;
+		_possessionEnemy.CollisionMask = CollisionMask;
+					
+		CollisionLayer = 0;
+		CollisionMask = 0;
+	}
+
+	private void ExitPossession()
+	{
+		CollisionLayer = OriginalCollisionLayer;
+		CollisionMask = OriginalCollisionMask;
+
+		if (IsInstanceValid(_possessionEnemy))
+		{
+			_possessionEnemy.CollisionLayer = _possessionEnemy.OriginalCollisionLayer;
+			_possessionEnemy.CollisionMask = _possessionEnemy.OriginalCollisionMask;
+			_possessionEnemy.SetPossessed(false);
+			_possessionEnemy.SetOutline(false);
+			_possessionEnemy = null;
+		}
+
+				
+				
+		_sprite.Visible = true;
+		_invulnerabilityTimer = _invulnerability * 2;
+	}
+	
 
 	private void OnPossessionAreaBodyEntered(Node2D body)
 	{
@@ -180,6 +221,10 @@ public partial class Player : CharacterBody2D
 	public override void _Ready()
 	{
 		Health = MaxHealth;
+		
+		OriginalCollisionLayer = CollisionLayer;
+		OriginalCollisionMask = CollisionMask;
+		
 		UpdateHealthBar();
 	}
 
