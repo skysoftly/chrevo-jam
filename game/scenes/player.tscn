@@ -2,11 +2,12 @@
 
 [ext_resource type="Script" uid="uid://d0v83nfpy8jog" path="res://scripts/Player.cs" id="1_3vyb7"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_u8vuu"]
-
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_u8vuu"]
 _data = PackedByteArray("AAADAAUAAAABAAAAQAAAACAAAADqAAAAUklGRuIAAABXRUJQVlA4TNUAAAAvP8AHEDegqG0jNtXnuA31FLWRAgdXwckLA0hDTQAQbE6EvZ0qmP8AgKPz3u0yEaf8HzhqJMmRWs1g7XtUqyVwcwTWEXAAzvLHMLbOviP6b7Rtm5QNWTtD/uTg9koGhxuUdpr1mN2OXlnnuszB9p50Yk4MlNPMyWnWScQ4xqC6CO4d36UY/L0jnGYKGM+28Pez5pyJLkXh7q68M6pwFT7WORfF4O+cM/0H0plc3pntMw6bzhIOwZRkQghHGmqVcQjsFCkthHIITjZYByEdYhBMJe/4BxMA")
 size_override = Vector2(64, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u8vuu"]
+radius = 15.0
 
 [sub_resource type="Animation" id="Animation_3vyb7"]
 length = 0.6
@@ -14,7 +15,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Pumpkin:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = false
 tracks/0/keys = {
@@ -30,17 +31,14 @@ _data = {
 }
 
 [node name="Player" type="CharacterBody2D" unique_id=250972871]
+collision_layer = 4
+collision_mask = 2
+motion_mode = 1
 script = ExtResource("1_3vyb7")
-MaxHealth = 2
-Speed = 100.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1119545135]
-shape = SubResource("CircleShape2D_u8vuu")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1563587527]
-position = Vector2(0, 8)
+position = Vector2(0, -7)
 texture = SubResource("PortableCompressedTexture2D_u8vuu")
-offset = Vector2(0, -8)
 hframes = 2
 metadata/_aseprite_wizard_interface_config_ = {
 "animation_section": false,
@@ -67,6 +65,11 @@ metadata/_aseprite_wizard_config_ = {
 "source_uid": 3212217112115422117
 }
 metadata/_aseprite_wizard_source_file_hash_ = "f0eeda2fcedd1be70662296ee6029ab5"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1119545135]
+position = Vector2(0, -7)
+shape = SubResource("CircleShape2D_u8vuu")
+debug_color = Color(0.5017985, 0.695035, 0.1450671, 0.0627451)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1282550276]
 libraries/ = SubResource("AnimationLibrary_g2els")
