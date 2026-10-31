@@ -6,6 +6,8 @@ namespace game.scenes.enemies;
 public abstract partial class Enemy : Entity
 {
 	[Export] protected Sprite2D Sprite { get; set; }
+	[Export] private AnimationPlayer _animationPlayer;
+
 	[Export] public Node2D PlayerReference { get; set; }
 
 	[Export] public float Speed { get; set; } = 100f;
@@ -52,6 +54,12 @@ public abstract partial class Enemy : Entity
 		{
 			GD.PushWarning($"{Name}: Outline Sprite or Material is missing!");
 		}
+		
+		
+		double randomPosition = GD.Randf() * _animationPlayer.CurrentAnimationLength;
+
+		_animationPlayer.Play("Idle");
+		_animationPlayer.Seek(randomPosition, true);
 	}
 
 	public override void _Process(double delta)

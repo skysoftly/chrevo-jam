@@ -129,6 +129,7 @@ public partial class Pumpkin : Enemy
         _attackState = AttackState.Jump;
         
         IsInvulnerable = true;
+        SoundManager.Instance.PlayPumpkinJump();
     }
 
     private void UpdateJump()
@@ -165,6 +166,7 @@ public partial class Pumpkin : Enemy
         _attackElapsed = 0;
         _attackState = AttackState.Recovery;
         IsInvulnerable = false;
+        SoundManager.Instance.PlayPumpkinJump();
     }
 
     private void UpdateRecovery()

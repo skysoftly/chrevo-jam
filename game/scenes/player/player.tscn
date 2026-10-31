@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d0v83nfpy8jog" path="res://scenes/player/Player.cs" id="1_3vyb7"]
 [ext_resource type="Texture2D" uid="uid://dmgk5x87tu83j" path="res://assets/particles/particle.png" id="2_dovo2"]
 [ext_resource type="Shader" uid="uid://b460tc7jof254" path="res://gdshaders/selectEnemy.gdshader" id="2_gmlin"]
+[ext_resource type="AudioStream" uid="uid://2cu5dog730wm" path="res://assets/songs/Possession.mp3" id="2_lvxji"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_u8vuu"]
 radius = 13.0
@@ -62,11 +63,11 @@ size_override = Vector2(96, 64)
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="Gradient_4ytvr"]
+[sub_resource type="Gradient" id="Gradient_gmlin"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_dovo2"]
-gradient = SubResource("Gradient_4ytvr")
+gradient = SubResource("Gradient_gmlin")
 width = 128
 height = 128
 fill = 1
@@ -109,11 +110,12 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
-[node name="Player" type="CharacterBody2D" unique_id=250972871 node_paths=PackedStringArray("_healthBar", "_cooldownPossessionBar", "_sprite", "_particlePossession", "_cooldownAttackBar", "_healthBar")]
+[node name="Player" type="CharacterBody2D" unique_id=250972871 node_paths=PackedStringArray("_possessionAudio", "_healthBar", "_cooldownPossessionBar", "_sprite", "_particlePossession", "_cooldownAttackBar", "_healthBar")]
 collision_layer = 4
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_3vyb7")
+_possessionAudio = NodePath("Possession")
 _healthBar = NodePath("CanvasLayer/Health")
 _possessionCooldown = 4.0
 _possessionDamage = 2.0
@@ -123,6 +125,10 @@ _particlePossession = NodePath("ParticlePossession")
 _cooldownAttackBar = NodePath("CanvasLayer/CooldownAttack")
 MaxHealth = 8.0
 _healthBar = NodePath("CanvasLayer/Health")
+
+[node name="Possession" type="AudioStreamPlayer2D" parent="." unique_id=341635193]
+stream = ExtResource("2_lvxji")
+parameters/looping = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1119545135]
 position = Vector2(0, -7)
@@ -146,8 +152,9 @@ debug_color = Color(0.827451, 0, 0.9529412, 0.047058824)
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1563587527]
 texture_filter = 1
 material = SubResource("ShaderMaterial_dovo2")
-position = Vector2(0, -7)
+position = Vector2(0, -2)
 texture = SubResource("PortableCompressedTexture2D_gmlin")
+offset = Vector2(0, -4)
 hframes = 2
 vframes = 2
 metadata/_aseprite_wizard_interface_config_ = {

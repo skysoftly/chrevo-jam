@@ -3,14 +3,47 @@
 [ext_resource type="PackedScene" uid="uid://b3vxw03w7mrfi" path="res://scenes/world/spawner.tscn" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://casgcs7q8ujxx" path="res://scenes/player/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://b7p8rcnxaw0ev" path="res://assets/Spooky_Arena.png" id="2_3gx7t"]
+[ext_resource type="Texture2D" uid="uid://bupc3tttk34ja" path="res://assets/lantern.png" id="2_sarsd"]
+[ext_resource type="Texture2D" uid="uid://c05cdbc4ehpo4" path="res://assets/pumpkin.png" id="3_3gx7t"]
 [ext_resource type="PackedScene" uid="uid://bxtepmylamtkc" path="res://scenes/enemies/Pumpkin/pumpkin.tscn" id="4_h30v7"]
 [ext_resource type="Texture2D" uid="uid://p8rjdhdgbav8" path="res://assets/vignette.png" id="5_h30v7"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h30v7"]
+size = Vector2(634, 14.666656)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3gx7t"]
-size = Vector2(664, 23.333344)
+size = Vector2(634, 24.000008)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sa52v"]
-size = Vector2(21.333344, 471.33334)
+size = Vector2(23.999992, 472)
+
+[sub_resource type="Gradient" id="Gradient_m8d4b"]
+offsets = PackedFloat32Array(0, 0.29714286, 0.72, 1)
+colors = PackedColorArray(0.6469792, 0.33000815, 0.04361047, 1, 0.64733636, 0.32663473, 0.12945074, 1, 0.5953264, 0.3130715, 0.13312902, 0.6666666, 0.49130648, 0.28594503, 0.14048555, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2oj1e"]
+gradient = SubResource("Gradient_m8d4b")
+width = 4
+height = 4
+fill = 1
+fill_from = Vector2(0.47863248, 0.45726496)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="Curve" id="Curve_ugwi3"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.49746192, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_4ytvr"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3gx7t"]
+gradient = SubResource("Gradient_4ytvr")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+metadata/_snap_enabled = true
 
 [sub_resource type="Curve" id="Curve_r5nxa"]
 _limits = [0.0, 10.0, 0.0, 1.0]
@@ -21,18 +54,6 @@ point_count = 2
 _limits = [0.0, 50.0, 0.0, 1.0]
 _data = [Vector2(0, 1.6853943), 0.0, 0.0, 0, 0, Vector2(1, 50), 0.0, 0.0, 0, 0]
 point_count = 2
-
-[sub_resource type="Gradient" id="Gradient_h30v7"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_3gx7t"]
-gradient = SubResource("Gradient_h30v7")
-width = 128
-height = 128
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.5, 0)
-metadata/_snap_enabled = true
 
 [node name="Game" type="Node2D" unique_id=2068740180]
 
@@ -45,24 +66,161 @@ collision_layer = 2
 collision_mask = 0
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="SpookyArena/StaticBody2D" unique_id=1962066945]
-position = Vector2(-0.6666616, -225)
-shape = SubResource("RectangleShape2D_3gx7t")
+position = Vector2(0, -228.66667)
+shape = SubResource("RectangleShape2D_h30v7")
 debug_color = Color(0, 0.33580458, 0.38414806, 0)
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="SpookyArena/StaticBody2D" unique_id=916047185]
-position = Vector2(-2, 219.33334)
+position = Vector2(0, 224)
 shape = SubResource("RectangleShape2D_3gx7t")
 debug_color = Color(0, 0.33580458, 0.38414806, 0)
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="SpookyArena/StaticBody2D" unique_id=837204634]
-position = Vector2(330, -1.3333333)
+position = Vector2(329, 2.5431316e-06)
 shape = SubResource("RectangleShape2D_sa52v")
 debug_color = Color(0, 0.33580458, 0.38414806, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpookyArena/StaticBody2D" unique_id=536822842]
-position = Vector2(-330, 0.33332825)
+position = Vector2(-329, 7.6293945e-06)
 shape = SubResource("RectangleShape2D_sa52v")
 debug_color = Color(0, 0.33580458, 0.38414806, 0)
+
+[node name="ParticlePumpkin" type="CPUParticles2D" parent="SpookyArena" unique_id=1332100650]
+z_index = 2
+scale = Vector2(0.6666667, 0.6666667)
+amount = 50
+texture = SubResource("GradientTexture2D_2oj1e")
+lifetime = 10.0
+preprocess = 10.0
+emission_shape = 3
+emission_rect_extents = Vector2(500, 350)
+direction = Vector2(0, 1)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 10.0
+scale_amount_min = 0.7
+scale_amount_curve = SubResource("Curve_ugwi3")
+
+[node name="Lantern" type="Sprite2D" parent="SpookyArena" unique_id=417031599]
+z_index = 2
+position = Vector2(-334, 132.66666)
+texture = ExtResource("2_sarsd")
+
+[node name="PointLight2D2" type="PointLight2D" parent="SpookyArena/Lantern" unique_id=820415516]
+position = Vector2(0, 5.333334)
+color = Color(0.9529412, 0.5529412, 0, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_3gx7t")
+texture_scale = 2.0
+
+[node name="Lantern3" type="Sprite2D" parent="SpookyArena" unique_id=969790646]
+z_index = 2
+position = Vector2(334, 178.66667)
+texture = ExtResource("2_sarsd")
+
+[node name="PointLight2D2" type="PointLight2D" parent="SpookyArena/Lantern3" unique_id=1937104873]
+position = Vector2(0, 5.333334)
+color = Color(0.9529412, 0.5529412, 0, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_3gx7t")
+texture_scale = 2.0
+
+[node name="Lantern4" type="Sprite2D" parent="SpookyArena" unique_id=2137721730]
+z_index = 2
+position = Vector2(334, -72)
+texture = ExtResource("2_sarsd")
+
+[node name="PointLight2D2" type="PointLight2D" parent="SpookyArena/Lantern4" unique_id=1971079342]
+position = Vector2(0, 5.333334)
+color = Color(0.9529412, 0.5529412, 0, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_3gx7t")
+texture_scale = 2.0
+
+[node name="Lantern5" type="Sprite2D" parent="SpookyArena" unique_id=262885761]
+z_index = 2
+position = Vector2(32.666668, -235.33333)
+texture = ExtResource("2_sarsd")
+
+[node name="PointLight2D2" type="PointLight2D" parent="SpookyArena/Lantern5" unique_id=1006068687]
+position = Vector2(0, 5.333334)
+color = Color(0.9529412, 0.5529412, 0, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_3gx7t")
+texture_scale = 2.0
+
+[node name="Lantern6" type="Sprite2D" parent="SpookyArena" unique_id=1181335950]
+z_index = 2
+position = Vector2(-328.66666, -227.33334)
+texture = ExtResource("2_sarsd")
+
+[node name="PointLight2D2" type="PointLight2D" parent="SpookyArena/Lantern6" unique_id=1289207618]
+position = Vector2(0, 5.333334)
+color = Color(0.9529412, 0.5529412, 0, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_3gx7t")
+texture_scale = 2.0
+
+[node name="Pumpkin" type="Sprite2D" parent="SpookyArena" unique_id=703078642]
+position = Vector2(-333.33334, -46.666668)
+scale = Vector2(0.33333334, 0.33333334)
+texture = ExtResource("3_3gx7t")
+
+[node name="PointLight2D2" type="PointLight2D" parent="SpookyArena/Pumpkin" unique_id=1406982649]
+position = Vector2(0, 5.333334)
+color = Color(0.9529412, 0.5529412, 0, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_3gx7t")
+texture_scale = 2.0
+
+[node name="Pumpkin2" type="Sprite2D" parent="SpookyArena" unique_id=803490599]
+position = Vector2(-150.66667, -230.66667)
+scale = Vector2(0.33333334, 0.33333334)
+texture = ExtResource("3_3gx7t")
+
+[node name="PointLight2D2" type="PointLight2D" parent="SpookyArena/Pumpkin2" unique_id=358816965]
+position = Vector2(0, 5.333334)
+color = Color(0.9529412, 0.5529412, 0, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_3gx7t")
+texture_scale = 2.0
+
+[node name="Pumpkin3" type="Sprite2D" parent="SpookyArena" unique_id=298389306]
+position = Vector2(283.33334, -229.33334)
+scale = Vector2(0.33333334, 0.33333334)
+texture = ExtResource("3_3gx7t")
+
+[node name="PointLight2D2" type="PointLight2D" parent="SpookyArena/Pumpkin3" unique_id=1238971544]
+position = Vector2(0, 5.333334)
+color = Color(0.9529412, 0.5529412, 0, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_3gx7t")
+texture_scale = 2.0
+
+[node name="Pumpkin4" type="Sprite2D" parent="SpookyArena" unique_id=687620219]
+position = Vector2(192.66667, 217.99998)
+scale = Vector2(0.33333334, 0.33333334)
+texture = ExtResource("3_3gx7t")
+
+[node name="PointLight2D2" type="PointLight2D" parent="SpookyArena/Pumpkin4" unique_id=603929941]
+position = Vector2(0, 5.333334)
+color = Color(0.9529412, 0.5529412, 0, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_3gx7t")
+texture_scale = 2.0
+
+[node name="Lantern2" type="Sprite2D" parent="SpookyArena" unique_id=1917672062]
+z_index = 2
+position = Vector2(-59.333336, 211.33333)
+texture = ExtResource("2_sarsd")
+
+[node name="PointLight2D2" type="PointLight2D" parent="SpookyArena/Lantern2" unique_id=1874441918]
+position = Vector2(0, 5.333334)
+color = Color(0.9529412, 0.5529412, 0, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_3gx7t")
+texture_scale = 2.0
 
 [node name="Spawner" parent="." unique_id=2065464322 node_paths=PackedStringArray("_player", "_objects") instance=ExtResource("1_lnu2h")]
 _player = NodePath("../Player")
@@ -83,90 +241,6 @@ position_smoothing_enabled = true
 
 [node name="Objects" type="Node2D" parent="." unique_id=1406873489]
 y_sort_enabled = true
-
-[node name="PointLight2D2" type="PointLight2D" parent="." unique_id=901476872]
-position = Vector2(417, 299)
-color = Color(1, 1, 0.023529412, 1)
-energy = 1.5
-texture = SubResource("GradientTexture2D_3gx7t")
-texture_scale = 2.4
-
-[node name="PointLight2D2" type="PointLight2D" parent="PointLight2D2" unique_id=860219425]
-position = Vector2(78, -196)
-color = Color(1, 1, 0.023529412, 1)
-energy = 1.5
-texture = SubResource("GradientTexture2D_3gx7t")
-texture_scale = 2.4
-
-[node name="PointLight2D10" type="PointLight2D" parent="PointLight2D2" unique_id=859872146]
-position = Vector2(-481, -84)
-color = Color(1, 1, 0.023529412, 1)
-energy = 1.5
-texture = SubResource("GradientTexture2D_3gx7t")
-texture_scale = 2.4
-
-[node name="PointLight2D11" type="PointLight2D" parent="PointLight2D2" unique_id=592153277]
-position = Vector2(-345, -338)
-color = Color(1, 1, 0.023529412, 1)
-energy = 1.5
-texture = SubResource("GradientTexture2D_3gx7t")
-texture_scale = 2.4
-
-[node name="PointLight2D12" type="PointLight2D" parent="PointLight2D2" unique_id=161050095]
-position = Vector2(-362, -603)
-color = Color(1, 1, 0.023529412, 1)
-energy = 1.5
-texture = SubResource("GradientTexture2D_3gx7t")
-texture_scale = 2.4
-
-[node name="PointLight2D3" type="PointLight2D" parent="PointLight2D2" unique_id=688558600]
-position = Vector2(80, -460)
-color = Color(1, 1, 0.023529412, 1)
-energy = 1.5
-texture = SubResource("GradientTexture2D_3gx7t")
-texture_scale = 2.4
-
-[node name="PointLight2D4" type="PointLight2D" parent="PointLight2D2" unique_id=390629373]
-position = Vector2(49, -604)
-color = Color(1, 1, 0.023529412, 1)
-energy = 1.5
-texture = SubResource("GradientTexture2D_3gx7t")
-texture_scale = 2.4
-
-[node name="PointLight2D5" type="PointLight2D" parent="PointLight2D2" unique_id=1452183335]
-position = Vector2(-899, -618)
-color = Color(1, 1, 0.023529412, 1)
-energy = 1.5
-texture = SubResource("GradientTexture2D_3gx7t")
-texture_scale = 2.4
-
-[node name="PointLight2D6" type="PointLight2D" parent="PointLight2D2" unique_id=1302242889]
-position = Vector2(-912, -467)
-color = Color(1, 1, 0.023529412, 1)
-energy = 1.5
-texture = SubResource("GradientTexture2D_3gx7t")
-texture_scale = 2.4
-
-[node name="PointLight2D7" type="PointLight2D" parent="PointLight2D2" unique_id=459460184]
-position = Vector2(-924, -170)
-color = Color(1, 1, 0.023529412, 1)
-energy = 1.5
-texture = SubResource("GradientTexture2D_3gx7t")
-texture_scale = 2.4
-
-[node name="PointLight2D8" type="PointLight2D" parent="PointLight2D2" unique_id=1651242091]
-position = Vector2(-885, 2)
-color = Color(1, 1, 0.023529412, 1)
-energy = 1.5
-texture = SubResource("GradientTexture2D_3gx7t")
-texture_scale = 2.4
-
-[node name="PointLight2D9" type="PointLight2D" parent="PointLight2D2" unique_id=1073625851]
-position = Vector2(-841, -287)
-color = Color(1, 1, 0.023529412, 1)
-energy = 1.5
-texture = SubResource("GradientTexture2D_3gx7t")
-texture_scale = 2.4
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=60745922]
 layer = 0

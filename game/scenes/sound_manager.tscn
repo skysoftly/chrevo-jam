@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://d2blbwayjkefs"]
+
+[ext_resource type="AudioStream" uid="uid://dbr5660ov35v4" path="res://assets/songs/pumpkinJump.mp3" id="1_gbdfy"]
+[ext_resource type="Script" uid="uid://csd2uotvwqqqs" path="res://scenes/SoundManager.cs" id="1_s6peo"]
+
+[node name="SoundManager" type="Node2D" unique_id=1655418152 node_paths=PackedStringArray("_pumpkinJumpSound")]
+script = ExtResource("1_s6peo")
+_pumpkinJumpSound = NodePath("PumpkinJumpSoud")
+
+[node name="PumpkinJumpSoud" type="AudioStreamPlayer2D" parent="." unique_id=1176731]
+stream = ExtResource("1_gbdfy")
+max_polyphony = 3
+parameters/looping = false
