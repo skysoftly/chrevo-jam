@@ -16,8 +16,15 @@ public partial class Menu : Node2D
 	{
 		PlayBtn.Pressed += PlayBtnOnPressed;
 		QuitBtn.Pressed += QuitBtnOnPressed;
+		
+		PlayBtn.GrabFocus();
 	}
-
+	
+	public override void _Process(double delta)
+	{
+	}
+	
+	
 	private void PlayBtnOnPressed()
 	{
 		GetTree().ChangeSceneToPacked(Scene);
@@ -25,10 +32,5 @@ public partial class Menu : Node2D
 	private void QuitBtnOnPressed()
 	{
 		GetTree().Quit();
-	}
-
-
-	public override void _Process(double delta)
-	{
 	}
 }

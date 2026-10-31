@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://c8tgtt7xpecuc"]
 
-[ext_resource type="Script" uid="uid://c4sgpgu4eejev" path="res://scripts/Menu.cs" id="1_yqeox"]
-[ext_resource type="PackedScene" uid="uid://dlgmtcau57j4d" path="res://scenes/game.tscn" id="2_vjb58"]
+[ext_resource type="Script" uid="uid://c4sgpgu4eejev" path="res://scenes/Menu.cs" id="1_yqeox"]
+[ext_resource type="PackedScene" uid="uid://dlgmtcau57j4d" path="res://scenes/world/game.tscn" id="2_vjb58"]
 [ext_resource type="Texture2D" uid="uid://cjobbrqhsm2ln" path="res://assets/bg.png" id="3_4ytvr"]
 [ext_resource type="Theme" uid="uid://b6ku3hh08t2am" path="res://assets/themes/theme.tres" id="3_mhnvy"]
 [ext_resource type="Texture2D" uid="uid://ci28fn8omu51v" path="res://assets/bgPumpkin.png" id="4_4ytvr"]
@@ -20,64 +20,24 @@ metadata/_snap_enabled = true
 
 [sub_resource type="Animation" id="Animation_g3eks"]
 resource_name = "Pumpkin"
-length = 6.0
+length = 8.0
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath(".:rotation")
-tracks/0/interp = 1
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1, 1.5, 2, 3, 4, 4.5, 5, 6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 4, 8.033334),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [0.0, -0.17453292519943295, -0.20943951023931956, -0.17453292519943295, 0.0, 0.17453292519943295, 0.20943951023931956, 0.17453292519943295, 0.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(-537.9701, -305.336), Vector2(-537.9701, -305.336), Vector2(-537.9701, -305.336), Vector2(-537.9701, -305.336), Vector2(-537.9701, -305.336), Vector2(-537.9701, -305.336), Vector2(-537.9701, -305.336)]
-}
-
-[sub_resource type="Animation" id="Animation_v86rl"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
+"values": [-0.20943951023931956, 0.20943951023931956, -0.20943951023931956]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_13sgg"]
 _data = {
-&"Pumpkin": SubResource("Animation_g3eks"),
-&"RESET": SubResource("Animation_v86rl")
+&"Pumpkin": SubResource("Animation_g3eks")
 }
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_con2f"]
@@ -542,8 +502,10 @@ texture = ExtResource("3_4ytvr")
 metadata/_edit_lock_ = true
 
 [node name="Pumpkin" type="Sprite2D" parent="Bg" unique_id=525041308]
+position = Vector2(-535.7969, -266.2182)
+rotation = -0.20943952
 texture = ExtResource("4_4ytvr")
-offset = Vector2(537.9701, 305.336)
+offset = Vector2(-4.076172, 97.84952)
 
 [node name="PointLight2D" type="PointLight2D" parent="Bg/Pumpkin" unique_id=1977090122]
 position = Vector2(0, 145.6051)
@@ -618,6 +580,7 @@ texture_filter = 1
 layout_mode = 2
 theme = ExtResource("3_mhnvy")
 theme_override_fonts/font = SubResource("FontFile_g3eks")
+keep_pressed_outside = true
 text = "Играть
 "
 
