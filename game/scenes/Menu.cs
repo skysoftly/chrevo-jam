@@ -6,6 +6,10 @@ public partial class Menu : Node2D
 {
 	[Export]
 	public Button PlayBtn { get; set; }
+
+	[Export] 
+	public Button SettingsBtn { get; set; }
+
 	[Export]
 	public Button QuitBtn { get; set; }
 	

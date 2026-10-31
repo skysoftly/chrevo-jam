@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://46phkp80ufgi" path="res://assets/bg.png" id="3_4ytvr"]
 [ext_resource type="Theme" uid="uid://b6ku3hh08t2am" path="res://assets/themes/theme.tres" id="3_mhnvy"]
 [ext_resource type="Texture2D" uid="uid://ci28fn8omu51v" path="res://assets/bgPumpkin.png" id="4_4ytvr"]
+[ext_resource type="Texture2D" uid="uid://dcqojvp73id4q" path="res://scenes/GameName.png" id="5_g3eks"]
 
 [sub_resource type="Gradient" id="Gradient_4ytvr"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -39,10 +40,6 @@ tracks/0/keys = {
 _data = {
 &"Pumpkin": SubResource("Animation_g3eks")
 }
-
-[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_con2f"]
-_data = PackedByteArray("AAADAAUAAAABAAAAAAEAAGAAAABIBAAAUklGRkAEAABXRUJQVlA4TDMEAAAv/8AXEIegoG0jx3f3i8fz57eIKGrbBuq5/6iMP7ZJYdu2jbKTjiP7/w0FBARF/o8WwLpCRY4DKjJd8N/XQEhbwfFl9u7ZC0hyG0mSJJuuZbbqCM///zbDzNwzIyvqNJiI/jty20aSVF2zneQkXdNv2P4VXdjXhyeiDj5iT15HwK7U8THmHnal7/2g0rrm/mRXANF1DTMLmYiSVyZVXLPvl557ICIqH4ZNt8vlh6q0ll6IiZzR9zPnfsYeH0xco9MLizEbGA6GF03kvLk/qe/XmvukvmHKLcQJALfd08IRrjL3QC33Jea+Hg+qARO7TioBuK4P5s+92LzJ3CMyIowA2/DSoAWAIIw0dmbP/bHcF5z7ESqroqLZ2E76THLWCdoo8QExe+6P5b7e3LtQIMJgJl3cbOyIpq4qKj672M7suT+aOwcIBSSNk3GhNIQCRkPJqW+SslfQNvTB9Lk/mluCGyUgIun7YwpUK1CgrNPFKaak1qvBji9+ISbOPVXxaO7i3E/tu0SUSoYgwQ/AReJPzRBUiZjA9kTnJDieuzz35/e9WEndRptoLYX1qEqshbuUg6y5EBP7Xspd7vvvet/nwMLRS6AKGdBRaMthzspL9R1v0ff02QaGUgaKzb2Wo9DEdkzrezX39fsOD2d1lGL3nWI1qAygYl059xX7bozNcQaXBNXYt5IOTwFf75d7at8hcDctUSPovVwNgCSogO+a+7b9nZA7BJ6aEF5cDiAPyH09YKOlwzJzAxp7tF0aaMvh8DKoxO76Dgm+zNwRGptQZS1HIWEhuMik9ern5SbNxn+gAOnfBpLl9NyYmnvT3Fs9d5gSe7ofHKjZeYgyOC2GvvVJ0YSF3G0sWLWF5gbHNhqmAthJD1CmpYBE0Jp+oTFaYG6fFHWhkmNB9DY8vgDcrd1te//cH3/9959/28G+PjwRdfBRegK7PK8jYFfq+ByfoutKfhi1zVqSKq15vmo31yD5AWBIw/gk772veEdE/gHAvguLUYvW0otcseBNSzCzFXbaoHVmzGYjw0smcrFbKiwAIfi7CpA6JwC33cgiEbDgTdVSjeze0nbIThAhwGToCyYyIrgB+bFq/2JgZxJGdBMHLBcAgpYUW3aVWtXYig9nhfZjsdgK41smx41RAfOu3QrytI3Cr2G1rfjC7+0FhC800Zohubu2v9yWZsRIGogVQ7X6Sb8WAO4VyO0boKP4zx8dR57E4bpcRq3sAQzPVtsNhedV7RrJLvd7/nAJN0io7ttWOo1WyZGKmeOUiQoQmUI3SKjxMyr7L/U3oQE6bK4dQO5YshEd/BgWT7DZet/pD8SdKtBm5AUuXEi68Q0s9kLo3yfuXO2Gm9JaSu+pjjMUGaO2TkBFAh+l39AzAySUHiBMSwGJQBjC5LHUJ2+gLlRyLIjehscXgLu1u23/I18bAA==")
-size_override = Vector2(256, 96)
 
 [sub_resource type="Animation" id="Animation_mhnvy"]
 length = 1.2666667
@@ -523,11 +520,14 @@ autoplay = &"Pumpkin"
 texture_filter = 1
 position = Vector2(313, 75.00001)
 scale = Vector2(2.7708333, 2.7708333)
-texture = SubResource("PortableCompressedTexture2D_con2f")
+texture = ExtResource("5_g3eks")
 hframes = 2
 vframes = 2
 metadata/_aseprite_wizard_interface_config_ = {
-"pending_changes": {}
+"animation_section": false,
+"layer_section": false,
+"pending_changes": {},
+"slice_section": false
 }
 metadata/_aseprite_wizard_config_ = {
 "convert_fps_field": 60.0,
