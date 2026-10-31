@@ -1,6 +1,6 @@
 using Godot;
 
-namespace game.scripts;
+namespace game.scenes;
 
 public partial class Menu : Node2D
 {

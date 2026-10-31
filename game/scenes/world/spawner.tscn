@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://b3vxw03w7mrfi"]
+
+[ext_resource type="Script" uid="uid://dpcd06k8xvtbe" path="res://scenes/world/Spawner.cs" id="1_2vbf6"]
+
+[node name="Spawner" type="Node2D" unique_id=2065464322]
+script = ExtResource("1_2vbf6")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1246674128]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer" unique_id=1388849059]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -86.0
+offset_top = 25.0
+offset_right = -44.0
+offset_bottom = 65.0
+grow_horizontal = 0
+
+[node name="Minute" type="Label" parent="CanvasLayer/HBoxContainer" unique_id=195807549]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="Label2" type="Label" parent="CanvasLayer/HBoxContainer" unique_id=431946035]
+layout_mode = 2
+text = ":"
+
+[node name="Second" type="Label" parent="CanvasLayer/HBoxContainer" unique_id=1646187819]
+unique_name_in_owner = true
+layout_mode = 2
+text = "00"
+
+[node name="Timer" type="Timer" parent="." unique_id=823017940]
+autostart = true
+
+[node name="Pattern" type="Timer" parent="." unique_id=272364016]
+wait_time = 10.0
+autostart = true
+
+[node name="Elite" type="Timer" parent="." unique_id=2092757431]
+wait_time = 9.0
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="On_timer_timeout"]
