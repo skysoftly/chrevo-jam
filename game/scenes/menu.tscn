@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c4sgpgu4eejev" path="res://scripts/Menu.cs" id="1_yqeox"]
 [ext_resource type="PackedScene" uid="uid://dlgmtcau57j4d" path="res://scenes/game.tscn" id="2_vjb58"]
+[ext_resource type="Theme" uid="uid://b6ku3hh08t2am" path="res://themes/theme.tres" id="3_mhnvy"]
 
 [node name="Menu" type="Node2D" unique_id=303230422 node_paths=PackedStringArray("PlayBtn", "QuitBtn")]
 script = ExtResource("1_yqeox")
@@ -12,23 +13,30 @@ Scene = ExtResource("2_vjb58")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=44820775]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1285189682]
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = 6
+anchor_left = 1.0
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -157.0
-offset_top = -33.0
-offset_right = 157.0
-offset_bottom = 33.0
-grow_horizontal = 2
+offset_left = -283.0
+offset_top = -68.0
+offset_right = -22.409058
+offset_bottom = 148.0
+grow_horizontal = 0
 grow_vertical = 2
+theme_override_constants/separation = 10
 
 [node name="Play" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=564096435]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 60.01)
 layout_mode = 2
+theme = ExtResource("3_mhnvy")
 text = "Play
 "
 
 [node name="Quit" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=66926747]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 67.72)
 layout_mode = 2
+theme = ExtResource("3_mhnvy")
 text = "Quit"
