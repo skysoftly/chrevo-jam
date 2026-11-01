@@ -10,10 +10,10 @@ config_version=5
 
 [application]
 
-config/name="game"
+config/name="Possessive"
 run/main_scene="uid://c8tgtt7xpecuc"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://b7vs2dek76x7y"
 
 [autoload]
 
