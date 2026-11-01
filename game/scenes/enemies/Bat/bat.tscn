@@ -113,7 +113,7 @@ AttackCooldown = 1.8
 Damage = 4.0
 DamageCooldown = 0.1
 _outlineMaterial = SubResource("ShaderMaterial_5t5qm")
-MaxHealth = 15.0
+MaxHealth = 17.0
 _healthBar = NodePath("ProgressBar")
 
 [node name="ParticlePumpkin" type="CPUParticles2D" parent="." unique_id=29875832]

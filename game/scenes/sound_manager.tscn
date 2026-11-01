@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://sj7a25lahbc3" path="res://assets/songs/vals-skazochnoy-nechisti-2240.mp3" id="3_shlr6"]
 
 [node name="SoundManager" type="Node2D" unique_id=1655418152 node_paths=PackedStringArray("_pumpkinJumpSound", "_batAttackSound")]
+process_mode = 3
 script = ExtResource("1_s6peo")
 _pumpkinJumpSound = NodePath("PumpkinJumpSoud")
 _batAttackSound = NodePath("BatAttackSoud")
@@ -20,8 +21,7 @@ stream = ExtResource("1_gbdfy")
 max_polyphony = 3
 parameters/looping = false
 
-[node name="Music" type="AudioStreamPlayer2D" parent="." unique_id=262088041]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=882712342]
 stream = ExtResource("3_shlr6")
+volume_db = -20.0
 autoplay = true
-max_polyphony = 3
-parameters/looping = true

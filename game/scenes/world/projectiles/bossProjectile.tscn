@@ -1,0 +1,87 @@
+[gd_scene format=4 uid="uid://2l6ehf0f3ll7"]
+
+[ext_resource type="Script" uid="uid://bvl7jahswycnu" path="res://scenes/world/Projectile.cs" id="1_1phw1"]
+[ext_resource type="Texture2D" uid="uid://b2f5quhnxchec" path="res://assets/particles/attack.png" id="2_sottr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sa52v"]
+
+[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_jveri"]
+_data = PackedByteArray("AAADAAUAAAABAAAAIAAAACAAAAB+AAAAUklGRnYAAABXRUJQVlA4TGoAAAAvH8AHECdAkG2bG8gIBnSBCwSS80dZMuY/iMb4wCgAgjjaQNZg2EDWYPYPtQN8+Y7ov8K2bZvsnbRnlE1gA6oHkPD6JI/q9eiE19KjrJasevR9PcrA0JzqC5CdXJIHxX/I/xT/ceGf94AF")
+size_override = Vector2(32, 32)
+
+[sub_resource type="Animation" id="Animation_dmo7y"]
+length = 0.1
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8oybk"]
+_data = {
+&"default": SubResource("Animation_dmo7y")
+}
+
+[sub_resource type="Curve" id="Curve_jveri"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Projectile" type="Area2D" unique_id=1010572242]
+collision_layer = 0
+collision_mask = 6
+script = ExtResource("1_1phw1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1099901584]
+shape = SubResource("CircleShape2D_sa52v")
+debug_color = Color(0.39354205, 0.60450184, 0.2532796, 0.41960785)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=576832153]
+texture_filter = 1
+texture = SubResource("PortableCompressedTexture2D_jveri")
+metadata/_aseprite_wizard_interface_config_ = {
+"pending_changes": {}
+}
+metadata/_aseprite_wizard_config_ = {
+"convert_fps_field": 60.0,
+"convert_ms_field": 16.0,
+"convert_to_fps": false,
+"embed_tex": true,
+"i_mode": 0,
+"keep_anim_length": false,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "AnimationPlayer",
+"scale": "1.0",
+"slice": "",
+"source": "res://assets/particles/attack.aseprite",
+"source_uid": 5122820588504406097
+}
+metadata/_aseprite_wizard_source_file_hash_ = "6ecca98d0fff7d2c35014c4d18bfe7ae"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1042783603]
+libraries/ = SubResource("AnimationLibrary_8oybk")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=2014862988]
+amount = 10
+texture = ExtResource("2_sottr")
+emission_shape = 1
+emission_sphere_radius = 11.52
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 20.0
+scale_amount_min = 0.05
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("Curve_jveri")

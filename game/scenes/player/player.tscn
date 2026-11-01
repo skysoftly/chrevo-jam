@@ -226,13 +226,13 @@ texture = SubResource("GradientTexture2D_dovo2")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -97.1875
-offset_top = 8.0
-offset_right = 41.3125
-offset_bottom = 47.375
+offset_left = -69.25
+offset_top = 9.0
+offset_right = 69.25
+offset_bottom = 48.375
 grow_horizontal = 2
-scale = Vector2(2, 2)
-pivot_offset = Vector2(40.8125, 3.75)
+scale = Vector2(1.75, 1.75)
+pivot_offset = Vector2(68.92836, 3.3333325)
 theme_override_styles/panel = SubResource("StyleBoxTexture_sa52v")
 
 [node name="Health" type="ProgressBar" parent="CanvasLayer2/Panel" unique_id=1752786683]
