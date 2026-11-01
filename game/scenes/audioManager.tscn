@@ -2,24 +2,77 @@
 
 [ext_resource type="Script" uid="uid://csd2uotvwqqqs" path="res://scenes/AudioManager.cs" id="1_a2hv1"]
 [ext_resource type="AudioStream" uid="uid://43bfgc57ouwl" path="res://assets/songs/batAttack.mp3" id="2_nv43o"]
+[ext_resource type="AudioStream" uid="uid://jxh5a8qrtonq" path="res://assets/songs/hits/bathit.mp3" id="3_7ahar"]
 [ext_resource type="AudioStream" uid="uid://dbr5660ov35v4" path="res://assets/songs/pumpkinJump.mp3" id="3_ls11a"]
 [ext_resource type="AudioStream" uid="uid://sj7a25lahbc3" path="res://assets/songs/vals-skazochnoy-nechisti-2240.mp3" id="4_1ggkt"]
+[ext_resource type="AudioStream" uid="uid://ca7vh8ne1ilei" path="res://assets/songs/hits/playerhit.mp3" id="4_nv43o"]
+[ext_resource type="AudioStream" uid="uid://ba0uh6f12ukw" path="res://assets/songs/yes.mp3" id="4_tv3ta"]
+[ext_resource type="AudioStream" uid="uid://exfaeclt2t0p" path="res://assets/songs/hits/bonehit.mp3" id="5_ls11a"]
+[ext_resource type="AudioStream" uid="uid://df8xttmeorvq0" path="res://assets/songs/no.mp3" id="5_twrc3"]
+[ext_resource type="AudioStream" uid="uid://drdng4kyh1gh7" path="res://assets/songs/hits/d-damage-splat.mp3" id="6_1ggkt"]
 
 [node name="AudioManager" type="Node2D" unique_id=1655418152]
 process_mode = 3
 script = ExtResource("1_a2hv1")
 
-[node name="PumpkinJumpSoud" type="AudioStreamPlayer" parent="." unique_id=1738611021]
+[node name="PumpkinJump" type="AudioStreamPlayer" parent="." unique_id=1738611021]
 stream = ExtResource("3_ls11a")
 volume_db = -20.0
 max_polyphony = 5
 
-[node name="BatAttackSoud" type="AudioStreamPlayer" parent="." unique_id=4367982]
+[node name="PumpkinHit" type="AudioStreamPlayer" parent="." unique_id=644816695]
+stream = ExtResource("3_ls11a")
+volume_db = -10.0
+pitch_scale = 2.38
+max_polyphony = 5
+
+[node name="BatHit" type="AudioStreamPlayer" parent="." unique_id=747640394]
+stream = ExtResource("3_7ahar")
+volume_db = -20.0
+pitch_scale = 0.56
+max_polyphony = 5
+
+[node name="Yes" type="AudioStreamPlayer" parent="." unique_id=1659071649]
+stream = ExtResource("4_tv3ta")
+volume_db = -20.0
+pitch_scale = 0.56
+max_polyphony = 5
+
+[node name="No" type="AudioStreamPlayer" parent="." unique_id=340395208]
+stream = ExtResource("5_twrc3")
+volume_db = -20.0
+pitch_scale = 0.56
+max_polyphony = 5
+
+[node name="BatAttack" type="AudioStreamPlayer" parent="." unique_id=4367982]
 stream = ExtResource("2_nv43o")
 volume_db = -20.0
 max_polyphony = 5
 
+[node name="PlayerHit" type="AudioStreamPlayer" parent="." unique_id=1865875231]
+stream = ExtResource("4_nv43o")
+volume_db = -35.0
+pitch_scale = 1.6
+max_polyphony = 5
+
+[node name="BoneHit" type="AudioStreamPlayer" parent="." unique_id=2069089236]
+stream = ExtResource("5_ls11a")
+volume_db = -18.0
+pitch_scale = 1.7
+max_polyphony = 5
+
+[node name="BoneShoot" type="AudioStreamPlayer" parent="." unique_id=1847071136]
+stream = ExtResource("5_ls11a")
+volume_db = -14.0
+max_polyphony = 5
+
+[node name="BossHit" type="AudioStreamPlayer" parent="." unique_id=185086270]
+stream = ExtResource("6_1ggkt")
+volume_db = -21.515
+pitch_scale = 1.48
+max_polyphony = 5
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=882712342]
 stream = ExtResource("4_1ggkt")
-volume_db = -20.0
+volume_db = -24.407
 autoplay = true

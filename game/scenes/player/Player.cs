@@ -168,6 +168,8 @@ public partial class Player : Entity
 		if (IsDead)
 			return;
 
+		
+		AudioManager.Instance.PlaySound("No");
 		GetTree().Paused = true;
 		_gameOverMenu.Show();
 	}

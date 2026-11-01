@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://d01q4rqnvorls"]
+
+[ext_resource type="Texture2D" uid="uid://bnpf7412l2rt7" path="res://assets/boss-bar.png" id="1_7khmv"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7khmv"]
+texture = ExtResource("1_7khmv")
+texture_margin_left = 11.0
+texture_margin_top = 4.0
+texture_margin_right = 11.0
+texture_margin_bottom = 4.0
+region_rect = Rect2(174, 36, 66, 8)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6ci5c"]
+texture = ExtResource("1_7khmv")
+texture_margin_left = 11.0
+texture_margin_top = 4.0
+texture_margin_right = 11.0
+texture_margin_bottom = 4.0
+region_rect = Rect2(174, 59, 66, 8)
+
+[node name="HealthBar" type="ProgressBar" unique_id=1519286907]
+modulate = Color(0.57700807, 0.5770085, 0.57700825, 0.49803922)
+offset_right = 44.0
+offset_bottom = 8.0
+theme_override_styles/background = SubResource("StyleBoxTexture_7khmv")
+theme_override_styles/fill = SubResource("StyleBoxTexture_6ci5c")
+value = 50.0
+show_percentage = false

@@ -17,6 +17,9 @@ public abstract partial class Entity : CharacterBody2D, IHealth
     [Export] private ShaderMaterial _outlineMaterial;
     [Export] private float _hitDuration = 0.15f;
 
+    [ExportGroup("Audio")]
+    [Export] protected string DamageSound = "Damage";
+    
     public float Health { get; protected set; }
 
     public bool IsDead { get; protected set; }
@@ -126,7 +129,8 @@ public abstract partial class Entity : CharacterBody2D, IHealth
         Health = Mathf.Max(0, Health - amount);
 
         UpdateHealthBar();
-
+        AudioManager.Instance?.PlaySound(DamageSound);
+        
         if (Health <= 0)
             Die();
 

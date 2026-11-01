@@ -17,6 +17,8 @@ public partial class Spawner : Node2D
 	[Export] private Label _minuteLabel;
 	[Export] private Label _secondLabel;
 	[Export] private Control _bossVictoryMenu;
+	[ExportGroup("Animations")]
+	[Export] private AnimationPlayer _waveAnimationPlayer;
 
 	[ExportGroup("Waves")]
 	[Export] private Godot.Collections.Array<WaveSettings> _waves = new();
@@ -105,6 +107,12 @@ public partial class Spawner : Node2D
 		_countedEnemies.Clear();
 
 		UpdateWaveUI();
+		
+		if (GodotObject.IsInstanceValid(_waveAnimationPlayer) &&
+			_waveAnimationPlayer.HasAnimation("WaveStart"))
+		{
+			_waveAnimationPlayer.Play("WaveStart");
+		}
 
 		GD.Print($"Wave {index + 1} started");
 	}
@@ -273,13 +281,13 @@ public partial class Spawner : Node2D
 
 		_currentBoss = null;
 
-		// Убираем оставшихся миньонов.
 		foreach (Enemy enemy in _waveEnemies)
 		{
 			if (GodotObject.IsInstanceValid(enemy) && !enemy.IsDead)
 				enemy.TakeDamage(enemy.MaxHealth);
 		}
 
+		AudioManager.Instance.PlaySound("Yes");
 		GetTree().Paused = true;
 		_bossVictoryMenu.Show();
 	}

@@ -15,6 +15,7 @@ public abstract partial class Boss : Entity
     protected Node2D Player => Spawner?.Player;
 
     [ExportGroup("References")]
+    [Export] protected AnimationPlayer AnimationPlayer;
     [Export] private AnimationPlayer _introAnimationPlayer;
     [Export] private AudioStreamPlayer _music;
 
@@ -107,10 +108,13 @@ public abstract partial class Boss : Entity
 
     // DEATH
 
-    protected override void Die()
+    protected override async void Die()
     {
         if (IsDead)
             return;
+
+        if (GodotObject.IsInstanceValid(_music))
+            _music.Stop();
 
         GetTree().Paused = false;
 
@@ -121,10 +125,30 @@ public abstract partial class Boss : Entity
         if (GodotObject.IsInstanceValid(_introAnimationPlayer))
             _introAnimationPlayer.AnimationFinished -= OnIntroAnimationFinished;
 
-        if (GodotObject.IsInstanceValid(_music))
-            _music.Stop();
+        ProcessMode = ProcessModeEnum.Always;
 
+        if (GodotObject.IsInstanceValid(_introAnimationPlayer) &&
+            AnimationPlayer.HasAnimation("Die"))
+        {
+            AnimationPlayer.Play("Die");
+
+            await ToSignal(
+                _introAnimationPlayer,
+                AnimationMixer.SignalName.AnimationFinished
+            );
+        }
+        await ToSignal(GetTree().CreateTimer( 3.0), SceneTreeTimer.SignalName.Timeout);
+        
         Died?.Invoke(this);
+        
+        await ToSignal(GetTree().CreateTimer( 10.0), SceneTreeTimer.SignalName.Timeout);
+        
+        var tween = CreateTween();
+        tween.TweenProperty(this, "modulate:a", 0f, 1.5f);
+
+
+        await ToSignal(tween, Tween.SignalName.Finished);
+        
         base.Die();
     }
 }

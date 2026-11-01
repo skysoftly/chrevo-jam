@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b6udxlxr51j2e" path="res://scenes/enemies/Pumpkin/Pumpkin.cs" id="1_m8d4b"]
 [ext_resource type="Shader" uid="uid://b460tc7jof254" path="res://gdshaders/selectEnemy.gdshader" id="2_61lmv"]
+[ext_resource type="PackedScene" uid="uid://d01q4rqnvorls" path="res://scenes/enemies/health_bar.tscn" id="3_m8d4b"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m8d4b"]
 shader = ExtResource("2_61lmv")
@@ -10,6 +11,7 @@ shader_parameter/line_color_attack = Color(0.5507359, 0.114297844, 0.1088836, 1)
 shader_parameter/line_thickness = 1.0
 shader_parameter/enabled = false
 shader_parameter/attack = false
+shader_parameter/hit = false
 
 [sub_resource type="Gradient" id="Gradient_t7bmf"]
 offsets = PackedFloat32Array(0, 0.29714286, 0.72, 1)
@@ -34,6 +36,7 @@ shader_parameter/line_color_attack = Color(1, 0.2, 0.2, 1)
 shader_parameter/line_thickness = 1.0
 shader_parameter/enabled = false
 shader_parameter/attack = false
+shader_parameter/hit = false
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_t7bmf"]
 _data = PackedByteArray("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")
@@ -96,21 +99,7 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_38ino"]
 radius = 30.016663
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38ino"]
-bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.31764707)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m8d4b"]
-bg_color = Color(0.53333336, 0, 0.003921569, 0.5176471)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-
-[node name="Pumpkin" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_particles", "_attackArea", "_rangePumpkin", "Sprite", "AnimationPlayer", "_healthBar")]
+[node name="Pumpkin" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_particles", "_attackArea", "_rangePumpkin", "AnimationPlayer", "Sprite", "_healthBar")]
 collision_layer = 8
 collision_mask = 2
 motion_mode = 1
@@ -119,7 +108,6 @@ script = ExtResource("1_m8d4b")
 _particles = NodePath("ParticlePumpkin")
 _attackArea = NodePath("AttackArea")
 _rangePumpkin = NodePath("AttackArea/RangePumpkin")
-Sprite = NodePath("Pumpkin")
 AnimationPlayer = NodePath("AnimationPlayer")
 Speed = 80.0
 StopDistance = 30.0
@@ -127,9 +115,12 @@ AttackRange = 60.0
 Damage = 5.0
 DamageCooldown = 0.3
 SeparationRadius = 40.0
-_outlineMaterial = SubResource("ShaderMaterial_m8d4b")
+_deathFadeDelay = 120.0
+Sprite = NodePath("Pumpkin")
 MaxHealth = 20.0
-_healthBar = NodePath("ProgressBar")
+_healthBar = NodePath("HealthBar")
+_outlineMaterial = SubResource("ShaderMaterial_m8d4b")
+DamageSound = "PumpkinHit"
 
 [node name="ParticlePumpkin" type="CPUParticles2D" parent="." unique_id=29875832]
 position = Vector2(0, -6)
@@ -203,15 +194,10 @@ shape = SubResource("CircleShape2D_38ino")
 disabled = true
 debug_color = Color(0.1764706, 0.023529412, 0.03137255, 0.1254902)
 
-[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1215665850]
-offset_left = -14.0
-offset_top = -28.0
-offset_right = 14.0
-offset_bottom = -25.0
-theme_override_styles/background = SubResource("StyleBoxFlat_38ino")
-theme_override_styles/fill = SubResource("StyleBoxFlat_m8d4b")
-max_value = 15.0
-value = 7.5
-show_percentage = false
+[node name="HealthBar" parent="." unique_id=1519286907 instance=ExtResource("3_m8d4b")]
+offset_left = -22.0
+offset_top = -38.0
+offset_right = 22.0
+offset_bottom = -30.0
 
 [connection signal="body_entered" from="AttackArea" to="." method="OnAttackAreaBodyEntered"]

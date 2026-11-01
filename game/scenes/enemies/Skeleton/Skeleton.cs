@@ -121,6 +121,8 @@ public partial class Skeleton : Enemy
         if (scene == null)
             return;
 
+        AudioManager.Instance.PlaySound("BoneShoot");
+        
         // Четыре основных направления
         ShootDirection(scene, Vector2.Up);
         ShootDirection(scene, Vector2.Down);
