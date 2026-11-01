@@ -7,7 +7,6 @@ namespace game.scenes.enemies;
 public abstract partial class Enemy : Entity
 {
 	[ExportGroup("References")]
-	[Export] protected Sprite2D Sprite { get; set; }
 	[Export] protected AnimationPlayer AnimationPlayer { get; set; }
 
 	[Export] public Node2D PlayerReference { get; set; }
@@ -26,15 +25,11 @@ public abstract partial class Enemy : Entity
 	[Export] public float SeparationRadius { get; set; } = 35f;
 	[Export] public float SeparationForce { get; set; } = 180f;
 
-	[ExportGroup("Outline")]
-	[Export] private ShaderMaterial _outlineMaterial;
-
 	[ExportGroup("Death")]
 	[Export] private float _deathFadeDelay = 10f;
 	[Export] private float _deathFadeDuration = 1.5f;
 
 	private float _damageTimer;
-	private ShaderMaterial _materialInstance;
 
 	public event Action<Enemy> Died;
 
@@ -49,18 +44,6 @@ public abstract partial class Enemy : Entity
 		base.OnEntityReady();
 
 		AddToGroup("enemies");
-
-		if (_outlineMaterial != null && Sprite != null)
-		{
-			_materialInstance = (ShaderMaterial)_outlineMaterial.Duplicate();
-			Sprite.Material = _materialInstance;
-
-			SetOutline(false);
-		}
-		else
-		{
-			GD.PushWarning($"{Name}: Outline Sprite or Material is missing!");
-		}
 
 		if (GodotObject.IsInstanceValid(AnimationPlayer))
 		{
@@ -217,7 +200,7 @@ public abstract partial class Enemy : Entity
 	protected bool IsValidTarget(Node2D target)
 	{
 		return GodotObject.IsInstanceValid(target)
-			   && !target.IsQueuedForDeletion();
+			&& !target.IsQueuedForDeletion();
 	}
 
 	protected void DamageTarget(Node2D target)
@@ -227,15 +210,6 @@ public abstract partial class Enemy : Entity
 
 		if (target is IHealth health)
 			health.TakeDamage(Damage);
-	}
-
-	public void SetOutline(bool enabled, bool attack = false)
-	{
-		if (_materialInstance == null || IsDead)
-			return;
-
-		_materialInstance.SetShaderParameter("enabled", enabled);
-		_materialInstance.SetShaderParameter("attack", attack);
 	}
 
 	// --------------------------------------------------
@@ -262,17 +236,12 @@ public abstract partial class Enemy : Entity
 		CollisionLayer = 0;
 		CollisionMask = 0;
 
-		
 		SetProcess(false);
 		SetPhysicsProcess(false);
 
 		DisableChildCollisions(this);
 
-		if (_materialInstance != null)
-		{
-			_materialInstance.SetShaderParameter("enabled", false);
-			_materialInstance.SetShaderParameter("attack", false);
-		}
+		ResetShaderEffects();
 
 		Died?.Invoke(this);
 
@@ -301,6 +270,7 @@ public abstract partial class Enemy : Entity
 			DisableChildCollisions(child);
 		}
 	}
+
 	private async void DeathSequence()
 	{
 		if (GodotObject.IsInstanceValid(AnimationPlayer) &&
@@ -325,6 +295,7 @@ public abstract partial class Enemy : Entity
 			GetTree().CreateTimer(_deathFadeDelay),
 			SceneTreeTimer.SignalName.Timeout
 		);
+
 		Tween tween = CreateTween();
 
 		tween.SetTrans(Tween.TransitionType.Linear);

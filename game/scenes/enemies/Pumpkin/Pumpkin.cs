@@ -142,7 +142,7 @@ public partial class Pumpkin : Enemy
 
         IsInvulnerable = false;
 
-        SoundManager.Instance.PlayPumpkinJump();
+        AudioManager.Instance.PlaySound("PumpkinJump");
     }
 
     private void UpdateRecovery()

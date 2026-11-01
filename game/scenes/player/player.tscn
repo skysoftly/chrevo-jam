@@ -6,6 +6,15 @@
 [ext_resource type="AudioStream" uid="uid://2cu5dog730wm" path="res://assets/songs/Possession.mp3" id="2_lvxji"]
 [ext_resource type="Texture2D" uid="uid://cmb3crpeg4cci" path="res://assets/playerStats.png" id="5_p47bc"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dovo2"]
+shader = ExtResource("2_gmlin")
+shader_parameter/line_color = Color(0.12769848, 0.13924831, 0.20539021, 1)
+shader_parameter/line_color_attack = Color(1, 0.2, 0.2, 1)
+shader_parameter/line_thickness = 0.250000011875
+shader_parameter/enabled = true
+shader_parameter/attack = false
+shader_parameter/hit = false
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_u8vuu"]
 radius = 13.0
 
@@ -46,14 +55,6 @@ _data = {
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sa52v"]
 radius = 80.024994
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dovo2"]
-shader = ExtResource("2_gmlin")
-shader_parameter/line_color = Color(0.12769848, 0.13924831, 0.20539021, 1)
-shader_parameter/line_color_attack = Color(1, 0.2, 0.2, 1)
-shader_parameter/line_thickness = 0.250000011875
-shader_parameter/enabled = true
-shader_parameter/attack = false
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_p47bc"]
 _data = PackedByteArray("AAADAAUAAAABAAAAYAAAAEAAAAACAQAAUklGRvoAAABXRUJQVlA4TO0AAAAvX8APEB8gFkzx7mASCKQ4h70WC6Z4XyDNfwD+KnBj247ayNSHxt6OJtAbwlvAVaGhS6uTTSU1Soq7QBXRfwZu2zZSd3tD7jPgCypBbeL6w8h5vWpqcBk/8dHh39HcTmTikZX/0NxOq831FjE3HA2Hilu8WpzzObzoEJF0AxgutnnIHJyqqujpJoq2/eTlpiRsioxDvi0ZJPE7N4FFUIrF2MBfojiM2DBUhw7DR+eF6oCj4TAe2QDeOgARXW8Rd1YdoKoqyuc8o3CQbPPQ1HAY8iy6g5K8qb3W6GsONtHuzfcT6YCI6v02fPgABQAA")
@@ -123,22 +124,23 @@ region_rect = Rect2(70, 84, 67, 12)
 texture = ExtResource("5_p47bc")
 region_rect = Rect2(60, 53, 9, 8)
 
-[node name="Player" type="CharacterBody2D" unique_id=250972871 node_paths=PackedStringArray("_possessionAudio", "_healthBar", "_cooldownPossessionBar", "_sprite", "_particlePossession", "_cooldownAttackBar", "_healthBar")]
+[node name="Player" type="CharacterBody2D" unique_id=250972871 node_paths=PackedStringArray("_possessionAudio", "_healthBar", "_cooldownPossessionBar", "_particlePossession", "_cooldownAttackBar", "Sprite", "_healthBar")]
 collision_layer = 4
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_3vyb7")
 _possessionAudio = NodePath("Possession")
-_invulnerabilityTime = 0.4
+_invulnerabilityTime = 0.6
 _healthBar = NodePath("CanvasLayer2/Panel/Health")
 _possessionCooldown = 4.0
 _possessionDamage = 2.0
 _cooldownPossessionBar = NodePath("CanvasLayer2/Panel/Cooldown")
-_sprite = NodePath("Sprite2D")
 _particlePossession = NodePath("ParticlePossession")
 _cooldownAttackBar = NodePath("CanvasLayer2/Panel/CooldownAttack")
-MaxHealth = 8.0
+Sprite = NodePath("Sprite2D")
+MaxHealth = 11.0
 _healthBar = NodePath("CanvasLayer2/Panel/Health")
+_outlineMaterial = SubResource("ShaderMaterial_dovo2")
 
 [node name="Possession" type="AudioStreamPlayer2D" parent="." unique_id=341635193]
 stream = ExtResource("2_lvxji")

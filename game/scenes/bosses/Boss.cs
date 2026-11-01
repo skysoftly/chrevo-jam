@@ -15,30 +15,23 @@ public abstract partial class Boss : Entity
     protected Node2D Player => Spawner?.Player;
 
     [ExportGroup("References")]
-    [Export] protected Sprite2D Sprite { get; set; }
     [Export] private AnimationPlayer _introAnimationPlayer;
-    [Export] private AudioStreamPlayer2D _introSound;
     [Export] private AudioStreamPlayer _music;
 
     [ExportGroup("Intro")]
     [Export] private string _introAnimation = "Intro";
 
-    [ExportGroup("Outline")]
-    [Export] private ShaderMaterial _outlineMaterial;
-
-    private ShaderMaterial _materialInstance;
     private bool _introFinished;
 
     protected override void OnEntityReady()
     {
         base.OnEntityReady();
-
+        ProcessMode = Node.ProcessModeEnum.Always;
+        Spawner.IsCutscenePlaying = true;
         AddToGroup("bosses");
 
         ShowHealthBar();
-
         
-        SetupOutline();
         StartIntro();
     }
 
@@ -51,8 +44,10 @@ public abstract partial class Boss : Entity
 
     private void StartIntro()
     {
-        if (GodotObject.IsInstanceValid(_introSound))
-            _introSound.Play();
+        GetTree().Paused = true;
+
+        // if (GodotObject.IsInstanceValid(_introSound))
+        //     _introSound.Play();
 
         if (GodotObject.IsInstanceValid(_introAnimationPlayer) &&
             _introAnimationPlayer.HasAnimation(_introAnimation))
@@ -79,8 +74,9 @@ public abstract partial class Boss : Entity
         if (_introFinished || IsDead)
             return;
 
+        ProcessMode = Node.ProcessModeEnum.Inherit;
         _introFinished = true;
-
+        Spawner.IsCutscenePlaying = false;
         GetTree().Paused = false;
 
         if (GodotObject.IsInstanceValid(_music))
@@ -107,31 +103,7 @@ public abstract partial class Boss : Entity
 
         return Spawner.ToGlobal(localPosition);
     }
-
-    // OUTLINE
-
-    private void SetupOutline()
-    {
-        if (_outlineMaterial == null || Sprite == null)
-        {
-            GD.PushWarning($"{Name}: Outline Sprite or Material is missing!");
-            return;
-        }
-
-        _materialInstance = (ShaderMaterial)_outlineMaterial.Duplicate();
-        Sprite.Material = _materialInstance;
-
-        SetOutline(false);
-    }
-
-    public void SetOutline(bool enabled, bool attack = false)
-    {
-        if (_materialInstance == null || IsDead)
-            return;
-
-        _materialInstance.SetShaderParameter("enabled", enabled);
-        _materialInstance.SetShaderParameter("attack", attack);
-    }
+    
 
     // DEATH
 

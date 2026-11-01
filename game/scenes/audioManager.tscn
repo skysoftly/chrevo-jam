@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://d2blbwayjkefs"]
+
+[ext_resource type="Script" uid="uid://csd2uotvwqqqs" path="res://scenes/AudioManager.cs" id="1_a2hv1"]
+[ext_resource type="AudioStream" uid="uid://43bfgc57ouwl" path="res://assets/songs/batAttack.mp3" id="2_nv43o"]
+[ext_resource type="AudioStream" uid="uid://dbr5660ov35v4" path="res://assets/songs/pumpkinJump.mp3" id="3_ls11a"]
+[ext_resource type="AudioStream" uid="uid://sj7a25lahbc3" path="res://assets/songs/vals-skazochnoy-nechisti-2240.mp3" id="4_1ggkt"]
+
+[node name="AudioManager" type="Node2D" unique_id=1655418152]
+process_mode = 3
+script = ExtResource("1_a2hv1")
+
+[node name="PumpkinJumpSoud" type="AudioStreamPlayer" parent="." unique_id=1738611021]
+stream = ExtResource("3_ls11a")
+volume_db = -20.0
+max_polyphony = 5
+
+[node name="BatAttackSoud" type="AudioStreamPlayer" parent="." unique_id=4367982]
+stream = ExtResource("2_nv43o")
+volume_db = -20.0
+max_polyphony = 5
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=882712342]
+stream = ExtResource("4_1ggkt")
+volume_db = -20.0
+autoplay = true
