@@ -13,7 +13,7 @@ point_count = 2
 collision_layer = 0
 collision_mask = 6
 script = ExtResource("1_1phw1")
-_damage = 5.0
+_damage = 6.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1099901584]
 shape = SubResource("CircleShape2D_sa52v")

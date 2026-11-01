@@ -59,3 +59,6 @@ metadata/_custom_type_script = "uid://bqwrxvcjuuqgr"
 [node name="Spawner" type="Node2D" unique_id=2065464322]
 script = ExtResource("1_2vbf6")
 _waves = Array[ExtResource("2_lydsj")]([SubResource("Resource_2sx2w"), SubResource("Resource_l30kr"), SubResource("Resource_eyqf8"), SubResource("Resource_nxmw7"), SubResource("Resource_hs70d")])
+_endlessEnemyScenes = [ExtResource("4_2sx2w"), ExtResource("3_l30kr"), ExtResource("5_2sx2w")]
+_endlessSpawnInterval = 1.0
+_endlessMaxAlive = 14

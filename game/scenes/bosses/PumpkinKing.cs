@@ -15,8 +15,6 @@ public partial class PumpkinKing : Boss
         Summoning
     }
 
-    [ExportGroup("References")]
-    [Export] private AnimationPlayer _animationPlayer;
 
     [ExportGroup("Intro")]
     [Export] private float _introWalkDuration = 3f;
@@ -400,10 +398,10 @@ public partial class PumpkinKing : Boss
 
     private void PlayAnimation(string animation)
     {
-        if (!GodotObject.IsInstanceValid(_animationPlayer))
+        if (!GodotObject.IsInstanceValid(AnimationPlayer))
             return;
 
-        if (!_animationPlayer.HasAnimation(animation))
+        if (!AnimationPlayer.HasAnimation(animation))
         {
             GD.PushWarning(
                 $"{Name}: Animation '{animation}' not found!"
@@ -411,7 +409,7 @@ public partial class PumpkinKing : Boss
             return;
         }
 
-        _animationPlayer.Play(animation);
+        AnimationPlayer.Play(animation);
     }
 
     // --------------------------------------------------

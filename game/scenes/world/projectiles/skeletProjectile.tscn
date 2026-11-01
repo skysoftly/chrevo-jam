@@ -19,7 +19,7 @@ collision_layer = 0
 collision_mask = 6
 script = ExtResource("1_hprh3")
 _speed = 100.0
-_damage = 4.0
+_damage = 2.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1099901584]
 shape = SubResource("CircleShape2D_sa52v")

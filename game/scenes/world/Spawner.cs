@@ -281,13 +281,13 @@ public partial class Spawner : Node2D
 
 		_currentBoss = null;
 
-		// Убираем оставшихся миньонов.
 		foreach (Enemy enemy in _waveEnemies)
 		{
 			if (GodotObject.IsInstanceValid(enemy) && !enemy.IsDead)
 				enemy.TakeDamage(enemy.MaxHealth);
 		}
 
+		AudioManager.Instance.PlaySound("Yes");
 		GetTree().Paused = true;
 		_bossVictoryMenu.Show();
 	}

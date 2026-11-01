@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://46phkp80ufgi" path="res://assets/bg.png" id="3_4ytvr"]
 [ext_resource type="Theme" uid="uid://b6ku3hh08t2am" path="res://assets/themes/theme.tres" id="3_mhnvy"]
 [ext_resource type="Texture2D" uid="uid://ci28fn8omu51v" path="res://assets/bgPumpkin.png" id="4_4ytvr"]
+[ext_resource type="Script" uid="uid://ctdhkeq7rkvw4" path="res://scenes/GameUi.cs" id="5_v86rl"]
 [ext_resource type="Texture2D" uid="uid://p8rjdhdgbav8" path="res://assets/vignette.png" id="6_g3eks"]
 
 [sub_resource type="Animation" id="Animation_g3eks"]
@@ -61,14 +62,41 @@ point_count = 2
 _data = PackedByteArray("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")
 size_override = Vector2(304, 96)
 
+[sub_resource type="Animation" id="Animation_v86rl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(306.00003, 87)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1.0471814, 1.0471814)]
+}
+
 [sub_resource type="Animation" id="Animation_mhnvy"]
-length = 0.2
+length = 4.0
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
+tracks/0/interp = 2
 tracks/0/loop_wrap = false
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
@@ -76,9 +104,34 @@ tracks/0/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.7666667, 4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(306.00003, 87), Vector2(306.00003, 91.99999), Vector2(306.00003, 87)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.8666667, 4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1.0471814, 1.0471814), Vector2(1.047, 0.864), Vector2(1.0471814, 1.0471814)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4ytvr"]
 _data = {
+&"RESET": SubResource("Animation_v86rl"),
 &"default": SubResource("Animation_mhnvy")
 }
 
@@ -644,6 +697,9 @@ texture = SubResource("GradientTexture2D_gfg0v")
 texture_scale = 3.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=44820775]
+script = ExtResource("5_v86rl")
+_pathMenu = "res://scenes/menu.tscn"
+_pathCredits = "res://scenes/world/credits.tscn"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1285189682]
 anchors_preset = 6
@@ -668,6 +724,7 @@ text = "Играть
 "
 
 [node name="Settings" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=1324001686]
+visible = false
 texture_filter = 1
 layout_mode = 2
 theme = ExtResource("3_mhnvy")
@@ -693,3 +750,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("6_g3eks")
+metadata/_edit_lock_ = true
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Credits" to="CanvasLayer" method="ToCredits"]
