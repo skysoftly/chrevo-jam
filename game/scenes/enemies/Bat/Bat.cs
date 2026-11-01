@@ -1,3 +1,5 @@
+
+using System.Collections.Generic;
 using Godot;
 
 namespace game.scenes.enemies.Bat;
@@ -8,71 +10,70 @@ public partial class Bat : Enemy
     {
         None,
         Windup,
-        Dash,
+        Attack,
         Recovery
     }
 
-    [Export] private Sprite2D _sprite;
+    [ExportGroup("References")]
+    [Export] private Area2D _attackArea;
+    [Export] private CollisionShape2D _attackShape;
 
-    [Export] private float _hoverHeight = 60f;
-    [Export] private float _hoverAmplitude = 8f;
-    [Export] private float _hoverSpeed = 3f;
+    [ExportGroup("Attack Settings")]
+    [Export] private float _windupTime = 0.2f;
+    [Export] private float _attackDuration = 1f;
+    [Export] private float _recoveryTime = 0.1f;
 
-    [Export] private float _windupTime = 0.25f;
-    [Export] private float _dashDuration = 0.3f;
-    [Export] private float _recoveryTime = 0.2f;
-    [Export] private float _hitRadius = 35f;
-
-    private float _time;
-
-    private AttackState _attackState;
-
+    private AttackState _attackState = AttackState.None;
     private float _attackElapsed;
 
-    private Vector2 _attackStart;
-    private Vector2 _attackEnd;
+    private readonly HashSet<ulong> _hitTargets = new();
 
-    private Node2D _attackTarget;
+    public override void _Ready()
+    {
+        base._Ready();
+
+        _attackArea.CollisionMask = 4u;
+        _attackArea.Monitoring = false;
+        _attackShape.Disabled = true;
+    }
 
     protected override void MoveEnemy(double delta)
     {
         if (!IsValidTarget(PlayerReference))
             return;
 
-        _time += (float)delta;
-
-        Vector2 targetPosition = PlayerReference.GlobalPosition;
-
-        targetPosition.Y -= _hoverHeight;
-
-        targetPosition.Y += Mathf.Sin(
-            _time * _hoverSpeed
-        ) * _hoverAmplitude;
-
         Vector2 direction = GlobalPosition.DirectionTo(
-            targetPosition
+            PlayerReference.GlobalPosition
         );
 
-        Velocity = direction * Speed;
+        if (direction.X != 0)
+            Sprite.FlipH = direction.X < 0;
 
+        float distance = GlobalPosition.DistanceTo(
+            PlayerReference.GlobalPosition
+        );
+
+        Vector2 separation = GetSeparationDirection();
+
+        if (distance <= StopDistance)
+            direction = Vector2.Zero;
+
+        Vector2 movement = direction
+            + separation * SeparationForce / Speed;
+
+        Velocity = movement.LimitLength(1f) * Speed;
         MoveAndSlide();
     }
 
     protected override void StartAttack(Node2D target)
     {
-        _attackTarget = target;
-
-        _attackStart = GlobalPosition;
-        _attackEnd = target.GlobalPosition;
-
         _attackElapsed = 0;
         _attackState = AttackState.Windup;
 
         IsAttacking = true;
-
         Velocity = Vector2.Zero;
 
-        SetCollisionDisabled(true);
+        _hitTargets.Clear();
     }
 
     protected override void UpdateAttack(double delta)
@@ -82,63 +83,92 @@ public partial class Bat : Enemy
         switch (_attackState)
         {
             case AttackState.Windup:
-                if (_attackElapsed >= _windupTime)
-                {
-                    _attackElapsed = 0;
-                    _attackState = AttackState.Dash;
-                }
-
+                UpdateWindup();
                 break;
 
-            case AttackState.Dash:
-                UpdateDash();
+            case AttackState.Attack:
+                UpdateAttackState();
                 break;
 
             case AttackState.Recovery:
-                if (_attackElapsed >= _recoveryTime)
-                    FinishAttack();
-
+                UpdateRecovery();
                 break;
         }
     }
 
-    private void UpdateDash()
+    private void UpdateWindup()
     {
-        float progress = Mathf.Clamp(
-            _attackElapsed / _dashDuration,
-            0f,
-            1f
-        );
-
-        GlobalPosition = _attackStart.Lerp(
-            _attackEnd,
-            progress
-        );
-
-        if (progress < 1f)
+        if (_attackElapsed < _windupTime)
             return;
 
-        if (IsValidTarget(_attackTarget))
-        {
-            float distance = GlobalPosition.DistanceTo(
-                _attackTarget.GlobalPosition
-            );
+        _attackElapsed = 0;
+        _attackState = AttackState.Attack;
 
-            if (distance <= _hitRadius)
-                DamageTarget(_attackTarget);
-        }
+        AnimationPlayer.Play("Attack");
+        PlayAttackSound();
+
+        _attackArea.SetDeferred("monitoring", true);
+        _attackShape.SetDeferred("disabled", false);
+    }
+
+    private void UpdateAttackState()
+    {
+        if (_attackElapsed < _attackDuration)
+            return;
+
+        DisableAttackArea();
 
         _attackElapsed = 0;
         _attackState = AttackState.Recovery;
     }
 
+    private void UpdateRecovery()
+    {
+        if (_attackElapsed < _recoveryTime)
+            return;
+
+        FinishAttack();
+    }
+
     private void FinishAttack()
     {
-        SetCollisionDisabled(false);
+        DisableAttackArea();
+
+        AnimationPlayer.Play("Idle");
 
         _attackState = AttackState.None;
-        _attackTarget = null;
-
         IsAttacking = false;
+    }
+
+    private void DisableAttackArea()
+    {
+        _attackArea.SetDeferred("monitoring", false);
+        _attackShape.SetDeferred("disabled", true);
+    }
+
+    private void OnAttackAreaBodyEntered(Node2D body)
+    {
+        if (body is not IHealth health)
+            return;
+
+        if (!_hitTargets.Add(body.GetInstanceId()))
+            return;
+
+        health.TakeDamage(Damage);
+    }
+
+    private void PlayAttackSound()
+    {
+        SoundManager.Instance.PlayBatAttack();
+    }
+
+    public override void SetPossessed(
+        bool possessed,
+        uint playerLayer = 0,
+        uint playerMask = 0)
+    {
+        base.SetPossessed(possessed, playerLayer, playerMask);
+
+        _attackArea.CollisionMask = possessed ? 8u : 4u;
     }
 }

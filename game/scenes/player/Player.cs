@@ -1,20 +1,26 @@
+
 using Godot;
 using game.scenes.entities;
 using game.scenes.enemies;
+using game.scenes.bosses;
 
 namespace game.scenes.player;
 
 public partial class Player : Entity
 {
 	[Export] private AudioStreamPlayer2D _possessionAudio;
+	[Export] private Control _gameOverMenu;
 	
-	[ExportGroup("Movement")] [Export] private float _speed = 125f;
+	[ExportGroup("Movement")]
+	[Export] private float _speed = 125f;
 	[Export] private float _speedModifier = 1.25f;
 
-	[ExportGroup("Health")] [Export] private float _invulnerabilityTime = 0.2f;
+	[ExportGroup("Health")]
+	[Export] private float _invulnerabilityTime = 0.2f;
 	[Export] private ProgressBar _healthBar;
 
-	[ExportGroup("Possession")] [Export] private float _possessionRange = 100f;
+	[ExportGroup("Possession")]
+	[Export] private float _possessionRange = 100f;
 	[Export] private float _possessionCooldown = 3f;
 	[Export] private float _possessionDamage = 1f;
 	[Export] private float _possessionDamageInterval = 3f;
@@ -23,12 +29,12 @@ public partial class Player : Entity
 	[Export] private Sprite2D _sprite;
 	[Export] private CpuParticles2D _particlePossession;
 
+	[ExportGroup("Attack")]
 	[Export] private ProgressBar _cooldownAttackBar;
 
-	
-	
 	private Enemy _possessedEnemy;
 	private Enemy _nearestEnemy;
+	private Boss _nearestBoss;
 
 	private float _invulnerabilityTimer;
 	private float _possessionCooldownTimer;
@@ -40,8 +46,12 @@ public partial class Player : Entity
 	{
 		base.OnEntityReady();
 
-		_cooldownAttackBar.Visible = false;
+		if (GodotObject.IsInstanceValid(_cooldownAttackBar))
+			_cooldownAttackBar.Visible = false;
+
 		_possessionDamageTimer = _possessionDamageInterval;
+		_possessionCooldownTimer = _possessionCooldown;
+
 		UpdateHealthBar();
 
 		if (GodotObject.IsInstanceValid(_cooldownPossessionBar))
@@ -58,31 +68,37 @@ public partial class Player : Entity
 		float dt = (float)delta;
 
 		_invulnerabilityTimer = Mathf.Max(
-			0,
+			0f,
 			_invulnerabilityTimer - dt
 		);
 
-		_possessionCooldownTimer = Mathf.Max(
-			0,
-			_possessionCooldownTimer - dt
+		_possessionCooldownTimer = Mathf.Min(
+			_possessionCooldown,
+			_possessionCooldownTimer + dt
 		);
 
 		UpdateCooldownBar();
-
 		UpdatePossession(delta);
 
-		if (IsInstanceValid(_possessedEnemy))
-		{
-			if (IsInstanceValid(_nearestEnemy))
-			{
-				if (Input.IsActionJustPressed("attack"))
-				{
-					_possessedEnemy.TryAttack(_nearestEnemy);
-				}
-			}
+		if (!GodotObject.IsInstanceValid(_possessedEnemy))
+			return;
 
-			_cooldownAttackBar.Value = _possessedEnemy.AttackTimer;
+		if (_possessedEnemy.IsDead)
+		{
+			ExitPossession();
+			return;
 		}
+
+		if (Input.IsActionJustPressed("attack"))
+		{
+			if (IsValidBoss(_nearestBoss))
+				_possessedEnemy.TryAttack(_nearestBoss);
+			else if (IsValidEnemy(_nearestEnemy))
+				_possessedEnemy.TryAttack(_nearestEnemy);
+		}
+
+		if (GodotObject.IsInstanceValid(_cooldownAttackBar))
+			_cooldownAttackBar.Value = _possessedEnemy.AttackTimer;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -96,21 +112,26 @@ public partial class Player : Entity
 
 		if (GodotObject.IsInstanceValid(_possessedEnemy))
 		{
-			_possessedEnemy.MovePossessed(
-				direction,
-				_speedModifier
-			);
+			if (_possessedEnemy.IsDead)
+			{
+				ExitPossession();
+			}
+			else
+			{
+				_possessedEnemy.MovePossessed(
+					direction,
+					_speedModifier
+				);
 
-			GlobalPosition = _possessedEnemy.GlobalPosition;
-			return;
+				GlobalPosition = _possessedEnemy.GlobalPosition;
+				return;
+			}
 		}
 
-
-		if (direction.X > 0)
+		if (direction.X > 0f)
 			_sprite.FlipH = false;
-		else if (direction.X < 0)
+		else if (direction.X < 0f)
 			_sprite.FlipH = true;
-
 
 		_knockbackVelocity = _knockbackVelocity.MoveToward(
 			Vector2.Zero,
@@ -122,7 +143,9 @@ public partial class Player : Entity
 		MoveAndSlide();
 	}
 
-	#region Health
+	// --------------------------------------------------
+	// HEALTH
+	// --------------------------------------------------
 
 	public override void TakeDamage(float amount)
 	{
@@ -132,22 +155,27 @@ public partial class Player : Entity
 			return;
 		}
 
-		if (_invulnerabilityTimer > 0)
+		if (_invulnerabilityTimer > 0f)
 			return;
 
 		_invulnerabilityTimer = _invulnerabilityTime;
 
 		base.TakeDamage(amount);
+
 		UpdateHealthBar();
 	}
-
 	protected override void Die()
 	{
+		if (IsDead)
+			return;
+
+		GetTree().Paused = true;
+		_gameOverMenu.Show();
 	}
 
 	public void Heal(float amount)
 	{
-		if (amount <= 0)
+		if (amount <= 0f || IsDead)
 			return;
 
 		Health = Mathf.Min(
@@ -160,7 +188,7 @@ public partial class Player : Entity
 
 	public void Knockback(Vector2 attackerPosition, float force)
 	{
-		if (_invulnerabilityTimer > 0)
+		if (_invulnerabilityTimer > 0f)
 			return;
 
 		Vector2 direction = (
@@ -187,17 +215,18 @@ public partial class Player : Entity
 		_cooldownPossessionBar.Value = _possessionCooldownTimer;
 	}
 
-	#endregion
-
-	#region Possession
+	// --------------------------------------------------
+	// POSSESSION
+	// --------------------------------------------------
 
 	private void UpdatePossession(double delta)
 	{
 		_possessionDamageTimer -= (float)delta;
+
 		if (GodotObject.IsInstanceValid(_possessedEnemy) &&
-			!_possessedEnemy.IsQueuedForDeletion())
+			!_possessedEnemy.IsDead)
 		{
-			if (_possessionDamageTimer <= 0)
+			if (_possessionDamageTimer <= 0f)
 			{
 				_possessionDamageTimer = _possessionDamageInterval;
 
@@ -210,9 +239,9 @@ public partial class Player : Entity
 			ExitPossession();
 		}
 
-		if (_possessedEnemy == null)
+		if (!GodotObject.IsInstanceValid(_possessedEnemy))
 		{
-			if (_possessionDamageTimer <= 0)
+			if (_possessionDamageTimer <= 0f)
 			{
 				_possessionDamageTimer = _possessionDamageInterval;
 				TakeDamage(_possessionDamage);
@@ -230,24 +259,23 @@ public partial class Player : Entity
 			return;
 		}
 
-		if (_possessionCooldownTimer > 0)
+		if (_possessionCooldownTimer < _possessionCooldown)
 			return;
 
-		if (GodotObject.IsInstanceValid(_nearestEnemy))
+		if (IsValidEnemy(_nearestEnemy))
 			EnterPossession();
 	}
 
 	private Enemy GetNearestEnemy()
 	{
 		Vector2 origin = GlobalPosition;
-
-		if (GodotObject.IsInstanceValid(_possessedEnemy))
-			origin = _possessedEnemy.GlobalPosition;
-
 		float range = _possessionRange;
 
 		if (GodotObject.IsInstanceValid(_possessedEnemy))
+		{
+			origin = _possessedEnemy.GlobalPosition;
 			range = _possessedEnemy.AttackRange;
+		}
 
 		Enemy nearest = null;
 		float nearestDistance = range * range;
@@ -257,10 +285,7 @@ public partial class Player : Entity
 			if (node is not Enemy enemy)
 				continue;
 
-			if (!GodotObject.IsInstanceValid(enemy))
-				continue;
-
-			if (enemy.IsQueuedForDeletion())
+			if (!IsValidEnemy(enemy))
 				continue;
 
 			if (enemy.IsPossessed)
@@ -280,31 +305,103 @@ public partial class Player : Entity
 		return nearest;
 	}
 
+	private Boss GetNearestBoss()
+	{
+		if (!GodotObject.IsInstanceValid(_possessedEnemy))
+			return null;
+
+		Vector2 origin = _possessedEnemy.GlobalPosition;
+		float range = _possessedEnemy.AttackRange;
+
+		Boss nearest = null;
+		float nearestDistance = range * range;
+
+		foreach (Node node in GetTree().GetNodesInGroup("bosses"))
+		{
+			if (node is not Boss boss)
+				continue;
+
+			if (!IsValidBoss(boss))
+				continue;
+
+			float distance = origin.DistanceSquaredTo(
+				boss.GlobalPosition
+			);
+
+			if (distance > nearestDistance)
+				continue;
+
+			nearestDistance = distance;
+			nearest = boss;
+		}
+
+		return nearest;
+	}
+
+	private bool IsValidEnemy(Enemy enemy)
+	{
+		return GodotObject.IsInstanceValid(enemy)
+			&& !enemy.IsQueuedForDeletion()
+			&& !enemy.IsDead;
+	}
+
+	private bool IsValidBoss(Boss boss)
+	{
+		return GodotObject.IsInstanceValid(boss)
+			&& !boss.IsQueuedForDeletion()
+			&& !boss.IsDead;
+	}
+
 	private void UpdateNearestEnemy()
 	{
-		if (_nearestEnemy != null)
+		if (IsValidEnemy(_nearestEnemy))
 			_nearestEnemy.SetOutline(false);
+
+		if (IsValidBoss(_nearestBoss))
+			_nearestBoss.SetOutline(false);
 
 		_nearestEnemy = GetNearestEnemy();
 
-		if (_nearestEnemy == null)
-			return;
+		// Не вселены: ищем только врагов для вселения.
+		if (!GodotObject.IsInstanceValid(_possessedEnemy))
+		{
+			_nearestBoss = null;
 
-		if (GodotObject.IsInstanceValid(_possessedEnemy))
+			if (IsValidEnemy(_nearestEnemy))
+				_nearestEnemy.SetOutline(true);
+
+			return;
+		}
+
+		// Вселены: отдельно ищем босса для атаки.
+		_nearestBoss = GetNearestBoss();
+
+		if (IsValidBoss(_nearestBoss))
+		{
+			_nearestBoss.SetOutline(true, true);
+		}
+		else if (IsValidEnemy(_nearestEnemy))
+		{
 			_nearestEnemy.SetOutline(false, true);
-		else
-			_nearestEnemy.SetOutline(true);
+		}
 	}
 
 	private void EnterPossession()
 	{
-		if (!GodotObject.IsInstanceValid(_nearestEnemy))
+		if (!IsValidEnemy(_nearestEnemy))
 			return;
 
 		_possessedEnemy = _nearestEnemy;
 
-		_cooldownAttackBar.MaxValue = _possessedEnemy.AttackCooldown;
-		_cooldownAttackBar.Visible = true;
+		_possessedEnemy.Died += OnPossessedEnemyDied;
+
+		if (GodotObject.IsInstanceValid(_cooldownAttackBar))
+		{
+			_cooldownAttackBar.MaxValue = _possessedEnemy.AttackCooldown;
+			_cooldownAttackBar.Value = 0;
+			_cooldownAttackBar.Visible = true;
+		}
+
 		_possessedEnemy.SetOutline(true);
 
 		_possessedEnemy.SetPossessed(
@@ -313,10 +410,11 @@ public partial class Player : Entity
 			OriginalCollisionMask
 		);
 
-		_possessionCooldownTimer = _possessionCooldown;
+		_possessionCooldownTimer = 0f;
 		_possessionDamageTimer = _possessionDamageInterval;
 
 		_nearestEnemy = null;
+		_nearestBoss = null;
 
 		SetCollisionDisabled(true);
 
@@ -326,25 +424,50 @@ public partial class Player : Entity
 		if (GodotObject.IsInstanceValid(_particlePossession))
 			_particlePossession.Restart();
 
-		_possessionAudio.Play();
-		
+		if (GodotObject.IsInstanceValid(_possessionAudio))
+			_possessionAudio.Play();
+
 		UpdateNearestEnemy();
+	}
+
+	private void OnPossessedEnemyDied(Enemy enemy)
+	{
+		if (_possessedEnemy != enemy)
+			return;
+
+		ExitPossession();
 	}
 
 	private void ExitPossession()
 	{
-		if (GodotObject.IsInstanceValid(_possessedEnemy))
-		{
-			GlobalPosition = _possessedEnemy.GlobalPosition;
+		Enemy enemy = _possessedEnemy;
 
-			_possessedEnemy.SetPossessed(false);
-			_possessedEnemy.SetOutline(false);
+		if (GodotObject.IsInstanceValid(enemy))
+		{
+			GlobalPosition = enemy.GlobalPosition;
+
+			enemy.Died -= OnPossessedEnemyDied;
+
+			if (!enemy.IsDead)
+			{
+				enemy.SetPossessed(false);
+				enemy.SetOutline(false);
+			}
 		}
 
-		_nearestEnemy?.SetOutline(false);
-		_possessedEnemy = null;
+		if (IsValidEnemy(_nearestEnemy))
+			_nearestEnemy.SetOutline(false);
 
-		_cooldownAttackBar.Visible = false;
+		if (IsValidBoss(_nearestBoss))
+			_nearestBoss.SetOutline(false);
+
+		_possessedEnemy = null;
+		_nearestEnemy = null;
+		_nearestBoss = null;
+
+		if (GodotObject.IsInstanceValid(_cooldownAttackBar))
+			_cooldownAttackBar.Visible = false;
+
 		Velocity = Vector2.Zero;
 
 		SetCollisionDisabled(false);
@@ -357,12 +480,11 @@ public partial class Player : Entity
 		if (GodotObject.IsInstanceValid(_particlePossession))
 			_particlePossession.Restart();
 
-		_nearestEnemy = null;
+		if (GodotObject.IsInstanceValid(_possessionAudio))
+			_possessionAudio.Play();
 
-		_possessionAudio.Play();
-		
 		UpdateNearestEnemy();
 	}
-
-	#endregion
+	
+	
 }

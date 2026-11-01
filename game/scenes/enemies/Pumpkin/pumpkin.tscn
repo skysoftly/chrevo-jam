@@ -11,12 +11,12 @@ shader_parameter/line_thickness = 1.0
 shader_parameter/enabled = false
 shader_parameter/attack = false
 
-[sub_resource type="Gradient" id="Gradient_m8d4b"]
+[sub_resource type="Gradient" id="Gradient_t7bmf"]
 offsets = PackedFloat32Array(0, 0.29714286, 0.72, 1)
 colors = PackedColorArray(0.6469792, 0.33000815, 0.04361047, 1, 0.64733636, 0.32663473, 0.12945074, 1, 0.5953264, 0.3130715, 0.13312902, 0.6666666, 0.49130648, 0.28594503, 0.14048555, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_38ino"]
-gradient = SubResource("Gradient_m8d4b")
+gradient = SubResource("Gradient_t7bmf")
 width = 4
 height = 4
 fill = 1
@@ -35,12 +35,26 @@ shader_parameter/line_thickness = 1.0
 shader_parameter/enabled = false
 shader_parameter/attack = false
 
-[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_m8d4b"]
-_data = PackedByteArray("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")
-size_override = Vector2(192, 144)
+[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_t7bmf"]
+_data = PackedByteArray("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")
+size_override = Vector2(192, 192)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7p1mj"]
 radius = 15.0
+
+[sub_resource type="Animation" id="Animation_8ab2j"]
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pumpkin:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [9, 10, 11, 12]
+}
 
 [sub_resource type="Animation" id="Animation_61lmv"]
 loop_mode = 1
@@ -54,7 +68,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [7, 8, 9, 8]
+"values": [7, 8, 7, 8]
 }
 
 [sub_resource type="Animation" id="Animation_m8d4b"]
@@ -74,6 +88,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_md0e3"]
 _data = {
+&"Die": SubResource("Animation_8ab2j"),
 &"Idle": SubResource("Animation_61lmv"),
 &"Rotate and jump": SubResource("Animation_m8d4b")
 }
@@ -95,7 +110,7 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
-[node name="Pumpkin" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_particles", "_attackArea", "_rangePumpkin", "_jumpAudio", "Sprite", "_animationPlayer", "_healthBar")]
+[node name="Pumpkin" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_particles", "_attackArea", "_rangePumpkin", "Sprite", "AnimationPlayer", "_healthBar")]
 collision_layer = 8
 collision_mask = 2
 motion_mode = 1
@@ -104,15 +119,16 @@ script = ExtResource("1_m8d4b")
 _particles = NodePath("ParticlePumpkin")
 _attackArea = NodePath("AttackArea")
 _rangePumpkin = NodePath("AttackArea/RangePumpkin")
-_jumpAudio = NodePath("")
 Sprite = NodePath("Pumpkin")
-_animationPlayer = NodePath("AnimationPlayer")
+AnimationPlayer = NodePath("AnimationPlayer")
+Speed = 80.0
 StopDistance = 30.0
+AttackRange = 60.0
 Damage = 5.0
 DamageCooldown = 0.3
 SeparationRadius = 40.0
 _outlineMaterial = SubResource("ShaderMaterial_m8d4b")
-MaxHealth = 15.0
+MaxHealth = 20.0
 _healthBar = NodePath("ProgressBar")
 
 [node name="ParticlePumpkin" type="CPUParticles2D" parent="." unique_id=29875832]
@@ -138,11 +154,11 @@ scale_amount_curve = SubResource("Curve_lu5c6")
 texture_filter = 1
 material = SubResource("ShaderMaterial_61lmv")
 position = Vector2(0, -5)
-texture = SubResource("PortableCompressedTexture2D_m8d4b")
+texture = SubResource("PortableCompressedTexture2D_t7bmf")
 offset = Vector2(0, -9)
 hframes = 4
-vframes = 3
-frame = 7
+vframes = 4
+frame = 9
 metadata/_aseprite_wizard_interface_config_ = {
 "pending_changes": {}
 }
@@ -164,7 +180,7 @@ metadata/_aseprite_wizard_config_ = {
 "source": "res://assets/pumpkin.aseprite",
 "source_uid": 705358184441595397
 }
-metadata/_aseprite_wizard_source_file_hash_ = "6025d95ac0d731ae7a11bd6f024a1ff6"
+metadata/_aseprite_wizard_source_file_hash_ = "454c23b221aeb3f5c4d20aca7e4d12e0"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=387617582]
 position = Vector2(0, -6)
@@ -182,7 +198,7 @@ collision_layer = 0
 collision_mask = 4
 
 [node name="RangePumpkin" type="CollisionShape2D" parent="AttackArea" unique_id=1139850579]
-position = Vector2(0, -6)
+position = Vector2(0, 7)
 shape = SubResource("CircleShape2D_38ino")
 disabled = true
 debug_color = Color(0.1764706, 0.023529412, 0.03137255, 0.1254902)

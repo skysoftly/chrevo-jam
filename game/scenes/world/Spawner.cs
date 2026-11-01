@@ -1,6 +1,6 @@
-
-using System;
+using System.Collections.Generic;
 using Godot;
+using game.scenes.bosses;
 using game.scenes.enemies;
 
 namespace game.scenes.world;
@@ -11,77 +11,446 @@ public partial class Spawner : Node2D
 	[Export] private Node2D _player;
 	[Export] private Node2D _objects;
 
-	[ExportGroup("Enemies")]
-	[Export] private PackedScene[] _enemyScenes;
+	[ExportGroup("UI")]
+	[Export] private Label _enemiesLeftLabel;
+	[Export] private Label _waveLabel;
+	[Export] private Label _minuteLabel;
+	[Export] private Label _secondLabel;
+	[Export] private Control _bossVictoryMenu;
 
-	[ExportGroup("Spawn Settings")]
-	[Export] private int _maxEnemies = 50;
-	[Export] private float _spawnInterval = 5f;
-	[Export] private float _difficultyDuration = 600f;
+	[ExportGroup("Waves")]
+	[Export] private Godot.Collections.Array<WaveSettings> _waves = new();
 
-	[Export] private Curve _spawnCurve;
-	[Export] private Curve _maxEnemiesCurve;
+	[ExportGroup("Endless")]
+	[Export] private PackedScene[] _endlessEnemyScenes = [];
+	[Export] private float _endlessSpawnInterval = 0.7f;
+	[Export] private int _endlessMaxAlive = 50;
 
 	[ExportGroup("Spawn Area")]
 	[Export] private Vector2 _worldMin = new(-450, -300);
 	[Export] private Vector2 _worldMax = new(450, 300);
 
-	private readonly Random _random = new();
+	public Node2D Player => _player;
+	public Vector4 Arena =>
+		new(_worldMin.X, _worldMin.Y, _worldMax.X, _worldMax.Y);
 
-	private float _gameTime;
+	private readonly HashSet<Enemy> _waveEnemies = new();
+	private readonly HashSet<Enemy> _countedEnemies = new();
+
+	private Boss _currentBoss;
+
+	private int _currentWaveIndex;
+	private int _spawnedEnemies;
+	private int _killedEnemies;
+
 	private float _spawnTimer;
+	private float _gameTime;
+	private float _secondTimer;
 
 	private int _minute;
 	private int _second;
 
-	private Label _minuteLabel;
-	private Label _secondLabel;
+	private bool _bossSpawned;
+	private bool _waveFinished;
+	private bool _endlessMode;
 
 	public override void _Ready()
 	{
-		_minuteLabel = GetNode<Label>("%Minute");
-		_secondLabel = GetNode<Label>("%Second");
-
-		UpdateTimerLabels();
-
-		// Сразу создаём первого врага.
-		SpawnAmount(1);
-
-		GD.Print("Spawner initialized.");
+		if (_waves.Count > 0)
+			StartWave(0);
 	}
 
 	public override void _Process(double delta)
 	{
 		float dt = (float)delta;
 
-		_gameTime += dt;
-		_spawnTimer += dt;
+		UpdateGameTime(dt);
 
-		if (_spawnTimer < _spawnInterval)
+		if (_endlessMode)
+		{
+			UpdateEndless(dt);
+			return;
+		}
+
+		UpdateWave(dt);
+	}
+
+	// --------------------------------------------------
+	// WAVES
+	// --------------------------------------------------
+
+	private void StartWave(int index)
+	{
+		if (index >= _waves.Count)
+		{
+			StartEndlessMode();
+			return;
+		}
+
+		_currentWaveIndex = index;
+
+		_spawnedEnemies = 0;
+		_killedEnemies = 0;
+
+		_spawnTimer = 0f;
+
+		_bossSpawned = false;
+		_waveFinished = false;
+
+		_currentBoss = null;
+
+		_waveEnemies.Clear();
+		_countedEnemies.Clear();
+
+		UpdateWaveUI();
+
+		GD.Print($"Wave {index + 1} started");
+	}
+
+	private void UpdateWave(float delta)
+	{
+		if (_waveFinished || _currentWaveIndex >= _waves.Count)
 			return;
 
-		_spawnTimer -= _spawnInterval;
+		WaveSettings wave = _waves[_currentWaveIndex];
 
-		UpdateGameTime();
+		_spawnTimer += delta;
 
-		int spawnCount = GetSpawnCount();
-
-		SpawnAmount(spawnCount);
+		if (wave.IsBossWave)
+			UpdateBossWave(wave);
+		else
+			UpdateNormalWave(wave);
 	}
 
-	#region Game Time
-
-	private void UpdateTimerLabels()
+	private void UpdateNormalWave(WaveSettings wave)
 	{
-		if (GodotObject.IsInstanceValid(_minuteLabel))
-			_minuteLabel.Text = _minute.ToString();
+		if (_spawnedEnemies < wave.TotalEnemies)
+		{
+			if (_spawnTimer >= wave.SpawnInterval &&
+				GetAliveEnemyCount(_waveEnemies) < wave.MaxAlive)
+			{
+				_spawnTimer = 0f;
+				SpawnEnemy(wave.EnemyScenes, true);
+			}
+		}
 
-		if (GodotObject.IsInstanceValid(_secondLabel))
-			_secondLabel.Text = _second.ToString("00");
+		if (_spawnedEnemies >= wave.TotalEnemies &&
+			GetAliveEnemyCount(_waveEnemies) == 0)
+		{
+			FinishWave();
+		}
 	}
 
-	private void UpdateGameTime()
+	private void UpdateBossWave(WaveSettings wave)
 	{
+		// Сначала обычные враги.
+		if (!_bossSpawned)
+		{
+			if (_spawnedEnemies < wave.TotalEnemies)
+			{
+				if (_spawnTimer >= wave.SpawnInterval &&
+					GetAliveEnemyCount(_waveEnemies) < wave.MaxAlive)
+				{
+					_spawnTimer = 0f;
+					SpawnEnemy(wave.EnemyScenes, true);
+				}
+			}
+
+			// Когда обычные враги закончились — появляется босс.
+			if (_spawnedEnemies >= wave.TotalEnemies &&
+				GetAliveEnemyCount(_waveEnemies) == 0)
+			{
+				SpawnBoss(wave);
+			}
+
+			return;
+		}
+
+		// Во время битвы поддерживаем количество миньонов.
+		if (!GodotObject.IsInstanceValid(_currentBoss))
+			return;
+
+		if (_currentBoss.IsDead)
+			return;
+
+		if (GetAliveEnemyCount(_waveEnemies) < wave.MinEnemies &&
+			_spawnTimer >= wave.SpawnInterval)
+		{
+			_spawnTimer = 0f;
+			SpawnEnemy(wave.BossEnemyScenes, false);
+		}
+	}
+
+	// --------------------------------------------------
+	// ENEMIES
+	// --------------------------------------------------
+
+	private void SpawnEnemy(PackedScene[] scenes, bool countForWave)
+	{
+		PackedScene scene = GetRandomScene(scenes);
+
+		if (scene == null)
+		{
+			GD.PushWarning("Spawner: No enemy scenes assigned!");
+			return;
+		}
+
+		if (scene.Instantiate() is not Enemy enemy)
+		{
+			GD.PushWarning("Spawner: Scene does not inherit from Enemy!");
+			return;
+		}
+
+		_objects.AddChild(enemy);
+
+		enemy.GlobalPosition = GetRandomPosition();
+		enemy.PlayerReference = _player;
+
+		enemy.Died += OnEnemyDied;
+
+		_waveEnemies.Add(enemy);
+
+		if (countForWave)
+		{
+			_spawnedEnemies++;
+			_countedEnemies.Add(enemy);
+		}
+
+		UpdateWaveUI();
+	}
+
+	private void OnEnemyDied(Enemy enemy)
+	{
+		enemy.Died -= OnEnemyDied;
+
+		_waveEnemies.Remove(enemy);
+
+		if (_countedEnemies.Remove(enemy))
+			_killedEnemies++;
+
+		UpdateWaveUI();
+	}
+
+	// --------------------------------------------------
+	// BOSS
+	// --------------------------------------------------
+
+	private void SpawnBoss(WaveSettings wave)
+	{
+		if (_bossSpawned || wave.BossScene == null)
+			return;
+
+		if (wave.BossScene.Instantiate() is not Boss boss)
+		{
+			GD.PushWarning("Spawner: Boss scene does not inherit from Boss!");
+			return;
+		}
+
+		// Передаём спавнер до добавления в дерево.
+		boss.SetSpawner(this);
+
+		boss.ProcessMode = Node.ProcessModeEnum.Always;
+		GetTree().Paused = true;
+
+		_objects.AddChild(boss);
+
+		boss.GlobalPosition = GetWorldCenter();
+		boss.Died += OnBossDied;
+
+		_currentBoss = boss;
+		_bossSpawned = true;
+
+		_spawnTimer = 0f;
+
+		GD.Print("Boss spawned!");
+	}
+
+	private void OnBossDied(Boss boss)
+	{
+		boss.Died -= OnBossDied;
+
+		if (boss != _currentBoss)
+			return;
+
+		_currentBoss = null;
+
+		// Убираем оставшихся миньонов.
+		foreach (Enemy enemy in _waveEnemies)
+		{
+			if (GodotObject.IsInstanceValid(enemy) && !enemy.IsDead)
+				enemy.TakeDamage(enemy.MaxHealth);
+		}
+
+		_bossVictoryMenu.Show();
+	}
+
+	// --------------------------------------------------
+	// BOSS SPAWNING API
+	// --------------------------------------------------
+
+	public void SpawnBossMinion(PackedScene scene, Vector2 position)
+	{
+		if (scene == null)
+			return;
+
+		if (scene.Instantiate() is not Enemy enemy)
+		{
+			GD.PushWarning("Spawner: Minion scene does not inherit from Enemy!");
+			return;
+		}
+
+		_objects.AddChild(enemy);
+
+		enemy.GlobalPosition = position;
+		enemy.PlayerReference = _player;
+
+		enemy.Died += OnEnemyDied;
+
+		_waveEnemies.Add(enemy);
+	}
+
+	public void AddBossObject(Node2D node)
+	{
+		if (!GodotObject.IsInstanceValid(node))
+			return;
+
+		_objects.AddChild(node);
+	}
+
+	// --------------------------------------------------
+	// FINISH WAVE
+	// --------------------------------------------------
+
+	private void FinishWave()
+	{
+		if (_waveFinished)
+			return;
+
+		_waveFinished = true;
+
+		GD.Print($"Wave {_currentWaveIndex + 1} finished!");
+
+		StartWave(_currentWaveIndex + 1);
+	}
+
+	// --------------------------------------------------
+	// ENDLESS
+	// --------------------------------------------------
+
+	public void StartEndlessMode()
+	{
+		_endlessMode = true;
+		_spawnTimer = 0f;
+
+		_bossVictoryMenu.Hide();
+		GetTree().Paused = true;
+
+		if (GodotObject.IsInstanceValid(_waveLabel))
+			_waveLabel.Text = "Бесконечность";
+
+		GD.Print("Endless mode started!");
+	}
+
+	private void UpdateEndless(float delta)
+	{
+		_spawnTimer += delta;
+
+		if (_spawnTimer < _endlessSpawnInterval)
+			return;
+
+		if (GetEnemyCount() >= _endlessMaxAlive)
+			return;
+
+		_spawnTimer = 0f;
+
+		SpawnEnemy(_endlessEnemyScenes, false);
+	}
+
+	// --------------------------------------------------
+	// HELPERS
+	// --------------------------------------------------
+
+	private PackedScene GetRandomScene(PackedScene[] scenes)
+	{
+		if (scenes == null || scenes.Length == 0)
+			return null;
+
+		List<PackedScene> validScenes = new();
+
+		foreach (PackedScene scene in scenes)
+		{
+			if (scene != null)
+				validScenes.Add(scene);
+		}
+
+		if (validScenes.Count == 0)
+			return null;
+
+		return validScenes[GD.RandRange(0, validScenes.Count - 1)];
+	}
+
+	private Vector2 GetRandomPosition()
+	{
+		Vector2 localPosition = new(
+			(float)GD.RandRange(_worldMin.X, _worldMax.X),
+			(float)GD.RandRange(_worldMin.Y, _worldMax.Y)
+		);
+
+		return _objects.ToGlobal(localPosition);
+	}
+
+	private Vector2 GetWorldCenter()
+	{
+		return _objects.ToGlobal((_worldMin + _worldMax) / 2f);
+	}
+
+	private int GetAliveEnemyCount(HashSet<Enemy> enemies)
+	{
+		int count = 0;
+
+		foreach (Enemy enemy in enemies)
+		{
+			if (!GodotObject.IsInstanceValid(enemy))
+				continue;
+
+			if (!enemy.IsDead && !enemy.IsQueuedForDeletion())
+				count++;
+		}
+
+		return count;
+	}
+
+	private int GetEnemyCount()
+	{
+		int count = 0;
+
+		foreach (Node node in GetTree().GetNodesInGroup("enemies"))
+		{
+			if (node is Enemy enemy &&
+				GodotObject.IsInstanceValid(enemy) &&
+				!enemy.IsDead &&
+				!enemy.IsQueuedForDeletion())
+			{
+				count++;
+			}
+		}
+
+		return count;
+	}
+
+	// --------------------------------------------------
+	// TIME
+	// --------------------------------------------------
+
+	private void UpdateGameTime(float delta)
+	{
+		_gameTime += delta;
+		_secondTimer += delta;
+
+		if (_secondTimer < 1f)
+			return;
+
+		_secondTimer -= 1f;
 		_second++;
 
 		if (_second >= 60)
@@ -90,124 +459,35 @@ public partial class Spawner : Node2D
 			_minute++;
 		}
 
-		UpdateTimerLabels();
+		if (GodotObject.IsInstanceValid(_minuteLabel))
+			_minuteLabel.Text = _minute.ToString("00");
+
+		if (GodotObject.IsInstanceValid(_secondLabel))
+			_secondLabel.Text = _second.ToString("00");
 	}
 
-	#endregion
+	// --------------------------------------------------
+	// UI
+	// --------------------------------------------------
 
-	#region Difficulty
-
-	private float GetDifficultyProgress()
+	private void UpdateWaveUI()
 	{
-		return Mathf.Clamp(
-			_gameTime / _difficultyDuration,
-			0f,
-			1f
-		);
-	}
+		if (_currentWaveIndex >= _waves.Count)
+			return;
 
-	private int GetSpawnCount()
-	{
-		if (_spawnCurve == null)
-			return 1;
+		WaveSettings wave = _waves[_currentWaveIndex];
 
-		float progress = GetDifficultyProgress();
+		if (GodotObject.IsInstanceValid(_waveLabel))
+			_waveLabel.Text = wave.WaveName;
 
-		return Mathf.Max(
-			1,
-			Mathf.RoundToInt(_spawnCurve.Sample(progress))
-		);
-	}
-
-	private int GetMaxEnemies()
-	{
-		if (_maxEnemiesCurve == null)
-			return _maxEnemies;
-
-		float progress = GetDifficultyProgress();
-
-		float multiplier = _maxEnemiesCurve.Sample(progress);
-
-		return Mathf.Clamp(
-			Mathf.RoundToInt(multiplier * _maxEnemies),
-			1,
-			_maxEnemies
-		);
-	}
-
-	private int GetUnlockedEnemyCount()
-	{
-		if (_enemyScenes == null || _enemyScenes.Length == 0)
-			return 0;
-
-		float progress = GetDifficultyProgress();
-
-		return Mathf.Clamp(
-			Mathf.FloorToInt(progress * _enemyScenes.Length) + 1,
-			1,
-			_enemyScenes.Length
-		);
-	}
-
-	#endregion
-
-	#region Spawning
-
-	private int GetEnemyCount()
-	{
-		return GetTree().GetNodesInGroup("enemies").Count;
-	}
-
-	private Vector2 GetRandomPosition()
-	{
-		return new Vector2(
-			(float)(_random.NextDouble() * (_worldMax.X - _worldMin.X) + _worldMin.X),
-			(float)(_random.NextDouble() * (_worldMax.Y - _worldMin.Y) + _worldMin.Y)
-		);
-	}
-
-	private void Spawn()
-	{
-		if (_enemyScenes == null || _enemyScenes.Length == 0)
+		if (GodotObject.IsInstanceValid(_enemiesLeftLabel))
 		{
-			GD.PushWarning("Spawner: No enemy scenes assigned!");
-			return;
+			int remaining = Mathf.Max(
+				0,
+				wave.TotalEnemies - _killedEnemies
+			);
+
+			_enemiesLeftLabel.Text = remaining.ToString();
 		}
-
-		int unlockedCount = GetUnlockedEnemyCount();
-
-		if (unlockedCount <= 0)
-			return;
-
-		int index = _random.Next(unlockedCount);
-
-		PackedScene scene = _enemyScenes[index];
-
-		if (scene == null)
-			return;
-
-		Enemy enemy = scene.Instantiate<Enemy>();
-
-		_objects.AddChild(enemy);
-
-		enemy.GlobalPosition = ToGlobal(GetRandomPosition());
-		enemy.PlayerReference = _player;
-
-		GD.Print($"Spawned: {enemy.Name} at {enemy.GlobalPosition}");
 	}
-
-	private void SpawnAmount(int amount)
-	{
-		int remaining = Math.Max(
-			0,
-			GetMaxEnemies() - GetEnemyCount()
-		);
-
-		int count = Math.Min(amount, remaining);
-
-		for (int i = 0; i < count; i++)
-			Spawn();
-	}
-
-	#endregion
 }

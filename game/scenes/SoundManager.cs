@@ -7,6 +7,7 @@ public partial class SoundManager : Node
 	public static SoundManager Instance { get; private set; }
 
 	[Export] private AudioStreamPlayer2D _pumpkinJumpSound;
+	[Export] private AudioStreamPlayer2D _batAttackSound;
 
 	public override void _Ready()
 	{
@@ -15,7 +16,12 @@ public partial class SoundManager : Node
 
 	public void PlayPumpkinJump()
 	{
-		if (!_pumpkinJumpSound.Playing)
-			_pumpkinJumpSound.Play();
+		_pumpkinJumpSound.Play();
+	}
+
+
+	public void PlayBatAttack()
+	{
+		_batAttackSound.Play();
 	}
 }

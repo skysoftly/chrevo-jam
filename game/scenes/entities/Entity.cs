@@ -1,3 +1,5 @@
+
+using System;
 using Godot;
 using game.scenes;
 
@@ -8,12 +10,11 @@ public abstract partial class Entity : CharacterBody2D, IHealth
     [ExportGroup("Health")]
     [Export] public float MaxHealth { get; set; } = 5f;
     [Export] private ProgressBar _healthBar;
-    [Export] private float _healthBarHideDelay = 2f;
 
     public float Health { get; protected set; }
 
     public bool IsDead { get; protected set; }
-    
+
     public uint OriginalCollisionLayer { get; private set; }
     public uint OriginalCollisionMask { get; private set; }
 
@@ -21,7 +22,6 @@ public abstract partial class Entity : CharacterBody2D, IHealth
     protected uint ActiveCollisionMask;
 
     private bool _collisionDisabled;
-    private float _healthBarTimer;
 
     public override void _Ready()
     {
@@ -41,20 +41,12 @@ public abstract partial class Entity : CharacterBody2D, IHealth
         }
 
         OnEntityReady();
+        
+        GD.Print($"{Name}: HP bar = {_healthBar}, Max = {_healthBar?.MaxValue}");
     }
 
     public override void _Process(double delta)
     {
-        if (_healthBarTimer <= 0)
-            return;
-
-        _healthBarTimer -= (float)delta;
-
-        if (_healthBarTimer <= 0 &&
-            GodotObject.IsInstanceValid(_healthBar))
-        {
-            _healthBar.Visible = false;
-        }
     }
 
     protected virtual void OnEntityReady()
@@ -63,7 +55,7 @@ public abstract partial class Entity : CharacterBody2D, IHealth
 
     public virtual void TakeDamage(float amount)
     {
-        if (amount <= 0 || Health <= 0)
+        if (IsDead || amount <= 0 || Health <= 0)
             return;
 
         Health = Mathf.Max(0, Health - amount);
@@ -72,24 +64,36 @@ public abstract partial class Entity : CharacterBody2D, IHealth
 
         if (Health <= 0)
             Die();
+        
+        GD.Print($"{Name}: TakeDamage called, HP = {Health}/{MaxHealth}");
     }
 
     protected void UpdateHealthBar()
     {
-        if (!GodotObject.IsInstanceValid(_healthBar))
+        if (!GodotObject.IsInstanceValid(_healthBar) || IsDead)
             return;
 
         _healthBar.MaxValue = MaxHealth;
         _healthBar.Value = Health;
-
         _healthBar.Visible = true;
-        _healthBarTimer = _healthBarHideDelay;
     }
 
     protected virtual void Die()
     {
+        if (IsDead)
+            return;
+
         IsDead = true;
+
+        HideHealthBar();
+        SetCollisionDisabled(true);
         QueueFree();
+    }
+
+    protected void HideHealthBar()
+    {
+        if (GodotObject.IsInstanceValid(_healthBar))
+            _healthBar.Visible = false;
     }
 
     protected void SetCollisionDisabled(bool disabled)
@@ -129,5 +133,11 @@ public abstract partial class Entity : CharacterBody2D, IHealth
         }
 
         ApplyCollisionState();
+    }
+    
+    protected void ShowHealthBar()
+    {
+        if (GodotObject.IsInstanceValid(_healthBar))
+            _healthBar.Visible = true;
     }
 }

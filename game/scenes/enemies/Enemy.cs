@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using game.scenes.entities;
 
@@ -5,36 +6,42 @@ namespace game.scenes.enemies;
 
 public abstract partial class Enemy : Entity
 {
+	[ExportGroup("References")]
 	[Export] protected Sprite2D Sprite { get; set; }
-	[Export] private AnimationPlayer _animationPlayer;
+	[Export] protected AnimationPlayer AnimationPlayer { get; set; }
 
 	[Export] public Node2D PlayerReference { get; set; }
 
+	[ExportGroup("Movement")]
 	[Export] public float Speed { get; set; } = 100f;
 	[Export] public float StopDistance { get; set; } = 5f;
+
 	[ExportGroup("Damage")]
 	[Export] public float AttackRange { get; set; } = 50f;
 	[Export] public float AttackCooldown { get; set; } = 2f;
 	[Export] public float Damage { get; set; } = 1f;
 	[Export] public float DamageCooldown { get; set; } = 0.2f;
 
-	private float _damageTimer;
-	
 	[ExportGroup("Separation")]
 	[Export] public float SeparationRadius { get; set; } = 35f;
 	[Export] public float SeparationForce { get; set; } = 180f;
-	
+
 	[ExportGroup("Outline")]
 	[Export] private ShaderMaterial _outlineMaterial;
 
+	[ExportGroup("Death")]
+	[Export] private float _deathFadeDelay = 10f;
+	[Export] private float _deathFadeDuration = 1.5f;
+
+	private float _damageTimer;
 	private ShaderMaterial _materialInstance;
-	
+
+	public event Action<Enemy> Died;
+
 	public bool IsInvulnerable { get; protected set; }
-	
 	public bool IsPossessed { get; private set; }
 	public bool IsAttacking { get; protected set; }
 
-	
 	public float AttackTimer { get; protected set; }
 
 	protected override void OnEntityReady()
@@ -42,7 +49,7 @@ public abstract partial class Enemy : Entity
 		base.OnEntityReady();
 
 		AddToGroup("enemies");
-		
+
 		if (_outlineMaterial != null && Sprite != null)
 		{
 			_materialInstance = (ShaderMaterial)_outlineMaterial.Duplicate();
@@ -54,21 +61,30 @@ public abstract partial class Enemy : Entity
 		{
 			GD.PushWarning($"{Name}: Outline Sprite or Material is missing!");
 		}
-		
-		
-		double randomPosition = GD.Randf() * _animationPlayer.CurrentAnimationLength;
 
-		_animationPlayer.Play("Idle");
-		_animationPlayer.Seek(randomPosition, true);
+		if (GodotObject.IsInstanceValid(AnimationPlayer))
+		{
+			AnimationPlayer.Play("Idle");
+
+			double length = AnimationPlayer.GetAnimation("Idle").Length;
+			AnimationPlayer.Seek(GD.Randf() * length, true);
+		}
 	}
 
 	public override void _Process(double delta)
 	{
-		_damageTimer = Mathf.Max(0, _damageTimer - (float)delta);
-		
-		AttackTimer = Mathf.Max(
-			0,
-			AttackTimer - (float)delta
+		base._Process(delta);
+
+		if (IsDead)
+			return;
+
+		float dt = (float)delta;
+
+		_damageTimer = Mathf.Max(0f, _damageTimer - dt);
+
+		AttackTimer = Mathf.Min(
+			AttackCooldown,
+			AttackTimer + dt
 		);
 
 		if (IsPossessed || IsAttacking)
@@ -81,14 +97,15 @@ public abstract partial class Enemy : Entity
 			PlayerReference.GlobalPosition
 		);
 
-		if (distance <= AttackRange && AttackTimer <= 0)
-		{
+		if (distance <= AttackRange && AttackTimer >= AttackCooldown)
 			TryAttack(PlayerReference);
-		}
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (IsDead)
+			return;
+
 		if (IsAttacking)
 		{
 			UpdateAttack(delta);
@@ -100,6 +117,7 @@ public abstract partial class Enemy : Entity
 
 		MoveEnemy(delta);
 	}
+
 	protected Vector2 GetSeparationDirection()
 	{
 		Vector2 separation = Vector2.Zero;
@@ -109,13 +127,13 @@ public abstract partial class Enemy : Entity
 			if (node == this || node is not Enemy other)
 				continue;
 
-			if (other.IsPossessed || other.IsQueuedForDeletion())
+			if (other.IsDead || other.IsPossessed || other.IsQueuedForDeletion())
 				continue;
 
 			Vector2 offset = GlobalPosition - other.GlobalPosition;
 			float distance = offset.Length();
 
-			if (distance <= 0 || distance >= SeparationRadius)
+			if (distance <= 0f || distance >= SeparationRadius)
 				continue;
 
 			float strength = Mathf.Pow(
@@ -131,13 +149,14 @@ public abstract partial class Enemy : Entity
 
 	public override void TakeDamage(float amount)
 	{
-		if (IsInvulnerable || _damageTimer > 0)
+		if (IsDead || IsInvulnerable || _damageTimer > 0f)
 			return;
 
 		_damageTimer = DamageCooldown;
+
 		base.TakeDamage(amount);
 	}
-	
+
 	protected abstract void MoveEnemy(double delta);
 
 	protected abstract void StartAttack(Node2D target);
@@ -148,13 +167,13 @@ public abstract partial class Enemy : Entity
 
 	public bool TryAttack(Node2D target)
 	{
-		if (IsAttacking || AttackTimer > 0)
+		if (IsDead || IsAttacking || AttackTimer < AttackCooldown)
 			return false;
 
 		if (!IsValidTarget(target))
 			return false;
 
-		AttackTimer = AttackCooldown;
+		AttackTimer = 0f;
 
 		StartAttack(target);
 
@@ -163,20 +182,15 @@ public abstract partial class Enemy : Entity
 
 	public void MovePossessed(Vector2 direction, float speedMultiplier = 1f)
 	{
-		if (!IsPossessed || IsAttacking)
+		if (IsDead || !IsPossessed || IsAttacking)
 			return;
 
-		if (direction.X > 0)
-		{
+		if (direction.X > 0f)
 			Sprite.FlipH = false;
-		}
-		else if (direction.X < 0)
-		{
+		else if (direction.X < 0f)
 			Sprite.FlipH = true;
-		}
-		
-		Velocity = direction * Speed * speedMultiplier;
 
+		Velocity = direction * Speed * speedMultiplier;
 
 		MoveAndSlide();
 	}
@@ -186,6 +200,9 @@ public abstract partial class Enemy : Entity
 		uint playerLayer = 0,
 		uint playerMask = 0)
 	{
+		if (IsDead && possessed)
+			return;
+
 		IsPossessed = possessed;
 
 		Velocity = Vector2.Zero;
@@ -211,13 +228,117 @@ public abstract partial class Enemy : Entity
 		if (target is IHealth health)
 			health.TakeDamage(Damage);
 	}
-	
+
 	public void SetOutline(bool enabled, bool attack = false)
 	{
-		if (_materialInstance == null)
+		if (_materialInstance == null || IsDead)
 			return;
 
 		_materialInstance.SetShaderParameter("enabled", enabled);
 		_materialInstance.SetShaderParameter("attack", attack);
+	}
+
+	// --------------------------------------------------
+	// DEATH
+	// --------------------------------------------------
+
+	protected override void Die()
+	{
+		if (IsDead)
+			return;
+
+		IsDead = true;
+		HideHealthBar();
+
+		RemoveFromGroup("enemies");
+		RemoveFromGroup("bosses");
+
+		Velocity = Vector2.Zero;
+
+		IsAttacking = false;
+		IsInvulnerable = true;
+		IsPossessed = false;
+
+		CollisionLayer = 0;
+		CollisionMask = 0;
+
+		
+		SetProcess(false);
+		SetPhysicsProcess(false);
+
+		DisableChildCollisions(this);
+
+		if (_materialInstance != null)
+		{
+			_materialInstance.SetShaderParameter("enabled", false);
+			_materialInstance.SetShaderParameter("attack", false);
+		}
+
+		Died?.Invoke(this);
+
+		if (GodotObject.IsInstanceValid(AnimationPlayer) &&
+			AnimationPlayer.HasAnimation("Die"))
+		{
+			AnimationPlayer.Play("Die");
+		}
+
+		DeathSequence();
+	}
+
+	private void DisableChildCollisions(Node node)
+	{
+		foreach (Node child in node.GetChildren())
+		{
+			if (child is Area2D area)
+			{
+				area.SetDeferred("monitoring", false);
+				area.SetDeferred("monitorable", false);
+			}
+
+			if (child is CollisionShape2D shape)
+				shape.SetDeferred("disabled", true);
+
+			DisableChildCollisions(child);
+		}
+	}
+	private async void DeathSequence()
+	{
+		if (GodotObject.IsInstanceValid(AnimationPlayer) &&
+			AnimationPlayer.HasAnimation("Die"))
+		{
+			await ToSignal(
+				AnimationPlayer,
+				AnimationPlayer.SignalName.AnimationFinished
+			);
+		}
+
+		if (!GodotObject.IsInstanceValid(this))
+			return;
+
+		if (!GodotObject.IsInstanceValid(Sprite))
+		{
+			QueueFree();
+			return;
+		}
+
+		await ToSignal(
+			GetTree().CreateTimer(_deathFadeDelay),
+			SceneTreeTimer.SignalName.Timeout
+		);
+		Tween tween = CreateTween();
+
+		tween.SetTrans(Tween.TransitionType.Linear);
+
+		tween.TweenProperty(
+			this,
+			"modulate:a",
+			0f,
+			_deathFadeDuration
+		);
+
+		await ToSignal(tween, Tween.SignalName.Finished);
+
+		if (GodotObject.IsInstanceValid(this))
+			QueueFree();
 	}
 }
