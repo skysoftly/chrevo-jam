@@ -6,6 +6,8 @@ namespace game.scenes.player;
 
 public partial class Player : Entity
 {
+	[Export] private AudioStreamPlayer2D _possessionAudio;
+	
 	[ExportGroup("Movement")] [Export] private float _speed = 125f;
 	[Export] private float _speedModifier = 1.25f;
 
@@ -23,6 +25,8 @@ public partial class Player : Entity
 
 	[Export] private ProgressBar _cooldownAttackBar;
 
+	
+	
 	private Enemy _possessedEnemy;
 	private Enemy _nearestEnemy;
 
@@ -322,6 +326,8 @@ public partial class Player : Entity
 		if (GodotObject.IsInstanceValid(_particlePossession))
 			_particlePossession.Restart();
 
+		_possessionAudio.Play();
+		
 		UpdateNearestEnemy();
 	}
 
@@ -353,6 +359,8 @@ public partial class Player : Entity
 
 		_nearestEnemy = null;
 
+		_possessionAudio.Play();
+		
 		UpdateNearestEnemy();
 	}
 
