@@ -107,7 +107,7 @@ public abstract partial class Boss : Entity
 
     // DEATH
 
-    protected override void Die()
+    protected override async void Die()
     {
         if (IsDead)
             return;
@@ -124,7 +124,17 @@ public abstract partial class Boss : Entity
         if (GodotObject.IsInstanceValid(_music))
             _music.Stop();
 
+        ProcessMode = ProcessModeEnum.Always;
+
         Died?.Invoke(this);
+        
+        await ToSignal(GetTree().CreateTimer( 10.0), SceneTreeTimer.SignalName.Timeout);
+        
+        var tween = CreateTween();
+        tween.TweenProperty(this, "modulate:a", 0f, 1.5f);
+
+        await ToSignal(tween, Tween.SignalName.Finished);
+        
         base.Die();
     }
 }

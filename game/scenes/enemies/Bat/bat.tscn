@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://tdodwn0auqtb" path="res://scenes/enemies/Bat/Bat.cs" id="1_5t5qm"]
 [ext_resource type="Shader" uid="uid://b460tc7jof254" path="res://gdshaders/selectEnemy.gdshader" id="2_nox2u"]
+[ext_resource type="PackedScene" uid="uid://d01q4rqnvorls" path="res://scenes/enemies/health_bar.tscn" id="3_e1lu6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5t5qm"]
 shader = ExtResource("2_nox2u")
@@ -10,6 +11,7 @@ shader_parameter/line_color_attack = Color(0.5507359, 0.114297844, 0.1088836, 1)
 shader_parameter/line_thickness = 1.0
 shader_parameter/enabled = false
 shader_parameter/attack = false
+shader_parameter/hit = false
 
 [sub_resource type="Gradient" id="Gradient_m8d4b"]
 offsets = PackedFloat32Array(0, 0.29714286, 0.72, 1)
@@ -34,6 +36,7 @@ shader_parameter/line_color_attack = Color(1, 0.2, 0.2, 1)
 shader_parameter/line_thickness = 1.0
 shader_parameter/enabled = false
 shader_parameter/attack = false
+shader_parameter/hit = false
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_5t5qm"]
 _data = PackedByteArray("AAADAAUAAAABAAAAYAAAAGAAAABiAQAAUklGRloBAABXRUJQVlA4TE0BAAAvX8AXECcgJCAMEP3fZ5KQgDBAtN1eIQFhgOj/PjPmPwBAVeUH2LGt1q2wacBHpABLaQByKkj/ZckSGn3ex0xE/xE5kowZsk5S4RfyC9hD5Eri1LnHqUlCxDK5BWceWqQq9chyA9SnxwmcQ0hqVx1XlzjJcRUgnh4D6uR9AJB6A6eTAHQuenrmmo4Ganl9awGA6TU2ehKNE9NS5xmaRIQTUDC5eObJbvYxKps8oiy1VLqkiegeszwi79Y+slDV7nGXhXhrKrLTI6Sse/639BC59npCxPZ6TD32eu7jOjd6nHoDp1MXRN2j+clQy+tbCyI/vLvnk23DtJEsx6OJxZA0lkyR0CM4hmbQZC4MC1VRlloqXdwtsllLMsa/eLf2GSHTGd1jwMqHtbZgMYR2jxtC8pKSB9CnxwHZUceETuiWzF98T3Rq2JM5QuVHtAIA")
@@ -83,21 +86,7 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_38ino"]
 radius = 36.013885
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38ino"]
-bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.31764707)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m8d4b"]
-bg_color = Color(0.53333336, 0, 0.003921569, 0.5176471)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-
-[node name="Bat" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_attackArea", "_attackShape", "Sprite", "AnimationPlayer", "_healthBar")]
+[node name="Bat" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_attackArea", "_attackShape", "AnimationPlayer", "Sprite", "_healthBar")]
 collision_layer = 8
 collision_mask = 2
 motion_mode = 1
@@ -107,14 +96,15 @@ _attackArea = NodePath("AttackArea")
 _attackShape = NodePath("AttackArea/RangePumpkin")
 _windupTime = 0.3
 _attackDuration = 0.2
-Sprite = NodePath("Bat")
 AnimationPlayer = NodePath("AnimationPlayer")
 AttackCooldown = 1.8
 Damage = 4.0
 DamageCooldown = 0.1
-_outlineMaterial = SubResource("ShaderMaterial_5t5qm")
+_deathFadeDelay = 120.0
+Sprite = NodePath("Bat")
 MaxHealth = 17.0
-_healthBar = NodePath("ProgressBar")
+_healthBar = NodePath("HealthBar")
+_outlineMaterial = SubResource("ShaderMaterial_5t5qm")
 
 [node name="ParticlePumpkin" type="CPUParticles2D" parent="." unique_id=29875832]
 position = Vector2(0, -6)
@@ -189,15 +179,10 @@ shape = SubResource("CircleShape2D_38ino")
 disabled = true
 debug_color = Color(0.1764706, 0.023529412, 0.03137255, 0.1254902)
 
-[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1215665850]
-offset_left = -14.0
-offset_top = -29.0
-offset_right = 14.0
-offset_bottom = -26.0
-theme_override_styles/background = SubResource("StyleBoxFlat_38ino")
-theme_override_styles/fill = SubResource("StyleBoxFlat_m8d4b")
-max_value = 15.0
-value = 7.5
-show_percentage = false
+[node name="HealthBar" parent="." unique_id=1519286907 instance=ExtResource("3_e1lu6")]
+offset_left = -22.0
+offset_top = -27.0
+offset_right = 22.0
+offset_bottom = -19.0
 
 [connection signal="body_entered" from="AttackArea" to="." method="OnAttackAreaBodyEntered"]

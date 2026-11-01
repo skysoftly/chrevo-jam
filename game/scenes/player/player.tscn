@@ -19,6 +19,7 @@ shader_parameter/hit = false
 radius = 13.0
 
 [sub_resource type="Animation" id="Animation_3vyb7"]
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -138,9 +139,10 @@ _cooldownPossessionBar = NodePath("CanvasLayer2/Panel/Cooldown")
 _particlePossession = NodePath("ParticlePossession")
 _cooldownAttackBar = NodePath("CanvasLayer2/Panel/CooldownAttack")
 Sprite = NodePath("Sprite2D")
-MaxHealth = 11.0
+MaxHealth = 12.0
 _healthBar = NodePath("CanvasLayer2/Panel/Health")
 _outlineMaterial = SubResource("ShaderMaterial_dovo2")
+DamageSound = "PlayerHit"
 
 [node name="Possession" type="AudioStreamPlayer2D" parent="." unique_id=341635193]
 stream = ExtResource("2_lvxji")

@@ -3,21 +3,59 @@
 [ext_resource type="Script" uid="uid://dpcd06k8xvtbe" path="res://scenes/world/Spawner.cs" id="1_2vbf6"]
 [ext_resource type="Script" uid="uid://bqwrxvcjuuqgr" path="res://scenes/world/WaveSettings.cs" id="2_lydsj"]
 [ext_resource type="PackedScene" uid="uid://bxtepmylamtkc" path="res://scenes/enemies/Pumpkin/pumpkin.tscn" id="3_l30kr"]
+[ext_resource type="PackedScene" uid="uid://c6r7s8wxc6x8e" path="res://scenes/enemies/Bat/bat.tscn" id="4_2sx2w"]
 [ext_resource type="PackedScene" uid="uid://b4ibsjjpyfv4v" path="res://scenes/bosses/PumpkinKing.tscn" id="4_l30kr"]
 [ext_resource type="PackedScene" uid="uid://bpqthpl6tnqxd" path="res://scenes/enemies/Skeleton/skeleton.tscn" id="5_2sx2w"]
 
-[sub_resource type="Resource" id="Resource_4s7b6"]
+[sub_resource type="Resource" id="Resource_2sx2w"]
 script = ExtResource("2_lydsj")
-WaveName = "Волна -1"
-TotalEnemies = 2
-SpawnInterval = 2.5
-MaxAlive = 2
-EnemyScenes = Array[PackedScene]([ExtResource("5_2sx2w")])
+WaveName = "Волна 1"
+TotalEnemies = 8
+SpawnInterval = 2.0
+MaxAlive = 4
+EnemyScenes = [ExtResource("3_l30kr")]
+metadata/_custom_type_script = "uid://bqwrxvcjuuqgr"
+
+[sub_resource type="Resource" id="Resource_l30kr"]
+script = ExtResource("2_lydsj")
+WaveName = "Волна 2"
+TotalEnemies = 12
+SpawnInterval = 2.0
+MaxAlive = 6
+EnemyScenes = [ExtResource("3_l30kr"), ExtResource("3_l30kr"), ExtResource("5_2sx2w")]
+metadata/_custom_type_script = "uid://bqwrxvcjuuqgr"
+
+[sub_resource type="Resource" id="Resource_eyqf8"]
+script = ExtResource("2_lydsj")
+WaveName = "Волна 3"
+TotalEnemies = 16
+SpawnInterval = 2.0
+MaxAlive = 8
+EnemyScenes = [ExtResource("3_l30kr"), ExtResource("3_l30kr"), ExtResource("3_l30kr"), ExtResource("5_2sx2w"), ExtResource("5_2sx2w"), ExtResource("4_2sx2w"), ExtResource("4_2sx2w")]
+metadata/_custom_type_script = "uid://bqwrxvcjuuqgr"
+
+[sub_resource type="Resource" id="Resource_nxmw7"]
+script = ExtResource("2_lydsj")
+WaveName = "Волна 4"
+TotalEnemies = 18
+SpawnInterval = 2.0
+MaxAlive = 8
+EnemyScenes = [ExtResource("3_l30kr"), ExtResource("3_l30kr"), ExtResource("5_2sx2w"), ExtResource("5_2sx2w"), ExtResource("4_2sx2w"), ExtResource("3_l30kr")]
+metadata/_custom_type_script = "uid://bqwrxvcjuuqgr"
+
+[sub_resource type="Resource" id="Resource_hs70d"]
+script = ExtResource("2_lydsj")
+WaveName = "Волна 5"
+TotalEnemies = 24
+SpawnInterval = 2.0
+MaxAlive = 9
+EnemyScenes = [ExtResource("3_l30kr"), ExtResource("3_l30kr"), ExtResource("5_2sx2w"), ExtResource("5_2sx2w"), ExtResource("4_2sx2w")]
 IsBossWave = true
 BossScene = ExtResource("4_l30kr")
-BossEnemyScenes = [ExtResource("3_l30kr"), ExtResource("5_2sx2w"), ExtResource("3_l30kr"), ExtResource("3_l30kr")]
+BossEnemyScenes = [ExtResource("3_l30kr"), ExtResource("3_l30kr"), ExtResource("3_l30kr"), ExtResource("5_2sx2w"), ExtResource("5_2sx2w"), ExtResource("4_2sx2w")]
+MinEnemies = 4
 metadata/_custom_type_script = "uid://bqwrxvcjuuqgr"
 
 [node name="Spawner" type="Node2D" unique_id=2065464322]
 script = ExtResource("1_2vbf6")
-_waves = Array[ExtResource("2_lydsj")]([SubResource("Resource_4s7b6")])
+_waves = Array[ExtResource("2_lydsj")]([SubResource("Resource_2sx2w"), SubResource("Resource_l30kr"), SubResource("Resource_eyqf8"), SubResource("Resource_nxmw7"), SubResource("Resource_hs70d")])

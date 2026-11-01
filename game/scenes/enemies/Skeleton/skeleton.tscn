@@ -4,6 +4,7 @@
 [ext_resource type="Shader" uid="uid://b460tc7jof254" path="res://gdshaders/selectEnemy.gdshader" id="2_dil3f"]
 [ext_resource type="PackedScene" uid="uid://dqfnlxc4puw6k" path="res://scenes/world/projectiles/skeletProjectile.tscn" id="2_ouoer"]
 [ext_resource type="PackedScene" uid="uid://bxuj0t5i8isxu" path="res://scenes/world/projectiles/skeletProjectilePoss.tscn" id="3_rhic8"]
+[ext_resource type="PackedScene" uid="uid://d01q4rqnvorls" path="res://scenes/enemies/health_bar.tscn" id="5_rhic8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1hyxc"]
 shader = ExtResource("2_dil3f")
@@ -39,7 +40,7 @@ shader_parameter/enabled = false
 shader_parameter/attack = false
 shader_parameter/hit = false
 
-[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_ouoer"]
+[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_rhic8"]
 _data = PackedByteArray("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")
 size_override = Vector2(235, 240)
 
@@ -47,7 +48,7 @@ size_override = Vector2(235, 240)
 radius = 15.0
 
 [sub_resource type="Animation" id="Animation_rhic8"]
-length = 0.9800000000000002
+length = 0.7600000000000001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -55,7 +56,7 @@ tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = false
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.13, 0.26, 0.39, 0.52, 0.65, 0.78, 0.83, 0.88, 0.93),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.64, 0.68, 0.72),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [4, 5, 6, 7, 8, 9, 10, 11, 12, 0]
@@ -116,21 +117,7 @@ _data = {
 &"Walk": SubResource("Animation_txrv3")
 }
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38ino"]
-bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.31764707)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m8d4b"]
-bg_color = Color(0.53333336, 0, 0.003921569, 0.5176471)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-
-[node name="Skeleton" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("Sprite", "AnimationPlayer", "Sprite", "_healthBar")]
+[node name="Skeleton" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("AnimationPlayer", "Sprite", "_healthBar")]
 collision_layer = 8
 collision_mask = 2
 motion_mode = 1
@@ -139,16 +126,15 @@ script = ExtResource("1_1hyxc")
 _enemyProjectile = ExtResource("2_ouoer")
 _playerProjectile = ExtResource("3_rhic8")
 _shootDelay = 0.7
-_attackEndDelay = 0.5
-Sprite = NodePath("Sprite")
 AnimationPlayer = NodePath("AnimationPlayer")
 StopDistance = 40.0
 AttackRange = 500.0
-_outlineMaterial = SubResource("ShaderMaterial_1hyxc")
+_deathFadeDelay = 120.0
 Sprite = NodePath("Sprite")
 MaxHealth = 15.0
-_healthBar = NodePath("ProgressBar")
+_healthBar = NodePath("HealthBar")
 _outlineMaterial = SubResource("ShaderMaterial_1hyxc")
+DamageSound = "BoneHit"
 
 [node name="ParticlePumpkin" type="CPUParticles2D" parent="." unique_id=29875832]
 position = Vector2(0, -6)
@@ -173,10 +159,11 @@ scale_amount_curve = SubResource("Curve_lu5c6")
 texture_filter = 1
 material = SubResource("ShaderMaterial_61lmv")
 position = Vector2(0, -5)
-texture = SubResource("PortableCompressedTexture2D_ouoer")
+texture = SubResource("PortableCompressedTexture2D_rhic8")
 offset = Vector2(0, -9)
 hframes = 5
 vframes = 5
+frame = 7
 metadata/_aseprite_wizard_interface_config_ = {
 "pending_changes": {}
 }
@@ -198,7 +185,7 @@ metadata/_aseprite_wizard_config_ = {
 "source": "res://assets/skeletom.aseprite",
 "source_uid": 1659322700549615356
 }
-metadata/_aseprite_wizard_source_file_hash_ = "417a15278b43c89563d2b531da8a1499"
+metadata/_aseprite_wizard_source_file_hash_ = "c7dde4487a52971cc884ea0bb5a1714a"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=387617582]
 position = Vector2(0, -6)
@@ -210,13 +197,8 @@ debug_color = Color(0.20258287, 0.34238014, 0.14652398, 0.12941177)
 libraries/ = SubResource("AnimationLibrary_md0e3")
 autoplay = &"Idle"
 
-[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1215665850]
-offset_left = -14.0
-offset_top = -38.0
-offset_right = 14.0
-offset_bottom = -35.0
-theme_override_styles/background = SubResource("StyleBoxFlat_38ino")
-theme_override_styles/fill = SubResource("StyleBoxFlat_m8d4b")
-max_value = 15.0
-value = 7.5
-show_percentage = false
+[node name="HealthBar" parent="." unique_id=1519286907 instance=ExtResource("5_rhic8")]
+offset_left = -22.0
+offset_top = -41.0
+offset_right = 22.0
+offset_bottom = -33.0
