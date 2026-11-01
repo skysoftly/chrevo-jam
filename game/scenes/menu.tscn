@@ -57,12 +57,12 @@ fill_to = Vector2(0, 0)
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_4ytvr"]
-_data = PackedByteArray("AAADAAUAAAABAAAAAAEAAGAAAACgAwAAUklGRpgDAABXRUJQVlA4TIsDAAAv/8AXECegpm0Dpgg3/6+gBAKEUnFGjdP8BwDIecxAu7btuI0EZPAuUAngFhIwEAFqvfyDwnsAB0Ff1UNE/xm4bdtIt7djt70/hL+hkyB+O7oHiN+NjBq/Ije4yTOqExEXE1I8K7e7ijBIMiE6mApJeEU1venby7nJ0M08lG5y2u1M+83kTXjIDd9ezQ2qOhE4czxk8nQUriE8y+2Ob2/l5mv9M8EvM+caBDhEyee5Xfn2Xm5QWkkyJlDu8YIIZxv5Rm7QT+Q2FjSZOS6yQra8ggrfhhgf53al+73cgKU8wykNML+COBW+v8hIk8e5Xel+MTcpFskwig9MSstTsObCBKWhED7O7VL3RW7yJDezKZvJExjRskAwwSC1JqNCnud2qXuX21PfgksG1RtGbuRNwU5HdtYkqc9yk1EvdV/lVh+BOmU7Ai5AmHRjMI360Ldr3fvc7vu2KxBKh5B9wTkJthx9hEo89G2j+wO+DULrhrxHSsfSa8n0km/5A76VZaSKDoQFtXcC0fVaxzPftrpf900WiMm+2TDvSmgZTPFl3e/5JtU0oTA5gbvY2raEDimMn9P90DcYOTjGDmXbloAYQMQzdY9JgwwHiY3XaQG6aVNH6pZB66yumYuSaVcNVtuYEMSSjUfqVlrnlEoEqStipLgKW2riPSpbR4DFLKbwtm68rVsnzUP3G4cJuQfZEa2HO/pCIVuPq7A+sXgO1L35yQZgAualbU36wk/PP9kOej5SdwCwK2KjATbFRUzEWtnndf+/xiSI347uwZe4ADfdQkb9CjBIMnmLR4VNcTEhHcbdRIfSTQAmTMU0eHE1ndu8hiKu2+ohUwh2pv1m8iEcDFR1IrDi3P2FbNnTUehhisduK/9M8CuE4WOG1etBgEOUPBUorSQZk+LfLaXl6IkTuCvnMhY0ufe6eN2d4lKw/u7CwbkreHurey939ormwgSloUlOxRWbgvh+hS2oAKnVBcEk9VgC3JaGkN3ho7Z7evZPj4MZNUK5grAhBSkdTgOpxLkQWv3XZHuszCEA61vJdPBpksuIU7k7bpugUY/koqiEYnWNDdDNQCsYNQMlIR56PGmQ4b5DYqcGGwvcF3jk5WV461GU2UpjXo+5bGSxwJKJR1LZOoKwRfeuhUK27iF79570Myktw9LFBMxLtoXsCz89/0xQej7zAoCdCRsNsCkuYiLi4sy/x6cAAA==")
-size_override = Vector2(256, 96)
+[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_g3eks"]
+_data = PackedByteArray("AAADAAUAAAABAAAAMAEAAGAAAADQBgAAUklGRsgGAABXRUJQVlA4TLsGAAAvL8EXECfCKJIkKV3de8nBA24wjAEs8NvDhuPItpXoPsHdnTVFAJD/grE8JgN3xpEktWn8ixcZEITyV1LeGWQbqQfy/mAPshBUErONHVBgIES0f8Y3yCvJM2qXSlB+/wDRrHLC/ej7XfN8m/IShJoYGJTyyGJWK9wSmR1gJQAGA4TybazhubjVHmqOXQBGEmTnS5EsSM6XVK+Fx8Jj47XvnD9jRAxMiWlo6nRSP/3/d9d51JbuPq3ejWddQLZtS4qkxODuFO7uHmhC0j39//+UGXnjRtQ0XW9E9B+CJMltmzmcAQa5dg8gFJ6w+Z9oiBOL6LUVxpK5BF9bvOgnFsnIeS1x4ubiSOIMc/uySDuKD5ZG5gwWRWYNFgEml1QT4VJVelDt3jLpVc0KJge7H/Z5PwY+EBIXFwlwLqi2TAi2RUKo6TLBawsIvy0LUhpGdz90YzvV7UNMbKHTgKi0JjrEFhatthDZOqehVujmDkBsti5NbBFinRaRQPdv+1YvtW5bDfrILFO0MFObyL/jV4itQdDCqINlovhCDlyRvtT4vhBXm6UIFmurf/ZgTqIgB4zMCiJwIkFtkqLt671McM1dcpearWpEGFyiYbW8D6elQTufp+c6hjM9Lo82AzLt25brg16jvVBBtVk+upCbCaOA82wKwHxmC7Qzf862uHgGVIevW62xiffXqEhQbdTHUIO0YtPOkzVDVPEzLkz+/fv799nzZzbcAMJ/5gFLyhcUVSuZn6HiT3bAeSa14jQ+RvF+9tHZS2cHjETsNYwa0JLCkmNqIz7YBVvdguGpizhPBBsXLEWFygvn0B+3uEmIsE/7TBDzMGywDiJw6kLOZwD4E6NFDVeHONWzce70yRNWySCRsipCY4sGZIp4kgIIDZ4HEYstupeoKBHnMzE4H5RLH002rpi8dOnsrUFIG/iygVUSNdQKPYI6qYTUxhRtkBUsXZyEUijns1JG52MZ+qi2eHJnmqZLLaZpevqkK2kDi+BpJlDFm3KvmmcREFIbUASkx6i1QBjnc2MC0MZmH3r3vtb6bGrxrAl4/95YnSKd4GIKKLizqFwCamOKIKoOuIdGHeezAwTUWm0det81vH5Xa/n4obZ4+7HW+ua1Ycqgi2+VVR0LXgtgKONARG1EEURVHHCPtHjOjw/O50J1rDjwfeiqyc89yyfr+HO/7+WXofORcTWB4jgfxgRRhieoDosyojagCDNOKC6Ab3QTcz4HIm6avjSMlV/W4E/zOsvk08yODcNsYugRGj1H1PKKHERIfVIhUeeJwB0JjKzs1hsKDkRhcQom4lHod9iIWl8RyygHIIRRCTvPg9iRzJRtDGZOvlB8D9M9DAWDWjzwqoioZRTFQfoEohJ0fm0Ghmqo3ZMQPff3B0YNP2gCS9F5CFW9kZGbeZJDAHAgtcKVG3KemoBBhykDwWplABK+0LBLcVwSqGZGAniGAmpzFA1iQBlRVCePBZx3SYlUosSQ8Xi1Wq1Bro2aIEPxQWFdpIe5Zu8g1aYo4rzx+6IEnSf2IxLAyFqvG/vt9eOEhalOXUS8GnYZuEK82hxFo5kRIWGdj6/P7YFNmm8FvMLcYKetfKNQSCusswostMmA2hRFpXhSEF5BfGYKSQLePSxyGoFUZ58XiRFRG1HkoyPCnSOYLxGRg/0+WJVVi/6fzJ7wpblncKe/ViDJwytTSG2GIsY0mT6zNDEZpLWvX3tbgRjya9EpArDDUoyKMWJqExRxi4S+KeQ8bdQyiOkaBbE2WV6ZviHCXSlx7EMNRETUxhVh02RToCjoPAE7gpCd9inpsSor+5/WxvsLHY8rXD+RR9HDe6iVRwMoAJt2GvPBMug86f9nMKm+eKFEmZ4/V3ssDhsaVWGAegNqExWp4sKN3yfVeciDzuO0TMG0h+o1bVJMXu0JUB5TL1s++lt+RG2eoq4ENm5DDDk/OGz2jkzTdP+B9vgK7tM7d6aeXT0+ZulVPeaVyZcVUZugSPIqHXR+MJAetw8dnaY7U+fRY9XHjzrTnT465J5TcSSTVeh6mDUaUcsrciSpagIh51npokIpMx9O7x6+cX1y4/oNOyJ6WFoQhB63RhJRm6ooStx5An6qUDku+L3DV93YDCOvz4qb4sTmYES2fJnDuYi/c9BZKCdw5PS7LUScJHo8Cd78NxFg5PU7r0kowT7hvBTcC0ZY+u4LvHVQfTSY3O0hZYbc9cyQO5/83P2kNpsLqlPtuQQ6yT23EAaZuaSayQXRwifA7zeL4gR7q9pomq4ZlsatYyiK8fvbsgnv57L/HscGAA==")
+size_override = Vector2(304, 96)
 
 [sub_resource type="Animation" id="Animation_mhnvy"]
-length = 1.2
+length = 0.2
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -71,10 +71,10 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = false
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [0, 1, 2, 2, 1, 0]
+"values": [0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4ytvr"]
@@ -551,11 +551,9 @@ scale_amount_curve = SubResource("Curve_v86rl")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=692747591]
 texture_filter = 1
-position = Vector2(313, 75.00001)
-scale = Vector2(2.7708333, 2.7708333)
-texture = SubResource("PortableCompressedTexture2D_4ytvr")
-hframes = 2
-vframes = 2
+position = Vector2(306.00003, 87)
+scale = Vector2(1.0471814, 1.0471814)
+texture = SubResource("PortableCompressedTexture2D_g3eks")
 metadata/_aseprite_wizard_interface_config_ = {
 "pending_changes": {}
 }
@@ -577,7 +575,7 @@ metadata/_aseprite_wizard_config_ = {
 "source": "res://assets/GameName.aseprite",
 "source_uid": 7606953952552242511
 }
-metadata/_aseprite_wizard_source_file_hash_ = "5c3fed92ca1f676d493d76671e2e9e8d"
+metadata/_aseprite_wizard_source_file_hash_ = "0b92236fa021356009775b6dd281d009"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=116505798]
 libraries/ = SubResource("AnimationLibrary_4ytvr")
