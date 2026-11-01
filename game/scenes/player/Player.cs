@@ -42,6 +42,7 @@ public partial class Player : Entity
 
 		_cooldownAttackBar.Visible = false;
 		_possessionDamageTimer = _possessionDamageInterval;
+		_possessionCooldownTimer = _possessionCooldown;
 		UpdateHealthBar();
 
 		if (GodotObject.IsInstanceValid(_cooldownPossessionBar))
@@ -62,9 +63,9 @@ public partial class Player : Entity
 			_invulnerabilityTimer - dt
 		);
 
-		_possessionCooldownTimer = Mathf.Max(
-			0,
-			_possessionCooldownTimer - dt
+		_possessionCooldownTimer = Mathf.Min(
+			_possessionCooldown,
+			_possessionCooldownTimer + dt
 		);
 
 		UpdateCooldownBar();
@@ -230,7 +231,7 @@ public partial class Player : Entity
 			return;
 		}
 
-		if (_possessionCooldownTimer > 0)
+		if (_possessionCooldownTimer < _possessionCooldown)
 			return;
 
 		if (GodotObject.IsInstanceValid(_nearestEnemy))
@@ -313,7 +314,7 @@ public partial class Player : Entity
 			OriginalCollisionMask
 		);
 
-		_possessionCooldownTimer = _possessionCooldown;
+		_possessionCooldownTimer = 0;
 		_possessionDamageTimer = _possessionDamageInterval;
 
 		_nearestEnemy = null;

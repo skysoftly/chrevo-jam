@@ -1,4 +1,3 @@
-
 using System;
 using Godot;
 using game.scenes.enemies;
@@ -17,22 +16,30 @@ public partial class Spawner : Node2D
 	[ExportGroup("Spawn Settings")]
 	[Export] private int _maxEnemies = 50;
 	[Export] private float _spawnInterval = 5f;
-	[Export] private float _difficultyDuration = 600f;
-
-	[Export] private Curve _spawnCurve;
+	[Export] private Curve _spawnCountCurve;
 	[Export] private Curve _maxEnemiesCurve;
+
+	[ExportGroup("Difficulty")]
+	[Export] private float _difficultyDuration = 600f;
 
 	[ExportGroup("Spawn Area")]
 	[Export] private Vector2 _worldMin = new(-450, -300);
 	[Export] private Vector2 _worldMax = new(450, 300);
 
+	[ExportGroup("Boss")]
+	[Export] private PackedScene _bossScene;
+	[Export] private float _bossSpawnTime = 300f;
+
 	private readonly Random _random = new();
 
 	private float _gameTime;
 	private float _spawnTimer;
+	private float _secondTimer;
 
 	private int _minute;
 	private int _second;
+
+	private bool _bossSpawned;
 
 	private Label _minuteLabel;
 	private Label _secondLabel;
@@ -44,7 +51,7 @@ public partial class Spawner : Node2D
 
 		UpdateTimerLabels();
 
-		// Сразу создаём первого врага.
+		// Первый моб сразу при запуске.
 		SpawnAmount(1);
 
 		GD.Print("Spawner initialized.");
@@ -56,20 +63,36 @@ public partial class Spawner : Node2D
 
 		_gameTime += dt;
 		_spawnTimer += dt;
+		_secondTimer += dt;
 
-		if (_spawnTimer < _spawnInterval)
-			return;
+		UpdateGameTimer();
+		UpdateBossSpawn();
 
-		_spawnTimer -= _spawnInterval;
-
-		UpdateGameTime();
-
-		int spawnCount = GetSpawnCount();
-
-		SpawnAmount(spawnCount);
+		if (_spawnTimer >= _spawnInterval)
+		{
+			_spawnTimer -= _spawnInterval;
+			SpawnAmount(GetSpawnCount());
+		}
 	}
 
-	#region Game Time
+	// TIME
+
+	private void UpdateGameTimer()
+	{
+		while (_secondTimer >= 1f)
+		{
+			_secondTimer -= 1f;
+			_second++;
+
+			if (_second >= 60)
+			{
+				_second = 0;
+				_minute++;
+			}
+
+			UpdateTimerLabels();
+		}
+	}
 
 	private void UpdateTimerLabels()
 	{
@@ -80,25 +103,13 @@ public partial class Spawner : Node2D
 			_secondLabel.Text = _second.ToString("00");
 	}
 
-	private void UpdateGameTime()
-	{
-		_second++;
-
-		if (_second >= 60)
-		{
-			_second = 0;
-			_minute++;
-		}
-
-		UpdateTimerLabels();
-	}
-
-	#endregion
-
-	#region Difficulty
+	// DIFFICULTY
 
 	private float GetDifficultyProgress()
 	{
+		if (_difficultyDuration <= 0f)
+			return 1f;
+
 		return Mathf.Clamp(
 			_gameTime / _difficultyDuration,
 			0f,
@@ -108,14 +119,14 @@ public partial class Spawner : Node2D
 
 	private int GetSpawnCount()
 	{
-		if (_spawnCurve == null)
+		if (_spawnCountCurve == null)
 			return 1;
-
-		float progress = GetDifficultyProgress();
 
 		return Mathf.Max(
 			1,
-			Mathf.RoundToInt(_spawnCurve.Sample(progress))
+			Mathf.RoundToInt(
+				_spawnCountCurve.Sample(GetDifficultyProgress())
+			)
 		);
 	}
 
@@ -124,34 +135,18 @@ public partial class Spawner : Node2D
 		if (_maxEnemiesCurve == null)
 			return _maxEnemies;
 
-		float progress = GetDifficultyProgress();
-
-		float multiplier = _maxEnemiesCurve.Sample(progress);
+		float multiplier = _maxEnemiesCurve.Sample(
+			GetDifficultyProgress()
+		);
 
 		return Mathf.Clamp(
-			Mathf.RoundToInt(multiplier * _maxEnemies),
+			Mathf.RoundToInt(_maxEnemies * multiplier),
 			1,
 			_maxEnemies
 		);
 	}
 
-	private int GetUnlockedEnemyCount()
-	{
-		if (_enemyScenes == null || _enemyScenes.Length == 0)
-			return 0;
-
-		float progress = GetDifficultyProgress();
-
-		return Mathf.Clamp(
-			Mathf.FloorToInt(progress * _enemyScenes.Length) + 1,
-			1,
-			_enemyScenes.Length
-		);
-	}
-
-	#endregion
-
-	#region Spawning
+	// SPAWNING
 
 	private int GetEnemyCount()
 	{
@@ -169,19 +164,11 @@ public partial class Spawner : Node2D
 	private void Spawn()
 	{
 		if (_enemyScenes == null || _enemyScenes.Length == 0)
-		{
-			GD.PushWarning("Spawner: No enemy scenes assigned!");
-			return;
-		}
-
-		int unlockedCount = GetUnlockedEnemyCount();
-
-		if (unlockedCount <= 0)
 			return;
 
-		int index = _random.Next(unlockedCount);
-
-		PackedScene scene = _enemyScenes[index];
+		PackedScene scene = _enemyScenes[
+			_random.Next(_enemyScenes.Length)
+		];
 
 		if (scene == null)
 			return;
@@ -192,22 +179,40 @@ public partial class Spawner : Node2D
 
 		enemy.GlobalPosition = ToGlobal(GetRandomPosition());
 		enemy.PlayerReference = _player;
-
-		GD.Print($"Spawned: {enemy.Name} at {enemy.GlobalPosition}");
 	}
 
 	private void SpawnAmount(int amount)
 	{
-		int remaining = Math.Max(
-			0,
-			GetMaxEnemies() - GetEnemyCount()
-		);
-
-		int count = Math.Min(amount, remaining);
+		int remaining = GetMaxEnemies() - GetEnemyCount();
+		int count = Math.Min(amount, Math.Max(0, remaining));
 
 		for (int i = 0; i < count; i++)
 			Spawn();
 	}
 
-	#endregion
+	// BOSS
+
+	private void UpdateBossSpawn()
+	{
+		if (_bossSpawned || _bossScene == null)
+			return;
+
+		if (_gameTime < _bossSpawnTime)
+			return;
+
+		_bossSpawned = true;
+		SpawnBoss();
+	}
+
+	private void SpawnBoss()
+	{
+		Enemy boss = _bossScene.Instantiate<Enemy>();
+
+		_objects.AddChild(boss);
+
+		boss.GlobalPosition = ToGlobal(GetRandomPosition());
+		boss.PlayerReference = _player;
+
+		GD.Print("Boss spawned!");
+	}
 }

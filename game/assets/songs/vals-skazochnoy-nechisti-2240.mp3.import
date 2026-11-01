@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/vals-skazochnoy-nechisti-2240.mp3-2a4a1f4e837
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

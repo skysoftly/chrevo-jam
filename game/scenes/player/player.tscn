@@ -4,12 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://dmgk5x87tu83j" path="res://assets/particles/particle.png" id="2_dovo2"]
 [ext_resource type="Shader" uid="uid://b460tc7jof254" path="res://gdshaders/selectEnemy.gdshader" id="2_gmlin"]
 [ext_resource type="AudioStream" uid="uid://2cu5dog730wm" path="res://assets/songs/Possession.mp3" id="2_lvxji"]
+[ext_resource type="Texture2D" uid="uid://cmb3crpeg4cci" path="res://assets/playerStats.png" id="5_p47bc"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_u8vuu"]
 radius = 13.0
 
 [sub_resource type="Animation" id="Animation_3vyb7"]
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -55,7 +55,7 @@ shader_parameter/line_thickness = 0.250000011875
 shader_parameter/enabled = true
 shader_parameter/attack = false
 
-[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_gmlin"]
+[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_p47bc"]
 _data = PackedByteArray("AAADAAUAAAABAAAAYAAAAEAAAAACAQAAUklGRvoAAABXRUJQVlA4TO0AAAAvX8APEB8gFkzx7mASCKQ4h70WC6Z4XyDNfwD+KnBj247ayNSHxt6OJtAbwlvAVaGhS6uTTSU1Soq7QBXRfwZu2zZSd3tD7jPgCypBbeL6w8h5vWpqcBk/8dHh39HcTmTikZX/0NxOq831FjE3HA2Hilu8WpzzObzoEJF0AxgutnnIHJyqqujpJoq2/eTlpiRsioxDvi0ZJPE7N4FFUIrF2MBfojiM2DBUhw7DR+eF6oCj4TAe2QDeOgARXW8Rd1YdoKoqyuc8o3CQbPPQ1HAY8iy6g5K8qb3W6GsONtHuzfcT6YCI6v02fPgABQAA")
 size_override = Vector2(96, 64)
 
@@ -75,40 +75,53 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dovo2"]
-bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.31764707)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sa52v"]
+texture = ExtResource("5_p47bc")
+texture_margin_left = 17.0
+texture_margin_top = 10.0
+texture_margin_right = 17.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(0, 1, 127, 44)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gmlin"]
-bg_color = Color(0.72609425, 2.721794e-05, 0.0061748866, 1)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_75vfm"]
+texture = ExtResource("5_p47bc")
+texture_margin_left = 9.0
+texture_margin_right = 11.0
+region_rect = Rect2(0, 71, 66, 12)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lvxji"]
-bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.31764707)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0owmy"]
+texture = ExtResource("5_p47bc")
+texture_margin_left = 9.0
+texture_margin_right = 13.0
+region_rect = Rect2(70, 71, 67, 12)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_75vfm"]
-bg_color = Color(0.8047426, 0.80474263, 0.8047425, 0.7294118)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qek5x"]
+texture = ExtResource("5_p47bc")
+texture_margin_left = 12.0
+texture_margin_right = 11.0
+region_rect = Rect2(0, 98, 66, 12)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p47bc"]
-bg_color = Color(0.48761553, 0.28590983, 0.6291917, 1)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5gtgg"]
+texture = ExtResource("5_p47bc")
+texture_margin_left = 9.0
+texture_margin_right = 11.0
+region_rect = Rect2(14, 113, 67, 12)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h17s1"]
+texture = ExtResource("5_p47bc")
+texture_margin_left = 9.0
+texture_margin_right = 11.0
+region_rect = Rect2(0, 84, 66, 12)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_je7p5"]
+texture = ExtResource("5_p47bc")
+texture_margin_left = 9.0
+texture_margin_right = 12.0
+region_rect = Rect2(70, 84, 67, 12)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p47bc"]
+texture = ExtResource("5_p47bc")
+region_rect = Rect2(60, 53, 9, 8)
 
 [node name="Player" type="CharacterBody2D" unique_id=250972871 node_paths=PackedStringArray("_possessionAudio", "_healthBar", "_cooldownPossessionBar", "_sprite", "_particlePossession", "_cooldownAttackBar", "_healthBar")]
 collision_layer = 4
@@ -116,15 +129,16 @@ collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_3vyb7")
 _possessionAudio = NodePath("Possession")
-_healthBar = NodePath("CanvasLayer/Health")
+_invulnerabilityTime = 0.4
+_healthBar = NodePath("CanvasLayer2/Panel/Health")
 _possessionCooldown = 4.0
 _possessionDamage = 2.0
-_cooldownPossessionBar = NodePath("CanvasLayer/Cooldown")
+_cooldownPossessionBar = NodePath("CanvasLayer2/Panel/Cooldown")
 _sprite = NodePath("Sprite2D")
 _particlePossession = NodePath("ParticlePossession")
-_cooldownAttackBar = NodePath("CanvasLayer/CooldownAttack")
+_cooldownAttackBar = NodePath("CanvasLayer2/Panel/CooldownAttack")
 MaxHealth = 8.0
-_healthBar = NodePath("CanvasLayer/Health")
+_healthBar = NodePath("CanvasLayer2/Panel/Health")
 
 [node name="Possession" type="AudioStreamPlayer2D" parent="." unique_id=341635193]
 stream = ExtResource("2_lvxji")
@@ -153,7 +167,7 @@ debug_color = Color(0.827451, 0, 0.9529412, 0.047058824)
 texture_filter = 1
 material = SubResource("ShaderMaterial_dovo2")
 position = Vector2(0, -2)
-texture = SubResource("PortableCompressedTexture2D_gmlin")
+texture = SubResource("PortableCompressedTexture2D_p47bc")
 offset = Vector2(0, -4)
 hframes = 2
 vframes = 2
@@ -161,7 +175,8 @@ metadata/_aseprite_wizard_interface_config_ = {
 "animation_section": false,
 "layer_section": false,
 "output_section": false,
-"pending_changes": {}
+"pending_changes": {},
+"slice_section": false
 }
 metadata/_aseprite_wizard_config_ = {
 "convert_fps_field": 60.0,
@@ -205,48 +220,77 @@ position = Vector2(0, -5)
 color = Color(1, 0.6896666, 0.01999998, 1)
 texture = SubResource("GradientTexture2D_dovo2")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1780834866]
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=957154037]
 
-[node name="Health" type="ProgressBar" parent="CanvasLayer" unique_id=1497875978]
-offset_left = 13.0
-offset_top = 9.0
-offset_right = 188.0
-offset_bottom = 19.0
-theme_override_styles/background = SubResource("StyleBoxFlat_dovo2")
-theme_override_styles/fill = SubResource("StyleBoxFlat_gmlin")
+[node name="Panel" type="Panel" parent="CanvasLayer2" unique_id=466578466]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -97.1875
+offset_top = 8.0
+offset_right = 41.3125
+offset_bottom = 47.375
+grow_horizontal = 2
+scale = Vector2(2, 2)
+pivot_offset = Vector2(40.8125, 3.75)
+theme_override_styles/panel = SubResource("StyleBoxTexture_sa52v")
+
+[node name="Health" type="ProgressBar" parent="CanvasLayer2/Panel" unique_id=1752786683]
+custom_maximum_size = Vector2(50, -1)
+layout_mode = 0
+offset_left = 15.5
+offset_top = 8.375
+offset_right = 65.5
+offset_bottom = 20.375
+theme_override_styles/background = SubResource("StyleBoxTexture_75vfm")
+theme_override_styles/fill = SubResource("StyleBoxTexture_0owmy")
 value = 10.0
 show_percentage = false
 
-[node name="CooldownAttack" type="ProgressBar" parent="CanvasLayer" unique_id=612948783]
+[node name="CooldownAttack" type="ProgressBar" parent="CanvasLayer2/Panel" unique_id=1207992754]
+layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -193.0
-offset_top = -19.0
-offset_right = 193.0
-offset_bottom = -10.0
+offset_left = -25.25
+offset_top = -20.5
+offset_right = 24.75
+offset_bottom = -8.5
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_styles/background = SubResource("StyleBoxFlat_lvxji")
-theme_override_styles/fill = SubResource("StyleBoxFlat_75vfm")
+theme_override_styles/background = SubResource("StyleBoxTexture_qek5x")
+theme_override_styles/fill = SubResource("StyleBoxTexture_5gtgg")
 value = 10.0
 show_percentage = false
 
-[node name="Cooldown" type="ProgressBar" parent="CanvasLayer" unique_id=1777811515]
+[node name="Cooldown" type="ProgressBar" parent="CanvasLayer2/Panel" unique_id=1918520294]
+layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -87.0
-offset_top = 8.0
-offset_right = 88.0
-offset_bottom = 20.0
+offset_left = 2.75
+offset_top = 7.875
+offset_right = 52.75
+offset_bottom = 19.875
 grow_horizontal = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_lvxji")
-theme_override_styles/fill = SubResource("StyleBoxFlat_p47bc")
+theme_override_styles/background = SubResource("StyleBoxTexture_h17s1")
+theme_override_styles/fill = SubResource("StyleBoxTexture_je7p5")
 value = 10.0
 show_percentage = false
+
+[node name="Panel2" type="Panel" parent="CanvasLayer2/Panel" unique_id=27572551]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -4.0
+offset_right = 4.0
+offset_bottom = 8.0
+grow_horizontal = 2
+pivot_offset = Vector2(4, 4)
+theme_override_styles/panel = SubResource("StyleBoxTexture_p47bc")
 
 [connection signal="body_entered" from="PossessionArea" to="." method="OnPossessionAreaBodyEntered"]
 [connection signal="body_exited" from="PossessionArea" to="." method="OnPossessionAreaBodyExited"]

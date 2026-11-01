@@ -2,12 +2,26 @@
 
 [ext_resource type="AudioStream" uid="uid://dbr5660ov35v4" path="res://assets/songs/pumpkinJump.mp3" id="1_gbdfy"]
 [ext_resource type="Script" uid="uid://csd2uotvwqqqs" path="res://scenes/SoundManager.cs" id="1_s6peo"]
+[ext_resource type="AudioStream" uid="uid://43bfgc57ouwl" path="res://assets/songs/batAttack.mp3" id="2_5lwbd"]
+[ext_resource type="AudioStream" uid="uid://sj7a25lahbc3" path="res://assets/songs/vals-skazochnoy-nechisti-2240.mp3" id="3_shlr6"]
 
-[node name="SoundManager" type="Node2D" unique_id=1655418152 node_paths=PackedStringArray("_pumpkinJumpSound")]
+[node name="SoundManager" type="Node2D" unique_id=1655418152 node_paths=PackedStringArray("_pumpkinJumpSound", "_batAttackSound")]
 script = ExtResource("1_s6peo")
 _pumpkinJumpSound = NodePath("PumpkinJumpSoud")
+_batAttackSound = NodePath("BatAttackSoud")
+
+[node name="BatAttackSoud" type="AudioStreamPlayer2D" parent="." unique_id=1855181957]
+stream = ExtResource("2_5lwbd")
+max_polyphony = 3
+parameters/looping = false
 
 [node name="PumpkinJumpSoud" type="AudioStreamPlayer2D" parent="." unique_id=1176731]
 stream = ExtResource("1_gbdfy")
 max_polyphony = 3
 parameters/looping = false
+
+[node name="Music" type="AudioStreamPlayer2D" parent="." unique_id=262088041]
+stream = ExtResource("3_shlr6")
+autoplay = true
+max_polyphony = 3
+parameters/looping = true

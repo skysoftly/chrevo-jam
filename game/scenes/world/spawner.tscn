@@ -30,16 +30,3 @@ text = ":"
 unique_name_in_owner = true
 layout_mode = 2
 text = "00"
-
-[node name="Timer" type="Timer" parent="." unique_id=823017940]
-autostart = true
-
-[node name="Pattern" type="Timer" parent="." unique_id=272364016]
-wait_time = 10.0
-autostart = true
-
-[node name="Elite" type="Timer" parent="." unique_id=2092757431]
-wait_time = 9.0
-autostart = true
-
-[connection signal="timeout" from="Timer" to="." method="OnTimerTimeout"]

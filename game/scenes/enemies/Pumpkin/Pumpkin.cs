@@ -32,21 +32,15 @@ public partial class Pumpkin : Enemy
     private Vector2 _attackStart;
     private Vector2 _attackEnd;
 
-    private Node2D _attackTarget;
-
     public override void _Ready()
     {
         base._Ready();
 
-        if (GodotObject.IsInstanceValid(_attackArea))
-        {
-            _attackArea.CollisionMask = 4;
-            _attackArea.Monitoring = false;
-        }
-
-        if (GodotObject.IsInstanceValid(_rangePumpkin))
-            _rangePumpkin.Disabled = true;
+        _attackArea.CollisionMask = 4u;
+        _attackArea.Monitoring = false;
+        _rangePumpkin.Disabled = true;
     }
+
     protected override void MoveEnemy(double delta)
     {
         if (!IsValidTarget(PlayerReference))
@@ -55,17 +49,9 @@ public partial class Pumpkin : Enemy
         Vector2 direction = GlobalPosition.DirectionTo(
             PlayerReference.GlobalPosition
         );
-        
-        
-        if (direction.X > 0)
-        {
-            Sprite.FlipH = false;
-        }
-        else if (direction.X < 0)
-        {
-            Sprite.FlipH = true;
-        }
 
+        if (direction.X != 0)
+            Sprite.FlipH = direction.X < 0;
 
         float distance = GlobalPosition.DistanceTo(
             PlayerReference.GlobalPosition
@@ -79,15 +65,11 @@ public partial class Pumpkin : Enemy
         Vector2 movement = direction + separation * SeparationForce / Speed;
 
         Velocity = movement.LimitLength(1f) * Speed;
-
         MoveAndSlide();
     }
 
     protected override void StartAttack(Node2D target)
     {
-        IsInvulnerable = false;
-        _attackTarget = target;
-
         _attackStart = GlobalPosition;
         _attackEnd = target.GlobalPosition;
 
@@ -95,6 +77,7 @@ public partial class Pumpkin : Enemy
         _attackState = AttackState.Windup;
 
         IsAttacking = true;
+        IsInvulnerable = false;
         Velocity = Vector2.Zero;
 
         SetCollisionDisabled(true);
@@ -127,9 +110,8 @@ public partial class Pumpkin : Enemy
 
         _attackElapsed = 0;
         _attackState = AttackState.Jump;
-        
+
         IsInvulnerable = true;
-        SoundManager.Instance.PlayPumpkinJump();
     }
 
     private void UpdateJump()
@@ -140,45 +122,35 @@ public partial class Pumpkin : Enemy
             1f
         );
 
-        GlobalPosition = _attackStart.Lerp(
-            _attackEnd,
-            progress
-        );
+        GlobalPosition = _attackStart.Lerp(_attackEnd, progress);
 
         float height = Mathf.Sin(progress * Mathf.Pi) * _jumpHeight;
-
-        if (GodotObject.IsInstanceValid(Sprite))
-            Sprite.Position = new Vector2(0, -height);
+        Sprite.Position = new Vector2(0, -height);
 
         if (progress < 1f)
             return;
 
-        // Приземление.
-        if (GodotObject.IsInstanceValid(_attackArea))
-            _attackArea.Monitoring = true;
+        Sprite.Position = Vector2.Zero;
 
-        if (GodotObject.IsInstanceValid(_rangePumpkin))
-            _rangePumpkin.Disabled = false;
+        _attackArea.SetDeferred("monitoring", true);
+        _rangePumpkin.SetDeferred("disabled", false);
 
-        if (GodotObject.IsInstanceValid(_particles))
-            _particles.Restart();
+        _particles.Restart();
 
         _attackElapsed = 0;
         _attackState = AttackState.Recovery;
+
         IsInvulnerable = false;
+
         SoundManager.Instance.PlayPumpkinJump();
     }
 
     private void UpdateRecovery()
     {
-        // Включённая AttackArea работает только заданное время.
         if (_attackElapsed >= _attackAreaDuration)
         {
-            if (GodotObject.IsInstanceValid(_attackArea))
-                _attackArea.Monitoring = false;
-
-            if (GodotObject.IsInstanceValid(_rangePumpkin))
-                _rangePumpkin.Disabled = true;
+            _attackArea.SetDeferred("monitoring", false);
+            _rangePumpkin.SetDeferred("disabled", true);
         }
 
         if (_attackElapsed < _recoveryTime)
@@ -189,28 +161,17 @@ public partial class Pumpkin : Enemy
 
     private void FinishAttack()
     {
-        if (GodotObject.IsInstanceValid(Sprite))
-            Sprite.Position = Vector2.Zero;
+        Sprite.Position = Vector2.Zero;
 
-        if (GodotObject.IsInstanceValid(_attackArea))
-            _attackArea.Monitoring = false;
-
-        if (GodotObject.IsInstanceValid(_rangePumpkin))
-            _rangePumpkin.Disabled = true;
+        _attackArea.SetDeferred("monitoring", false);
+        _rangePumpkin.SetDeferred("disabled", true);
 
         SetCollisionDisabled(false);
 
         _attackState = AttackState.None;
-        _attackTarget = null;
-
         IsAttacking = false;
     }
 
-    protected override void Die()
-    {
-        base.Die();
-    }
-    
     public override void SetPossessed(
         bool possessed,
         uint playerLayer = 0,
@@ -218,15 +179,11 @@ public partial class Pumpkin : Enemy
     {
         base.SetPossessed(possessed, playerLayer, playerMask);
 
-        if (GodotObject.IsInstanceValid(_attackArea))
-            _attackArea.CollisionMask = possessed ? 8u : 4u;
+        _attackArea.CollisionMask = possessed ? 8u : 4u;
     }
-    
+
     private void OnAttackAreaBodyEntered(Node2D body)
     {
-        
-        GD.Print($"Hit: {body.Name}");
-        
         if (body is IHealth health)
             health.TakeDamage(Damage);
     }

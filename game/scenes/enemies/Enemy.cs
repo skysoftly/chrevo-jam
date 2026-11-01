@@ -6,7 +6,7 @@ namespace game.scenes.enemies;
 public abstract partial class Enemy : Entity
 {
 	[Export] protected Sprite2D Sprite { get; set; }
-	[Export] private AnimationPlayer _animationPlayer;
+	[Export] protected AnimationPlayer AnimationPlayer { get; set; }
 
 	[Export] public Node2D PlayerReference { get; set; }
 
@@ -55,20 +55,19 @@ public abstract partial class Enemy : Entity
 			GD.PushWarning($"{Name}: Outline Sprite or Material is missing!");
 		}
 		
-		
-		double randomPosition = GD.Randf() * _animationPlayer.CurrentAnimationLength;
+		double randomPosition = GD.Randf() * AnimationPlayer.CurrentAnimationLength;
 
-		_animationPlayer.Play("Idle");
-		_animationPlayer.Seek(randomPosition, true);
+		AnimationPlayer.Play("Idle");
+		AnimationPlayer.Seek(randomPosition, true);
 	}
 
 	public override void _Process(double delta)
 	{
 		_damageTimer = Mathf.Max(0, _damageTimer - (float)delta);
 		
-		AttackTimer = Mathf.Max(
-			0,
-			AttackTimer - (float)delta
+		AttackTimer = Mathf.Min(
+			AttackCooldown,
+			AttackTimer + (float)delta
 		);
 
 		if (IsPossessed || IsAttacking)
@@ -81,7 +80,7 @@ public abstract partial class Enemy : Entity
 			PlayerReference.GlobalPosition
 		);
 
-		if (distance <= AttackRange && AttackTimer <= 0)
+		if (distance <= AttackRange && AttackTimer >= AttackCooldown)
 		{
 			TryAttack(PlayerReference);
 		}
@@ -148,13 +147,13 @@ public abstract partial class Enemy : Entity
 
 	public bool TryAttack(Node2D target)
 	{
-		if (IsAttacking || AttackTimer > 0)
+		if (IsAttacking || AttackTimer < AttackCooldown)
 			return false;
 
 		if (!IsValidTarget(target))
 			return false;
 
-		AttackTimer = AttackCooldown;
+		AttackTimer = 0;
 
 		StartAttack(target);
 

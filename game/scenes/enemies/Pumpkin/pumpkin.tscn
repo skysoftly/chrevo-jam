@@ -95,7 +95,7 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
-[node name="Pumpkin" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_particles", "_attackArea", "_rangePumpkin", "_jumpAudio", "Sprite", "_animationPlayer", "_healthBar")]
+[node name="Pumpkin" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_particles", "_attackArea", "_rangePumpkin", "Sprite", "AnimationPlayer", "_healthBar")]
 collision_layer = 8
 collision_mask = 2
 motion_mode = 1
@@ -104,15 +104,16 @@ script = ExtResource("1_m8d4b")
 _particles = NodePath("ParticlePumpkin")
 _attackArea = NodePath("AttackArea")
 _rangePumpkin = NodePath("AttackArea/RangePumpkin")
-_jumpAudio = NodePath("")
 Sprite = NodePath("Pumpkin")
-_animationPlayer = NodePath("AnimationPlayer")
+AnimationPlayer = NodePath("AnimationPlayer")
+Speed = 80.0
 StopDistance = 30.0
+AttackRange = 60.0
 Damage = 5.0
 DamageCooldown = 0.3
 SeparationRadius = 40.0
 _outlineMaterial = SubResource("ShaderMaterial_m8d4b")
-MaxHealth = 15.0
+MaxHealth = 20.0
 _healthBar = NodePath("ProgressBar")
 
 [node name="ParticlePumpkin" type="CPUParticles2D" parent="." unique_id=29875832]
@@ -182,7 +183,7 @@ collision_layer = 0
 collision_mask = 4
 
 [node name="RangePumpkin" type="CollisionShape2D" parent="AttackArea" unique_id=1139850579]
-position = Vector2(0, -6)
+position = Vector2(0, 7)
 shape = SubResource("CircleShape2D_38ino")
 disabled = true
 debug_color = Color(0.1764706, 0.023529412, 0.03137255, 0.1254902)

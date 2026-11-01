@@ -589,13 +589,6 @@ scale = Vector2(0.46014887, 0.46014878)
 energy = 0.1
 blend_mode = 1
 
-[node name="PointLight2D" type="PointLight2D" parent="." unique_id=392259438]
-position = Vector2(39, 406)
-color = Color(1, 0.4745098, 0.023529412, 1)
-energy = 2.0
-texture = SubResource("GradientTexture2D_gfg0v")
-texture_scale = 3.0
-
 [node name="PointLight2D3" type="PointLight2D" parent="." unique_id=1464121685]
 position = Vector2(565, 396)
 color = Color(1, 0.4745098, 0.023529412, 1)
@@ -644,6 +637,13 @@ position = Vector2(463, 37)
 color = Color(0.82266104, 0.6635192, 0.78975856, 1)
 texture = SubResource("GradientTexture2D_gfg0v")
 texture_scale = 3.53
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=392259438]
+position = Vector2(39, 406)
+color = Color(1, 0.4745098, 0.023529412, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_gfg0v")
+texture_scale = 3.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=44820775]
 

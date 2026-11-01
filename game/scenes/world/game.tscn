@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c05cdbc4ehpo4" path="res://assets/pumpkin.png" id="3_3gx7t"]
 [ext_resource type="PackedScene" uid="uid://bxtepmylamtkc" path="res://scenes/enemies/Pumpkin/pumpkin.tscn" id="4_h30v7"]
 [ext_resource type="Texture2D" uid="uid://p8rjdhdgbav8" path="res://assets/vignette.png" id="5_h30v7"]
+[ext_resource type="PackedScene" uid="uid://c6r7s8wxc6x8e" path="res://scenes/enemies/Bat/bat.tscn" id="6_2oj1e"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h30v7"]
 size = Vector2(634, 14.666656)
@@ -45,9 +46,9 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
 
-[sub_resource type="Curve" id="Curve_r5nxa"]
-_limits = [0.0, 10.0, 0.0, 1.0]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 10), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_2oj1e"]
+_limits = [0.0, 5.0, 0.0, 1.0]
+_data = [Vector2(0, 0.6179776), 0.0, 0.0, 0, 0, Vector2(1, 5), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_h30v7"]
@@ -60,6 +61,7 @@ point_count = 2
 [node name="SpookyArena" type="Sprite2D" parent="." unique_id=1107190591]
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_3gx7t")
+offset = Vector2(0, -31.52)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="SpookyArena" unique_id=1342092912]
 collision_layer = 2
@@ -163,6 +165,7 @@ texture = SubResource("GradientTexture2D_3gx7t")
 texture_scale = 2.0
 
 [node name="Pumpkin" type="Sprite2D" parent="SpookyArena" unique_id=703078642]
+visible = false
 position = Vector2(-333.33334, -46.666668)
 scale = Vector2(0.33333334, 0.33333334)
 texture = ExtResource("3_3gx7t")
@@ -175,6 +178,7 @@ texture = SubResource("GradientTexture2D_3gx7t")
 texture_scale = 2.0
 
 [node name="Pumpkin2" type="Sprite2D" parent="SpookyArena" unique_id=803490599]
+visible = false
 position = Vector2(-150.66667, -230.66667)
 scale = Vector2(0.33333334, 0.33333334)
 texture = ExtResource("3_3gx7t")
@@ -187,6 +191,7 @@ texture = SubResource("GradientTexture2D_3gx7t")
 texture_scale = 2.0
 
 [node name="Pumpkin3" type="Sprite2D" parent="SpookyArena" unique_id=298389306]
+visible = false
 position = Vector2(283.33334, -229.33334)
 scale = Vector2(0.33333334, 0.33333334)
 texture = ExtResource("3_3gx7t")
@@ -199,6 +204,7 @@ texture = SubResource("GradientTexture2D_3gx7t")
 texture_scale = 2.0
 
 [node name="Pumpkin4" type="Sprite2D" parent="SpookyArena" unique_id=687620219]
+visible = false
 position = Vector2(192.66667, 217.99998)
 scale = Vector2(0.33333334, 0.33333334)
 texture = ExtResource("3_3gx7t")
@@ -225,8 +231,8 @@ texture_scale = 2.0
 [node name="Spawner" parent="." unique_id=2065464322 node_paths=PackedStringArray("_player", "_objects") instance=ExtResource("1_lnu2h")]
 _player = NodePath("../Player")
 _objects = NodePath("../Objects")
-_enemyScenes = Array[PackedScene]([ExtResource("4_h30v7")])
-_spawnCurve = SubResource("Curve_r5nxa")
+_enemyScenes = Array[PackedScene]([ExtResource("4_h30v7"), ExtResource("6_2oj1e")])
+_spawnCountCurve = SubResource("Curve_2oj1e")
 _maxEnemiesCurve = SubResource("Curve_h30v7")
 
 [node name="Player" parent="." unique_id=250972871 instance=ExtResource("1_uwrxv")]
@@ -234,7 +240,7 @@ position = Vector2(-67, 61)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1079895349]
 limit_left = -510
-limit_top = -352
+limit_top = -445
 limit_right = 510
 limit_bottom = 352
 position_smoothing_enabled = true

@@ -1,0 +1,203 @@
+[gd_scene format=4 uid="uid://c6r7s8wxc6x8e"]
+
+[ext_resource type="Script" uid="uid://tdodwn0auqtb" path="res://scenes/enemies/Bat/Bat.cs" id="1_5t5qm"]
+[ext_resource type="Shader" uid="uid://b460tc7jof254" path="res://gdshaders/selectEnemy.gdshader" id="2_nox2u"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5t5qm"]
+shader = ExtResource("2_nox2u")
+shader_parameter/line_color = Color(0.7153433, 0.46660912, 0.2977128, 1)
+shader_parameter/line_color_attack = Color(0.5507359, 0.114297844, 0.1088836, 1)
+shader_parameter/line_thickness = 1.0
+shader_parameter/enabled = false
+shader_parameter/attack = false
+
+[sub_resource type="Gradient" id="Gradient_m8d4b"]
+offsets = PackedFloat32Array(0, 0.29714286, 0.72, 1)
+colors = PackedColorArray(0.6469792, 0.33000815, 0.04361047, 1, 0.64733636, 0.32663473, 0.12945074, 1, 0.5953264, 0.3130715, 0.13312902, 0.6666666, 0.49130648, 0.28594503, 0.14048555, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_38ino"]
+gradient = SubResource("Gradient_m8d4b")
+width = 4
+height = 4
+fill = 1
+fill_from = Vector2(0.47863248, 0.45726496)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="Curve" id="Curve_lu5c6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_61lmv"]
+shader = ExtResource("2_nox2u")
+shader_parameter/line_color = Color(0.3, 1, 0.4, 1)
+shader_parameter/line_color_attack = Color(1, 0.2, 0.2, 1)
+shader_parameter/line_thickness = 1.0
+shader_parameter/enabled = false
+shader_parameter/attack = false
+
+[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_5t5qm"]
+_data = PackedByteArray("AAADAAUAAAABAAAAYAAAAGAAAABiAQAAUklGRloBAABXRUJQVlA4TE0BAAAvX8AXECcgJCAMEP3fZ5KQgDBAtN1eIQFhgOj/PjPmPwBAVeUH2LGt1q2wacBHpABLaQByKkj/ZckSGn3ex0xE/xE5kowZsk5S4RfyC9hD5Eri1LnHqUlCxDK5BWceWqQq9chyA9SnxwmcQ0hqVx1XlzjJcRUgnh4D6uR9AJB6A6eTAHQuenrmmo4Ganl9awGA6TU2ehKNE9NS5xmaRIQTUDC5eObJbvYxKps8oiy1VLqkiegeszwi79Y+slDV7nGXhXhrKrLTI6Sse/639BC59npCxPZ6TD32eu7jOjd6nHoDp1MXRN2j+clQy+tbCyI/vLvnk23DtJEsx6OJxZA0lkyR0CM4hmbQZC4MC1VRlloqXdwtsllLMsa/eLf2GSHTGd1jwMqHtbZgMYR2jxtC8pKSB9CnxwHZUceETuiWzF98T3Rq2JM5QuVHtAIA")
+size_override = Vector2(96, 96)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7p1mj"]
+radius = 15.0
+
+[sub_resource type="Animation" id="Animation_e1lu6"]
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bat:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_61lmv"]
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bat:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_md0e3"]
+_data = {
+&"Attack": SubResource("Animation_e1lu6"),
+&"Idle": SubResource("Animation_61lmv")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_38ino"]
+radius = 36.013885
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38ino"]
+bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.31764707)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m8d4b"]
+bg_color = Color(0.53333336, 0, 0.003921569, 0.5176471)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[node name="Bat" type="CharacterBody2D" unique_id=59595591 node_paths=PackedStringArray("_attackArea", "_attackShape", "Sprite", "AnimationPlayer", "_healthBar")]
+collision_layer = 8
+collision_mask = 2
+motion_mode = 1
+safe_margin = 0.001
+script = ExtResource("1_5t5qm")
+_attackArea = NodePath("AttackArea")
+_attackShape = NodePath("AttackArea/RangePumpkin")
+_windupTime = 0.3
+_attackDuration = 0.2
+Sprite = NodePath("Bat")
+AnimationPlayer = NodePath("AnimationPlayer")
+AttackCooldown = 1.8
+Damage = 4.0
+DamageCooldown = 0.1
+_outlineMaterial = SubResource("ShaderMaterial_5t5qm")
+MaxHealth = 15.0
+_healthBar = NodePath("ProgressBar")
+
+[node name="ParticlePumpkin" type="CPUParticles2D" parent="." unique_id=29875832]
+position = Vector2(0, -6)
+emitting = false
+amount = 20
+texture = SubResource("GradientTexture2D_38ino")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+emission_shape = 1
+emission_sphere_radius = 5.0
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+scale_amount_min = 2.0
+scale_amount_max = 3.0
+scale_amount_curve = SubResource("Curve_lu5c6")
+
+[node name="Bat" type="Sprite2D" parent="." unique_id=917173418]
+texture_filter = 1
+material = SubResource("ShaderMaterial_61lmv")
+position = Vector2(0, -4)
+texture = SubResource("PortableCompressedTexture2D_5t5qm")
+offset = Vector2(0, -5)
+hframes = 2
+vframes = 2
+frame = 2
+metadata/_aseprite_wizard_interface_config_ = {
+"output_section": false,
+"pending_changes": {}
+}
+metadata/_aseprite_wizard_config_ = {
+"convert_fps_field": 60.0,
+"convert_ms_field": 16.0,
+"convert_to_fps": false,
+"embed_tex": true,
+"i_mode": 0,
+"keep_anim_length": false,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "AnimationPlayer",
+"scale": "1.0",
+"slice": "",
+"source": "res://assets/bat.aseprite",
+"source_uid": 4653044749330239040
+}
+metadata/_aseprite_wizard_source_file_hash_ = "e09a2a0bee4495aad8209e6ad447142d"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=387617582]
+position = Vector2(0, -6)
+rotation = 1.5707964
+shape = SubResource("CircleShape2D_7p1mj")
+debug_color = Color(0.20258287, 0.34238014, 0.14652398, 0.12941177)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=255116535]
+libraries/ = SubResource("AnimationLibrary_md0e3")
+autoplay = &"Idle"
+
+[node name="AttackArea" type="Area2D" parent="." unique_id=728413881]
+position = Vector2(0, -9)
+collision_layer = 0
+collision_mask = 4
+
+[node name="RangePumpkin" type="CollisionShape2D" parent="AttackArea" unique_id=1139850579]
+position = Vector2(0, 3)
+shape = SubResource("CircleShape2D_38ino")
+disabled = true
+debug_color = Color(0.1764706, 0.023529412, 0.03137255, 0.1254902)
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1215665850]
+offset_left = -14.0
+offset_top = -29.0
+offset_right = 14.0
+offset_bottom = -26.0
+theme_override_styles/background = SubResource("StyleBoxFlat_38ino")
+theme_override_styles/fill = SubResource("StyleBoxFlat_m8d4b")
+max_value = 15.0
+value = 7.5
+show_percentage = false
+
+[connection signal="body_entered" from="AttackArea" to="." method="OnAttackAreaBodyEntered"]
