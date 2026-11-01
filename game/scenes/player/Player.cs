@@ -26,7 +26,6 @@ public partial class Player : Entity
 	[Export] private float _possessionDamageInterval = 3f;
 
 	[Export] private ProgressBar _cooldownPossessionBar;
-	[Export] private Sprite2D _sprite;
 	[Export] private CpuParticles2D _particlePossession;
 
 	[ExportGroup("Attack")]
@@ -129,9 +128,9 @@ public partial class Player : Entity
 		}
 
 		if (direction.X > 0f)
-			_sprite.FlipH = false;
+			Sprite.FlipH = false;
 		else if (direction.X < 0f)
-			_sprite.FlipH = true;
+			Sprite.FlipH = true;
 
 		_knockbackVelocity = _knockbackVelocity.MoveToward(
 			Vector2.Zero,
@@ -418,8 +417,8 @@ public partial class Player : Entity
 
 		SetCollisionDisabled(true);
 
-		if (GodotObject.IsInstanceValid(_sprite))
-			_sprite.Visible = false;
+		if (GodotObject.IsInstanceValid(Sprite))
+			Sprite.Visible = false;
 
 		if (GodotObject.IsInstanceValid(_particlePossession))
 			_particlePossession.Restart();
@@ -474,8 +473,8 @@ public partial class Player : Entity
 
 		_invulnerabilityTimer = _invulnerabilityTime;
 
-		if (GodotObject.IsInstanceValid(_sprite))
-			_sprite.Visible = true;
+		if (GodotObject.IsInstanceValid(Sprite))
+			Sprite.Visible = true;
 
 		if (GodotObject.IsInstanceValid(_particlePossession))
 			_particlePossession.Restart();

@@ -54,6 +54,8 @@ public partial class Spawner : Node2D
 	private bool _waveFinished;
 	private bool _endlessMode;
 
+	public bool IsCutscenePlaying { get; set; }
+	
 	public override void _Ready()
 	{
 		if (_waves.Count > 0)
@@ -249,9 +251,6 @@ public partial class Spawner : Node2D
 		// Передаём спавнер до добавления в дерево.
 		boss.SetSpawner(this);
 
-		boss.ProcessMode = Node.ProcessModeEnum.Always;
-		GetTree().Paused = true;
-
 		_objects.AddChild(boss);
 
 		boss.GlobalPosition = GetWorldCenter();
@@ -281,6 +280,7 @@ public partial class Spawner : Node2D
 				enemy.TakeDamage(enemy.MaxHealth);
 		}
 
+		GetTree().Paused = true;
 		_bossVictoryMenu.Show();
 	}
 

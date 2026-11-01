@@ -159,7 +159,7 @@ public partial class Bat : Enemy
 
     private void PlayAttackSound()
     {
-        SoundManager.Instance.PlayBatAttack();
+        AudioManager.Instance.PlaySound("BatAttack");
     }
 
     public override void SetPossessed(
