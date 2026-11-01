@@ -34,7 +34,7 @@ _data = {
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[node name="Projectile" type="Area2D" unique_id=1010572242]
+[node name="Projectile2" type="Area2D" unique_id=1010572242]
 collision_layer = 0
 collision_mask = 6
 script = ExtResource("1_1phw1")
