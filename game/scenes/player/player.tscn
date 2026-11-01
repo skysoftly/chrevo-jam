@@ -74,55 +74,20 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dovo2"]
-bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.31764707)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gmlin"]
-bg_color = Color(0.72609425, 2.721794e-05, 0.0061748866, 1)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lvxji"]
-bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.31764707)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_75vfm"]
-bg_color = Color(0.8047426, 0.80474263, 0.8047425, 0.7294118)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p47bc"]
-bg_color = Color(0.48761553, 0.28590983, 0.6291917, 1)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-
 [node name="Player" type="CharacterBody2D" unique_id=250972871 node_paths=PackedStringArray("_healthBar", "_cooldownPossessionBar", "_sprite", "_particlePossession", "_cooldownAttackBar", "_healthBar")]
 collision_layer = 4
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_3vyb7")
-_healthBar = NodePath("CanvasLayer/Health")
+_healthBar = NodePath("")
 _possessionCooldown = 4.0
 _possessionDamage = 2.0
-_cooldownPossessionBar = NodePath("CanvasLayer/Cooldown")
+_cooldownPossessionBar = NodePath("")
 _sprite = NodePath("Sprite2D")
 _particlePossession = NodePath("ParticlePossession")
-_cooldownAttackBar = NodePath("CanvasLayer/CooldownAttack")
+_cooldownAttackBar = NodePath("")
 MaxHealth = 8.0
-_healthBar = NodePath("CanvasLayer/Health")
+_healthBar = NodePath("")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1119545135]
 position = Vector2(0, -7)
@@ -197,49 +162,6 @@ scale_amount_curve = SubResource("Curve_gmlin")
 position = Vector2(0, -5)
 color = Color(1, 0.6896666, 0.01999998, 1)
 texture = SubResource("GradientTexture2D_dovo2")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1780834866]
-
-[node name="Health" type="ProgressBar" parent="CanvasLayer" unique_id=1497875978]
-offset_left = 13.0
-offset_top = 9.0
-offset_right = 188.0
-offset_bottom = 19.0
-theme_override_styles/background = SubResource("StyleBoxFlat_dovo2")
-theme_override_styles/fill = SubResource("StyleBoxFlat_gmlin")
-value = 10.0
-show_percentage = false
-
-[node name="CooldownAttack" type="ProgressBar" parent="CanvasLayer" unique_id=612948783]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -193.0
-offset_top = -19.0
-offset_right = 193.0
-offset_bottom = -10.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/background = SubResource("StyleBoxFlat_lvxji")
-theme_override_styles/fill = SubResource("StyleBoxFlat_75vfm")
-value = 10.0
-show_percentage = false
-
-[node name="Cooldown" type="ProgressBar" parent="CanvasLayer" unique_id=1777811515]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -87.0
-offset_top = 8.0
-offset_right = 88.0
-offset_bottom = 20.0
-grow_horizontal = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_lvxji")
-theme_override_styles/fill = SubResource("StyleBoxFlat_p47bc")
-value = 10.0
-show_percentage = false
 
 [connection signal="body_entered" from="PossessionArea" to="." method="OnPossessionAreaBodyEntered"]
 [connection signal="body_exited" from="PossessionArea" to="." method="OnPossessionAreaBodyExited"]

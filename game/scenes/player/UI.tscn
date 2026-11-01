@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://chtwcw6xe4kcd"]
+
+[ext_resource type="Texture2D" uid="uid://cmb3crpeg4cci" path="res://assets/playerStats.png" id="1_o4r8q"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1g74s"]
+texture = ExtResource("1_o4r8q")
+texture_margin_left = 9.0
+texture_margin_right = 11.0
+region_rect = Rect2(0, 73, 66, 8)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xx6uq"]
+texture = ExtResource("1_o4r8q")
+texture_margin_left = 9.0
+texture_margin_right = 13.0
+region_rect = Rect2(71, 73, 68, 8)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wpnd6"]
+texture = ExtResource("1_o4r8q")
+texture_margin_left = 12.0
+texture_margin_right = 11.0
+region_rect = Rect2(0, 98, 66, 12)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_smd10"]
+texture = ExtResource("1_o4r8q")
+texture_margin_left = 9.0
+texture_margin_right = 11.0
+region_rect = Rect2(15, 113, 66, 12)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2otcp"]
+texture = ExtResource("1_o4r8q")
+texture_margin_left = 9.0
+texture_margin_right = 11.0
+region_rect = Rect2(0, 84, 66, 12)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nhr62"]
+texture = ExtResource("1_o4r8q")
+texture_margin_left = 9.0
+texture_margin_right = 12.0
+region_rect = Rect2(71, 84, 67, 12)
+
+[node name="Ui" type="Node2D" unique_id=2076019591]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=481997910]
+
+[node name="Health" type="ProgressBar" parent="CanvasLayer" unique_id=473267307]
+custom_maximum_size = Vector2(50, -1)
+offset_left = 28.0
+offset_top = 361.0
+offset_right = 78.0
+offset_bottom = 371.0
+theme_override_styles/background = SubResource("StyleBoxTexture_1g74s")
+theme_override_styles/fill = SubResource("StyleBoxTexture_xx6uq")
+value = 10.0
+show_percentage = false
+
+[node name="CooldownAttack" type="ProgressBar" parent="CanvasLayer" unique_id=1191884773]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -356.0
+offset_top = -49.0
+offset_right = -306.0
+offset_bottom = -37.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxTexture_wpnd6")
+theme_override_styles/fill = SubResource("StyleBoxTexture_smd10")
+value = 10.0
+show_percentage = false
+
+[node name="Cooldown" type="ProgressBar" parent="CanvasLayer" unique_id=693736576]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -356.0
+offset_top = 371.0
+offset_right = -306.0
+offset_bottom = 383.0
+grow_horizontal = 2
+theme_override_styles/background = SubResource("StyleBoxTexture_2otcp")
+theme_override_styles/fill = SubResource("StyleBoxTexture_nhr62")
+value = 10.0
+show_percentage = false

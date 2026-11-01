@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://eggi6rs3ksu8"
+path="res://.godot/imported/playerStats.aseprite-675b68c50ceb96fdaa869b72c636057d.res"
+
+[deps]
+
+source_file="res://assets/playerStats.aseprite"
+dest_files=["res://.godot/imported/playerStats.aseprite-675b68c50ceb96fdaa869b72c636057d.res"]
+
+[params]
+
